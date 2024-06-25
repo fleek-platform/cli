@@ -41,7 +41,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     uploadResult = await sdk.storage().uploadPrivateFile({ filePath: bundledFilePath, onUploadProgress: uploadOnProgress(progressBar) });
   } else {
     const fileLikeObject = await getFileLikeObject(bundledFilePath);
-    uploadResult = await sdk.storage().uploadFile({ file: fileLikeObject, onUploadProgress: uploadOnProgress(progressBar) });
+    uploadResult = await sdk.storage().uploadFile({ file: fileLikeObject, options: { functionName: functionToDeploy.name }, onUploadProgress: uploadOnProgress(progressBar) });
   }
 
   if (!uploadResult.pin.cid) {
