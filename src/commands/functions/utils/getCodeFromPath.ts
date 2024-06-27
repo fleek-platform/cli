@@ -4,7 +4,6 @@ import { build, BuildOptions, Plugin } from 'esbuild';
 import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
 import { filesFromPaths } from 'files-from-path';
 import * as fs from 'fs';
-import os from 'os';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
@@ -75,7 +74,12 @@ const bundleCode = async (args: BundleCodeArgs) => {
     cliProgress.Presets.shades_grey
   );
 
-  const tempDir = os.tmpdir();
+  const tempDir = '.fleek';
+
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
+
   const outFile = tempDir + '/function.js';
   const unsupportedModulesUsed = new Set<string>();
 
@@ -115,8 +119,11 @@ const bundleCode = async (args: BundleCodeArgs) => {
     entryPoints: [filePath],
     bundle: true,
     logLevel: 'silent',
-    platform: 'neutral',
-    mainFields: ['module', 'main'],
+    platform: 'browser',
+    format: 'esm',
+    target: 'esnext',
+    treeShaking: true,
+    mainFields: ['browser', 'module', 'main'],
     external: [...Object.values(supportedModulesAliases)],
     alias: supportedModulesAliases,
     outfile: outFile,
