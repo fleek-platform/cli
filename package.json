@@ -42,7 +42,6 @@
     "commander": "^9.4.1",
     "conf": "^10.2.0",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.21.1",
     "esbuild-plugins-node-modules-polyfill": "^1.6.4",
     "files-from-path": "^1.0.0",
     "glob": "^8.1.0",
@@ -55,7 +54,8 @@
     "semver": "^7.3.8",
     "ts-node": "10.9.1",
     "unique-names-generator": "^4.7.1",
-    "update-notifier-cjs": "^5.1.6"
+    "update-notifier-cjs": "^5.1.6",
+    "webpack": "^5.92.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.6",

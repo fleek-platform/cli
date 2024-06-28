@@ -1,18 +1,20 @@
 import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
-import { build, BuildOptions, Plugin } from 'esbuild';
-import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
 import { filesFromPaths } from 'files-from-path';
 import * as fs from 'fs';
+import path from 'path';
+import { promisify } from 'util';
+import webpack, { Configuration } from 'webpack';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
 import { EnvironmentVariables } from './parseEnvironmentVariables';
-import { asyncLocalStoragePolyfill } from './plugins/asyncLocalStoragePolyfill';
-import { moduleChecker } from './plugins/moduleChecker';
+import { moduleChecker, unsupportedModules } from './plugins/moduleChecker';
 
-const supportedModulesAliases = {
+const externalModules = {
+  assert: 'node:assert',
   buffer: 'node:buffer',
+  console: 'node:console',
   crypto: 'node:crypto',
   domain: 'node:domain',
   events: 'node:events',
@@ -24,6 +26,7 @@ const supportedModulesAliases = {
   string_decoder: 'node:string_decoder',
   url: 'node:url',
   util: 'node:util',
+  'util/types': 'node:util/types',
   zlib: 'node:zlib',
 };
 
@@ -73,6 +76,7 @@ const bundleCode = async (args: BundleCodeArgs) => {
     },
     cliProgress.Presets.shades_grey
   );
+  progressBar.start(100, 0);
 
   const tempDir = '.fleek';
 
@@ -80,94 +84,93 @@ const bundleCode = async (args: BundleCodeArgs) => {
     fs.mkdirSync(tempDir);
   }
 
-  const outFile = tempDir + '/function.js';
   const unsupportedModulesUsed = new Set<string>();
 
-  const plugins: Plugin[] = [
-    moduleChecker({ unsupportedModulesUsed }),
-    {
-      name: 'ProgressBar',
-      setup: (build) => {
-        build.onStart(() => {
-          if (!noBundle) {
-            progressBar.start(100, 10);
-          }
-        });
+  const outfilePath = path.join(process.cwd(), tempDir);
+  const entryfilePath = path.join(process.cwd(), filePath);
+  const filename = 'function.js';
+
+  const webpackConfiguration: Configuration = {
+    entry: entryfilePath,
+    mode: 'none',
+    externals: {
+      ...externalModules,
+      ...Object.values(externalModules).reduce((acc, val) => {
+        acc[val] = val;
+
+        return acc;
+      }, {} as Record<string, string>),
+    },
+    experiments: {
+      outputModule: true,
+    },
+    resolve: {
+      alias: {
+        ...[...unsupportedModules].reduce((acc, val) => {
+          acc[val] = false;
+
+          return acc;
+        }, {} as Record<string, false>),
+      },
+      fallback: {
+        async_hooks: path.resolve(__dirname, 'polyfills', 'async_hooks.js'),
       },
     },
-  ];
-
-  if (!noBundle) {
-    plugins.push(
-      nodeModulesPolyfillPlugin({
-        globals: { Buffer: true },
-        modules: {
-          async_hooks: false,
-          assert: true,
-          dns: true,
-          http2: true,
-          net: true,
-          querystring: true,
-          tls: true,
-        },
+    output: {
+      library: {
+        type: 'module',
+      },
+      path: outfilePath,
+      filename,
+      iife: false,
+    },
+    plugins: [
+      moduleChecker({ unsupportedModulesUsed }),
+      new webpack.ProgressPlugin((percentage) => {
+        progressBar.update(percentage * 100);
       }),
-      asyncLocalStoragePolyfill()
-    );
+      new webpack.BannerPlugin({
+        raw: true,
+        banner: `
+globalThis.fleek = {
+  env: {
+    ${Object.entries(env)
+      .map(([key, value]) => `${key}: "${value}"`)
+      .join(',\n')}
   }
-
-  const buildOptions: BuildOptions = {
-    entryPoints: [filePath],
-    bundle: true,
-    logLevel: 'silent',
-    platform: 'browser',
-    format: 'esm',
-    target: 'esnext',
-    treeShaking: true,
-    mainFields: ['browser', 'module', 'main'],
-    external: [...Object.values(supportedModulesAliases)],
-    alias: supportedModulesAliases,
-    outfile: outFile,
-    minify: true,
-    plugins,
+}
+    `,
+      }),
+    ],
   };
 
-  if (Object.keys(env).length) {
-    buildOptions.banner = {
-      js: `
-    globalThis.fleek = {
-      env: {
-        ${Object.entries(env)
-          .map(([key, value]) => `${key}: "${value}"`)
-          .join(',\n')}
-      }
+  if (!noBundle) {
+    try {
+      const compiler = webpack(webpackConfiguration);
+      const pack = promisify(compiler.run).bind(compiler);
+      await pack();
+    } catch (e) {
+      progressBar.stop();
+
+      const errorMessage =
+        e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
+
+      const bundlingResponse: BundlingResponse = {
+        path: filePath,
+        unsupportedModules: unsupportedModulesUsed,
+        success: false,
+        error: errorMessage,
+      };
+
+      return bundlingResponse;
     }
-    `,
-    };
-  }
-
-  try {
-    await build(buildOptions);
-  } catch (e) {
-    progressBar.stop();
-
-    const errorMessage =
-      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
-
-    const bundlingResponse: BundlingResponse = {
-      path: filePath,
-      unsupportedModules: unsupportedModulesUsed,
-      success: false,
-      error: errorMessage,
-    };
-
-    return bundlingResponse;
   }
 
   progressBar.update(100);
   progressBar.stop();
 
   const bundlingResponse: BundlingResponse = {
-    path: noBundle ? filePath : outFile,
+    path: noBundle ? filePath : `${outfilePath}/${filename}`,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
   };
