@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.449.0",
+    "@fleek-platform/sdk": "^2.1.4",
     "@web-std/file": "^3.0.2",
     "ansi-escapes": "^3.0.1",
     "as-table": "^1.0.55",
@@ -60,7 +61,6 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.6",
     "@fleek-platform/errors": "^2.1.1",
-    "@fleek-platform/sdk": "^2.1.4",
     "@fleek-platform/tester": "^2.3.0",
     "@fleek-platform/utils-gateways": "^0.1.2",
     "@fleek-platform/utils-github": "^0.0.2",
