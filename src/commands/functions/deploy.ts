@@ -24,7 +24,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
   const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
-  const bundledFilePath = await getCodeFromPath({ path: filePath, noBundle: args.noBundle ?? false, env });
+  const bundledFilePath = await getCodeFromPath({ filePath, bundle: !!!args.noBundle, env });
 
   output.printNewLine();
 

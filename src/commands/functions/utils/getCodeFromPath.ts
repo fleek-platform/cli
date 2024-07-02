@@ -60,12 +60,12 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
 
 type BundleCodeArgs = {
   filePath: string;
-  noBundle: boolean;
+  bundle: boolean;
   env: EnvironmentVariables;
 };
 
 const transpileCode = async (args: BundleCodeArgs) => {
-  const { filePath, noBundle, env } = args;
+  const { filePath, bundle, env } = args;
   const progressBar = new cliProgress.SingleBar(
     {
       format: t('uploadProgress', { action: t('bundlingCode') }),
@@ -114,7 +114,7 @@ const transpileCode = async (args: BundleCodeArgs) => {
     },
   ];
 
-  if (!noBundle) {
+  if (bundle) {
     plugins.push(
       nodeModulesPolyfillPlugin({
         globals: { Buffer: true },
@@ -131,11 +131,6 @@ const transpileCode = async (args: BundleCodeArgs) => {
       asyncLocalStoragePolyfill()
     );
   }
-
-  // TODO: Rename the transpileCode param noBundle
-  // to "bundle" as its easier to read
-  // for the moment use proxy variable
-  const bundle = !noBundle;
 
   let buildOptions: BuildOptions = {
     entryPoints: [filePath],
@@ -221,15 +216,11 @@ export const getFileLikeObject = async (path: string) => {
   return files[0];
 };
 
-export const getCodeFromPath = async (args: { path: string; noBundle: boolean; env: EnvironmentVariables }) => {
-  const { path, noBundle, env } = args;
+export const getCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables }) => {
+  const { filePath, bundle, env } = args;
 
-  let filePath: string;
-
-  if (fs.existsSync(path)) {
-    filePath = path;
-  } else {
-    throw new FleekFunctionPathNotValidError({ path });
+  if (!fs.existsSync(filePath)) {
+    throw new FleekFunctionPathNotValidError({ path: filePath });
   }
 
   // TODO: Given original name "bundleCode" and "noBundle parameter, check original intent as some of the process
@@ -237,11 +228,16 @@ export const getCodeFromPath = async (args: { path: string; noBundle: boolean; e
   // pass is required. Notice that the original author
   // always bundled the code even though the user might not
   // request it
-  const bundlingResponse = await transpileCode({ filePath, noBundle, env });
+  const bundlingResponse = await transpileCode({
+    filePath,
+    bundle,
+    env,
+  });
 
   showUnsupportedModules({ unsupportedModulesUsed: bundlingResponse.unsupportedModules });
 
-  if (!bundlingResponse.success && !noBundle) {
+  if (!bundlingResponse.success && bundle) {
+    // TODO: there's a type error here
     throw new FleekFunctionBundlingFailedError({ error: bundlingResponse.error });
   }
 
