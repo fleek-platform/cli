@@ -10,24 +10,25 @@ import * as fs from 'fs';
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
 import { EnvironmentVariables } from './parseEnvironmentVariables';
-import { asyncLocalStoragePolyfill } from './plugins/asyncLocalStoragePolyfill';
-import { moduleChecker } from './plugins/moduleChecker';
+import { asyncLocalStoragePolyfill } from '../plugins/asyncLocalStoragePolyfill';
+import { moduleChecker } from '../plugins/moduleChecker';
+import { nodeProtocolImportSpecifier } from '../plugins/nodeProtocolImportSpecifier';
 
-const supportedModulesAliases = {
-  buffer: 'node:buffer',
-  crypto: 'node:crypto',
-  domain: 'node:domain',
-  events: 'node:events',
-  http: 'node:http',
-  https: 'node:https',
-  path: 'node:path',
-  punycode: 'node:punycode',
-  stream: 'node:stream',
-  string_decoder: 'node:string_decoder',
-  url: 'node:url',
-  util: 'node:util',
-  zlib: 'node:zlib',
-};
+const supportedModules = [
+  'node:buffer',
+  'node:crypto',
+  'node:domain',
+  'node:events',
+  'node:http',
+  'node:https',
+  'node:path',
+  'node:punycode',
+  'node:stream',
+  'node:string_decoder',
+  'node:url',
+  'node:util',
+  'node:zlib',
+];
 
 type TranspileResponse = {
   path: string;
@@ -84,31 +85,12 @@ const transpileCode = async (args: BundleCodeArgs) => {
 
   const plugins: Plugin[] = [
     moduleChecker({ unsupportedModulesUsed }),
+    nodeProtocolImportSpecifier(),
     {
       name: 'ProgressBar',
       setup: (build) => {
         build.onStart(() => {
           progressBar.start(100, 10);
-        });
-      },
-    },
-    {
-      name: 'Node:* protocol import specifier',
-      setup(build) {
-        build.onLoad({ filter: /\.js$/ }, async (args) => {
-          // TODO: escape module name
-          const moduleName = "buffer";
-          const buffer = await fs.promises.readFile(args.path, 'utf8');
-          const reImportSyntax = new RegExp(`import\\s+[\\w\\W]*?\\s+from\\s+["']${moduleName}["']`, 'g');
-          const contents = buffer.toString();
-          
-          if (!reImportSyntax.test(contents)) return;
-
-          const reModuleName = new RegExp(`["']${moduleName}["']`, 'g');
-
-          return {
-            contents: contents.replace(reModuleName, `"node:${moduleName}"`),
-          }
         });
       },
     },
@@ -151,7 +133,7 @@ const transpileCode = async (args: BundleCodeArgs) => {
       ...buildOptions,
       // TODO: native modules don't require to be made external
       // as that's the default behaviour, revise this line
-      external: [...Object.values(supportedModulesAliases)],
+      external: [...supportedModules],
     }
   }
 
@@ -171,6 +153,9 @@ const transpileCode = async (args: BundleCodeArgs) => {
 
   try {
     await build(buildOptions);
+
+    progressBar.update(100);
+    progressBar.stop();
   } catch (e) {
     progressBar.stop();
 
@@ -185,16 +170,6 @@ const transpileCode = async (args: BundleCodeArgs) => {
     };
 
     return transpileResponse;
-  }
-
-  progressBar.update(100);
-  progressBar.stop();
-
-  if (!bundle) {
-    const noCheck = '// @ts-nocheck';
-    const buf = await fs.promises.readFile(outFile, 'utf8');
-    const content = `${noCheck}\n${buf.toString()}`;
-    await fs.promises.writeFile(outFile, content, 'utf8');
   }
 
   const transpileResponse: TranspileResponse = {
