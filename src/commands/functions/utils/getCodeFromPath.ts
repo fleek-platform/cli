@@ -171,14 +171,14 @@ const transpileCode = async (args: BundleCodeArgs) => {
     const errorMessage =
       e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
 
-    const bundlingResponse: TranspileResponse = {
+    const transpileResponse: TranspileResponse = {
       path: filePath,
       unsupportedModules: unsupportedModulesUsed,
       success: false,
       error: errorMessage,
     };
 
-    return bundlingResponse;
+    return transpileResponse;
   }
 
   progressBar.update(100);
@@ -191,13 +191,13 @@ const transpileCode = async (args: BundleCodeArgs) => {
     await fs.promises.writeFile(outFile, content, 'utf8');
   }
 
-  const bundlingResponse: TranspileResponse = {
+  const transpileResponse: TranspileResponse = {
     path: outFile,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
   };
 
-  return bundlingResponse;
+  return transpileResponse;
 };
 
 export const getFileLikeObject = async (path: string) => {
@@ -222,17 +222,17 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
   // pass is required. Notice that the original author
   // always bundled the code even though the user might not
   // request it
-  const bundlingResponse = await transpileCode({
+  const transpileResponse = await transpileCode({
     filePath,
     bundle,
     env,
   });
 
-  showUnsupportedModules({ unsupportedModulesUsed: bundlingResponse.unsupportedModules });
+  showUnsupportedModules({ unsupportedModulesUsed: transpileResponse.unsupportedModules });
 
-  if (!bundlingResponse.success) {
-    throw new FleekFunctionBundlingFailedError({ error: bundlingResponse.error });
+  if (!transpileResponse.success) {
+    throw new FleekFunctionBundlingFailedError({ error: transpileResponse.error });
   }
 
-  return bundlingResponse.path;
+  return transpileResponse.path;
 };
