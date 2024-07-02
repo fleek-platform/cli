@@ -20,23 +20,47 @@ const runtimeModules = [
   'zlib',
 ];
 
-const applyNodeProtocolConvention = async ({
+const replaceLineByMatchRegExpr = ({
+  contents,
   moduleName,
+}: {
+  contents: string;
+  moduleName: string;
+}) => {
+  const reImportSyntax = new RegExp(`import\\s*[\\w\\W]*?\\s*from\\s+["']${moduleName}["']`, 'g');
+  const reModuleName = new RegExp(`["']${moduleName}["']`, 'g');
+  const convention = `"node:${moduleName}"`;
+  const lns = contents.split('\n');
+  const res = lns.map(ln => {
+    const shouldReplace = reImportSyntax.test(ln);
+    if (!shouldReplace) return ln;
+    return ln.replace(reModuleName, convention);
+  });
+  return res.join('\n');
+}
+
+const applyNodeProtocolConvention = async ({
   path,
 }: {
-  moduleName: string;
   path: string;
 }) => {
   const buffer = await fs.promises.readFile(path, 'utf8');
-  const reImportSyntax = new RegExp(`import\\s+[\\w\\W]*?\\s+from\\s+["']${moduleName}["']`, 'g');
   const contents = buffer.toString();
 
-  if (!reImportSyntax.test(contents)) return;
+  try {
+    const output = runtimeModules.reduce((acc, moduleName) => {
+      return replaceLineByMatchRegExpr({
+        contents: acc,
+        moduleName,
+      });
+    }, contents);
 
-  const reModuleName = new RegExp(`["']${moduleName}["']`, 'g');
-
-  return {
-    contents: contents.replace(reModuleName, `"node:${moduleName}"`),
+    return {
+      contents: output,
+    }
+  } catch (err) {
+    // TODO: Handle this gracefully
+    console.error(err);
   }
 }
 
@@ -49,12 +73,11 @@ export const nodeProtocolImportSpecifier = ({
   setup(build: PluginBuild) {
     build.onLoad({ filter: /\.js$/ }, async ({ path }) => {
       try {
-        for (const moduleName of runtimeModules) {
-          return applyNodeProtocolConvention({
-            moduleName,
-            path,
-          });
-        }        
+        const output = applyNodeProtocolConvention({
+          path,
+        });
+
+        return output;
       } catch (err) {
         onError();
       }

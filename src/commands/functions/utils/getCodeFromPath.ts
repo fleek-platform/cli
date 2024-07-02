@@ -156,11 +156,27 @@ export const getFileLikeObject = async (path: string) => {
   return files[0];
 };
 
+// TODO: Create a process to validate the user source code
+// using placeholder for the moment
+const checkUserSourceCodeSupport = async (filePath: string) => {
+  const reRequireSyntax = new RegExp(`require\\s*\\([^)]*\\)`, 'g');
+  const buffer = await fs.promises.readFile(filePath);
+  const contents = buffer.toString();
+
+  return reRequireSyntax.test(contents);
+}
+
 export const getCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables }) => {
   const { filePath, bundle, env } = args;
 
   if (!fs.existsSync(filePath)) {
     throw new FleekFunctionPathNotValidError({ path: filePath });
+  }
+
+  const isUserSourceCodeSupported = await checkUserSourceCodeSupport(filePath);
+
+  if (isUserSourceCodeSupported) {
+    output.error(t('requireDeprecatedUseES6Syntax'));
   }
 
   // TODO: Given original name "bundleCode" and "noBundle parameter, check original intent as some of the process
