@@ -1,7 +1,10 @@
 import fs from 'fs';
 import { PluginBuild } from 'esbuild';
 
-const supportedModules = [
+// Worker supported modules
+// due to environment constraints
+// optimized for edge computing
+const runtimeModules = [
   'buffer',
   'crypto',
   'domain',
@@ -46,7 +49,7 @@ export const nodeProtocolImportSpecifier = ({
   setup(build: PluginBuild) {
     build.onLoad({ filter: /\.js$/ }, async ({ path }) => {
       try {
-        for (const moduleName of supportedModules) {
+        for (const moduleName of runtimeModules) {
           return applyNodeProtocolConvention({
             moduleName,
             path,
