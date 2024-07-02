@@ -88,7 +88,7 @@ const transpileCode = async (args: BundleCodeArgs) => {
     );
   }
 
-  let buildOptions: BuildOptions = {
+  const buildOptions: BuildOptions = {
     entryPoints: [filePath],
     bundle,
     logLevel: 'silent',
