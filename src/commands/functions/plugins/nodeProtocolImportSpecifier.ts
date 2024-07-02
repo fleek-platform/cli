@@ -47,20 +47,15 @@ const applyNodeProtocolConvention = async ({
   const buffer = await fs.promises.readFile(path, 'utf8');
   const contents = buffer.toString();
 
-  try {
-    const output = runtimeModules.reduce((acc, moduleName) => {
-      return replaceLineByMatchRegExpr({
-        contents: acc,
-        moduleName,
-      });
-    }, contents);
+  const output = runtimeModules.reduce((acc, moduleName) => {
+    return replaceLineByMatchRegExpr({
+      contents: acc,
+      moduleName,
+    });
+  }, contents);
 
-    return {
-      contents: output,
-    }
-  } catch (err) {
-    // TODO: Handle this gracefully
-    console.error(err);
+  return {
+    contents: output,
   }
 }
 
