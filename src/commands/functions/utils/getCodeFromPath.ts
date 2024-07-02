@@ -64,9 +64,8 @@ type BundleCodeArgs = {
   env: EnvironmentVariables;
 };
 
-const bundleCode = async (args: BundleCodeArgs) => {
+const transpileCode = async (args: BundleCodeArgs) => {
   const { filePath, noBundle, env } = args;
-
   const progressBar = new cliProgress.SingleBar(
     {
       format: t('uploadProgress', { action: t('bundlingCode') }),
@@ -89,9 +88,7 @@ const bundleCode = async (args: BundleCodeArgs) => {
       name: 'ProgressBar',
       setup: (build) => {
         build.onStart(() => {
-          if (!noBundle) {
-            progressBar.start(100, 10);
-          }
+          progressBar.start(100, 10);
         });
       },
     },
@@ -108,6 +105,7 @@ const bundleCode = async (args: BundleCodeArgs) => {
           if (!reImportSyntax.test(contents)) return;
 
           const reModuleName = new RegExp(`["']${moduleName}["']`, 'g');
+
           return {
             contents: contents.replace(reModuleName, `"node:${moduleName}"`),
           }
@@ -134,20 +132,33 @@ const bundleCode = async (args: BundleCodeArgs) => {
     );
   }
 
-  const buildOptions: BuildOptions = {
+  // TODO: Rename the transpileCode param noBundle
+  // to "bundle" as its easier to read
+  // for the moment use proxy variable
+  const bundle = !noBundle;
+
+  let buildOptions: BuildOptions = {
     entryPoints: [filePath],
-    bundle: true,
+    bundle,
     logLevel: 'silent',
     platform: 'browser',
     format: 'esm',
     target: 'esnext',
     treeShaking: true,
     mainFields: ['browser', 'module', 'main'],
-    external: [...Object.values(supportedModulesAliases)],
     outfile: outFile,
     minify: true,
     plugins,
   };
+
+  if (bundle) {
+    buildOptions = {
+      ...buildOptions,
+      // TODO: native modules don't require to be made external
+      // as that's the default behaviour, revise this line
+      external: [...Object.values(supportedModulesAliases)],
+    }
+  }
 
   if (Object.keys(env).length) {
     buildOptions.banner = {
@@ -184,8 +195,15 @@ const bundleCode = async (args: BundleCodeArgs) => {
   progressBar.update(100);
   progressBar.stop();
 
+  if (!bundle) {
+    const noCheck = '// @ts-nocheck';
+    const buf = await fs.promises.readFile(outFile, 'utf8');
+    const content = `${noCheck}\n${buf.toString()}`;
+    await fs.promises.writeFile(outFile, content, 'utf8');
+  }
+
   const bundlingResponse: BundlingResponse = {
-    path: noBundle ? filePath : outFile,
+    path: outFile,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
   };
@@ -214,7 +232,12 @@ export const getCodeFromPath = async (args: { path: string; noBundle: boolean; e
     throw new FleekFunctionPathNotValidError({ path });
   }
 
-  const bundlingResponse = await bundleCode({ filePath, noBundle, env });
+  // TODO: Given original name "bundleCode" and "noBundle parameter, check original intent as some of the process
+  // done when transpiling should be available when no "esbuild"
+  // pass is required. Notice that the original author
+  // always bundled the code even though the user might not
+  // request it
+  const bundlingResponse = await transpileCode({ filePath, noBundle, env });
 
   showUnsupportedModules({ unsupportedModulesUsed: bundlingResponse.unsupportedModules });
 
