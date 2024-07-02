@@ -179,11 +179,14 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
     output.error(t('requireDeprecatedUseES6Syntax'));
   }
 
-  // TODO: Given original name "bundleCode" and "noBundle parameter, check original intent as some of the process
-  // done when transpiling should be available when no "esbuild"
-  // pass is required. Notice that the original author
-  // always bundled the code even though the user might not
-  // request it
+  // TODO: Given original name "bundleCode" and "noBundle"
+  // parameter, check original intent.
+  // The original version bundled regardless of "noBundle" flag
+  // although at very end opting to use the raw version
+  // but this seemed like a mistake.
+  // TODO: If the original intent did NOT want to have esbuild
+  // to transpile the code, it must apply shared computations
+  // such as the node: protocol or others.
   const transpileResponse = await transpileCode({
     filePath,
     bundle,
