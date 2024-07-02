@@ -27,7 +27,7 @@ const supportedModulesAliases = {
   zlib: 'node:zlib',
 };
 
-type BundlingResponse = {
+type TranspileResponse = {
   path: string;
   unsupportedModules: Set<string>;
   success: boolean;
@@ -171,7 +171,7 @@ const transpileCode = async (args: BundleCodeArgs) => {
     const errorMessage =
       e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
 
-    const bundlingResponse: BundlingResponse = {
+    const bundlingResponse: TranspileResponse = {
       path: filePath,
       unsupportedModules: unsupportedModulesUsed,
       success: false,
@@ -191,7 +191,7 @@ const transpileCode = async (args: BundleCodeArgs) => {
     await fs.promises.writeFile(outFile, content, 'utf8');
   }
 
-  const bundlingResponse: BundlingResponse = {
+  const bundlingResponse: TranspileResponse = {
     path: outFile,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
