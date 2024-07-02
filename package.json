@@ -43,7 +43,6 @@
     "conf": "^10.2.0",
     "dotenv": "^16.0.3",
     "esbuild": "^0.21.1",
-    "esbuild-plugins-node-modules-polyfill": "^1.6.4",
     "files-from-path": "^1.0.0",
     "glob": "^8.1.0",
     "lodash-es": "^4.17.21",

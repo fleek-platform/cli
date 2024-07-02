@@ -3,7 +3,6 @@
 import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
-import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
 import { filesFromPaths } from 'files-from-path';
 import * as fs from 'fs';
 
@@ -98,18 +97,6 @@ const transpileCode = async (args: BundleCodeArgs) => {
 
   if (bundle) {
     plugins.push(
-      nodeModulesPolyfillPlugin({
-        globals: { Buffer: true },
-        modules: {
-          async_hooks: false,
-          assert: true,
-          dns: true,
-          http2: true,
-          net: true,
-          querystring: true,
-          tls: true,
-        },
-      }),
       asyncLocalStoragePolyfill()
     );
   }
