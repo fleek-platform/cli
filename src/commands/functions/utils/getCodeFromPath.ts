@@ -27,18 +27,12 @@ const supportedModulesAliases = {
   zlib: 'node:zlib',
 };
 
-type BundlingResponse =
-  | {
-      path: string;
-      unsupportedModules: Set<string>;
-      success: true;
-    }
-  | {
-      path: string;
-      unsupportedModules: Set<string>;
-      success: false;
-      error: string;
-    };
+type BundlingResponse = {
+  path: string;
+  unsupportedModules: Set<string>;
+  success: boolean;
+  error?: string;
+};
 
 type ShowUnsupportedModulesArgs = {
   unsupportedModulesUsed: Set<string>;
@@ -236,8 +230,7 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
 
   showUnsupportedModules({ unsupportedModulesUsed: bundlingResponse.unsupportedModules });
 
-  if (!bundlingResponse.success && bundle) {
-    // TODO: there's a type error here
+  if (!bundlingResponse.success) {
     throw new FleekFunctionBundlingFailedError({ error: bundlingResponse.error });
   }
 
