@@ -1,6 +1,6 @@
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
-import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError } from '@fleek-platform/errors';
+import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
 import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
@@ -237,6 +237,10 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
   showUnsupportedModules({ unsupportedModulesUsed: transpileResponse.unsupportedModules });
 
   if (!transpileResponse.success) {
+    if (!transpileResponse.error) {
+      throw new UnknownError();
+    }
+    
     throw new FleekFunctionBundlingFailedError({ error: transpileResponse.error });
   }
 
