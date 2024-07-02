@@ -1,3 +1,5 @@
+// TODO: These error messages should be revised
+// e.g. FleekFunctionPathNotValidError happens regardless of bundling
 import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
@@ -62,11 +64,15 @@ const transpileCode = async (args: BundleCodeArgs) => {
   const { filePath, bundle, env } = args;
   const progressBar = new cliProgress.SingleBar(
     {
-      format: t('uploadProgress', { action: t('bundlingCode') }),
+      format: t('uploadProgress', { action: t(bundle ? 'bundlingCode' : 'transformingCode') }),
     },
     cliProgress.Presets.shades_grey
   );
 
+  // TODO: The temporary directory should be handled
+  // as expected. Create a temp location, use and deleted safely
+  // it shouldn't be persistent or dumped in the user workdir.
+  // Should be reusable across the file or process.
   const tempDir = '.fleek';
 
   if (!fs.existsSync(tempDir)) {
@@ -169,7 +175,7 @@ const transpileCode = async (args: BundleCodeArgs) => {
     progressBar.stop();
 
     const errorMessage =
-      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
+      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownTransformError');
 
     const transpileResponse: TranspileResponse = {
       path: filePath,

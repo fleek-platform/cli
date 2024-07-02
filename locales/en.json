@@ -308,6 +308,7 @@
   "noChangesDetected": "No changes detected. Skipping deployment",
   "typeFunctionCodePath": "Enter the path to the javascript file or folder containing the function code:",
   "bundlingCode": "Bundling code",
+  "transformingCode": "Transforming code",
   "uploadCodeToIpfs": "Uploading code to IPFS",
   "uploadToIpfsFailed": "Failed to upload to IPFS",
   "storageUploadSuccessCid": "The Storage IPFS CID is {cid}",
@@ -326,5 +327,5 @@
   "missingEnvVar": "Environment variable {key} is missing",
   "envFileParseError": "Failed to parse environment variables file at {path}",
   "envFilePathNotFound": "The environment variables file located at {path} could not be found.",
-  "unknownBundlingError": "Failed to bundle your function code."
+  "unknownTransformError": "We had trouble transforming your function code. Try again? If the issue persists, let us know to help us improve!"
 }
