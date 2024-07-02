@@ -1,24 +1,6 @@
 import fs from 'fs';
 import { PluginBuild } from 'esbuild';
-
-// Worker supported modules
-// due to environment constraints
-// optimized for edge computing
-const runtimeModules = [
-  'buffer',
-  'crypto',
-  'domain',
-  'events',
-  'http',
-  'https',
-  'path',
-  'punycode',
-  'stream',
-  'string_decoder',
-  'url',
-  'util',
-  'zlib',
-];
+import { runtimeModules } from '../runtimeModules';
 
 const replaceLineByMatchRegExpr = ({
   contents,
