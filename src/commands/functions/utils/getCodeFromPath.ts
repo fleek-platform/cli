@@ -13,22 +13,6 @@ import { asyncLocalStoragePolyfill } from '../plugins/asyncLocalStoragePolyfill'
 import { moduleChecker } from '../plugins/moduleChecker';
 import { nodeProtocolImportSpecifier } from '../plugins/nodeProtocolImportSpecifier';
 
-const supportedModules = [
-  'node:buffer',
-  'node:crypto',
-  'node:domain',
-  'node:events',
-  'node:http',
-  'node:https',
-  'node:path',
-  'node:punycode',
-  'node:stream',
-  'node:string_decoder',
-  'node:url',
-  'node:util',
-  'node:zlib',
-];
-
 type TranspileResponse = {
   path: string;
   unsupportedModules: Set<string>;
@@ -84,7 +68,10 @@ const transpileCode = async (args: BundleCodeArgs) => {
 
   const plugins: Plugin[] = [
     moduleChecker({ unsupportedModulesUsed }),
-    nodeProtocolImportSpecifier(),
+    nodeProtocolImportSpecifier({
+      // Handle the error gracefully
+      onError: () => output.error(t('failedToApplyNodeImportProtocol')),
+    }),
     {
       name: 'ProgressBar',
       setup: (build) => {
@@ -114,15 +101,6 @@ const transpileCode = async (args: BundleCodeArgs) => {
     minify: true,
     plugins,
   };
-
-  if (bundle) {
-    buildOptions = {
-      ...buildOptions,
-      // TODO: native modules don't require to be made external
-      // as that's the default behaviour, revise this line
-      external: [...supportedModules],
-    }
-  }
 
   if (Object.keys(env).length) {
     buildOptions.banner = {
