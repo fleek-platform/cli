@@ -1,35 +1,31 @@
-import fs from 'fs';
 import { PluginBuild } from 'esbuild';
-import { runtimeModules } from '../runtimeModules';
+import fs from 'fs';
 
-const replaceLineByMatchRegExpr = ({
-  contents,
-  moduleName,
-}: {
-  contents: string;
-  moduleName: string;
-}) => {
+import { supportedRuntimeModules, unsupportedRuntimeModules } from '../runtimeModules';
+
+const replaceLineByMatchRegExpr = ({ contents, moduleName }: { contents: string; moduleName: string }) => {
   const reImportSyntax = new RegExp(`import\\s*[\\w\\W]*?\\s*from\\s+["']${moduleName}["']`, 'g');
   const reModuleName = new RegExp(`["']${moduleName}["']`, 'g');
   const convention = `"node:${moduleName}"`;
   const lns = contents.split('\n');
-  const res = lns.map(ln => {
+  const res = lns.map((ln) => {
     const shouldReplace = reImportSyntax.test(ln);
-    if (!shouldReplace) return ln;
+
+    if (!shouldReplace) {
+      return ln;
+    }
+
     return ln.replace(reModuleName, convention);
   });
-  return res.join('\n');
-}
 
-const applyNodeProtocolConvention = async ({
-  path,
-}: {
-  path: string;
-}) => {
+  return res.join('\n');
+};
+
+const applyNodeProtocolConvention = async ({ path }: { path: string }) => {
   const buffer = await fs.promises.readFile(path, 'utf8');
   const contents = buffer.toString();
 
-  const output = runtimeModules.reduce((acc, moduleName) => {
+  const output = [...supportedRuntimeModules, ...unsupportedRuntimeModules].reduce((acc, moduleName) => {
     return replaceLineByMatchRegExpr({
       contents: acc,
       moduleName,
@@ -38,19 +34,15 @@ const applyNodeProtocolConvention = async ({
 
   return {
     contents: output,
-  }
-}
+  };
+};
 
-export const nodeProtocolImportSpecifier = ({
-  onError
-}: {
-  onError: () => void;    
-}) => ({
+export const nodeProtocolImportSpecifier = ({ onError }: { onError: () => void }) => ({
   name: 'nodeProtocolImportSpecifier',
   setup(build: PluginBuild) {
     build.onLoad({ filter: /\.js$/ }, async ({ path }) => {
       try {
-        const output = applyNodeProtocolConvention({
+        const output = await applyNodeProtocolConvention({
           path,
         });
 
@@ -60,7 +52,7 @@ export const nodeProtocolImportSpecifier = ({
       }
     });
 
-    build.onResolve({ filter: /^node:/ }, args => ({
+    build.onResolve({ filter: /^node:/ }, (args) => ({
       path: args.path,
       external: true,
     }));

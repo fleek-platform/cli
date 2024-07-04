@@ -5,13 +5,14 @@ import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
 import { filesFromPaths } from 'files-from-path';
 import * as fs from 'fs';
+import * as os from 'os';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
-import { EnvironmentVariables } from './parseEnvironmentVariables';
 import { asyncLocalStoragePolyfill } from '../plugins/asyncLocalStoragePolyfill';
-import { moduleChecker } from '../plugins/moduleChecker';
 import { nodeProtocolImportSpecifier } from '../plugins/nodeProtocolImportSpecifier';
+import { moduleChecker } from '../plugins/unsupportedModuleStub';
+import { EnvironmentVariables } from './parseEnvironmentVariables';
 
 type TranspileResponse = {
   path: string;
@@ -38,13 +39,19 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
   }
 };
 
-type BundleCodeArgs = {
+const buildEnvVars = (args: { env: EnvironmentVariables }) => {
+  Object.entries(args.env)
+    .map(([key, value]) => `${key}: "${value}"`)
+    .join(',');
+};
+
+type TranspileCodeArgs = {
   filePath: string;
   bundle: boolean;
   env: EnvironmentVariables;
 };
 
-const transpileCode = async (args: BundleCodeArgs) => {
+const transpileCode = async (args: TranspileCodeArgs) => {
   const { filePath, bundle, env } = args;
   const progressBar = new cliProgress.SingleBar(
     {
@@ -53,14 +60,16 @@ const transpileCode = async (args: BundleCodeArgs) => {
     cliProgress.Presets.shades_grey
   );
 
-  // TODO: The temporary directory should be handled
-  // as expected. Create a temp location, use and deleted safely
-  // it shouldn't be persistent or dumped in the user workdir.
-  // Should be reusable across the file or process.
-  const tempDir = '.fleek';
+  let tempDir;
 
-  if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir);
+  if (!output.debugEnabled) {
+    tempDir = os.tmpdir();
+  } else {
+    tempDir = '.fleek';
+
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir);
+    }
   }
 
   const outFile = tempDir + '/function.js';
@@ -68,10 +77,6 @@ const transpileCode = async (args: BundleCodeArgs) => {
 
   const plugins: Plugin[] = [
     moduleChecker({ unsupportedModulesUsed }),
-    nodeProtocolImportSpecifier({
-      // Handle the error gracefully
-      onError: () => output.error(t('failedToApplyNodeImportProtocol')),
-    }),
     {
       name: 'ProgressBar',
       setup: (build) => {
@@ -84,7 +89,11 @@ const transpileCode = async (args: BundleCodeArgs) => {
 
   if (bundle) {
     plugins.push(
-      asyncLocalStoragePolyfill()
+      asyncLocalStoragePolyfill(),
+      nodeProtocolImportSpecifier({
+        // Handle the error gracefully
+        onError: () => output.error(t('failedToApplyNodeImportProtocol')),
+      })
     );
   }
 
@@ -102,19 +111,9 @@ const transpileCode = async (args: BundleCodeArgs) => {
     plugins,
   };
 
-  if (Object.keys(env).length) {
-    buildOptions.banner = {
-      js: `
-    globalThis.fleek = {
-      env: {
-        ${Object.entries(env)
-          .map(([key, value]) => `${key}: "${value}"`)
-          .join(',\n')}
-      }
-    }
-    `,
-    };
-  }
+  buildOptions.banner = {
+    js: `globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
+  };
 
   try {
     await build(buildOptions);
@@ -164,7 +163,7 @@ const checkUserSourceCodeSupport = async (filePath: string) => {
   const contents = buffer.toString();
 
   return reRequireSyntax.test(contents);
-}
+};
 
 export const getCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables }) => {
   const { filePath, bundle, env } = args;
@@ -179,14 +178,6 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
     output.error(t('requireDeprecatedUseES6Syntax'));
   }
 
-  // TODO: Given original name "bundleCode" and "noBundle"
-  // parameter, check original intent.
-  // The original version bundled regardless of "noBundle" flag
-  // although at very end opting to use the raw version
-  // but this seemed like a mistake.
-  // TODO: If the original intent did NOT want to have esbuild
-  // to transpile the code, it must apply shared computations
-  // such as the node: protocol or others.
   const transpileResponse = await transpileCode({
     filePath,
     bundle,
@@ -199,7 +190,7 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
     if (!transpileResponse.error) {
       throw new UnknownError();
     }
-    
+
     throw new FleekFunctionBundlingFailedError({ error: transpileResponse.error });
   }
 
