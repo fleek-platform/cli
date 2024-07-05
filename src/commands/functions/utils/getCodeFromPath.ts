@@ -112,7 +112,8 @@ const transpileCode = async (args: TranspileCodeArgs) => {
   };
 
   buildOptions.banner = {
-    js: `globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
+    js: `import { Buffer } from "node:buffer";
+globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
   };
 
   try {
@@ -137,7 +138,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
   }
 
   const transpileResponse: TranspileResponse = {
-    path: outFile,
+    path: bundle ? outFile : filePath,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
   };
