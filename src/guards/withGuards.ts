@@ -3,11 +3,11 @@ import { loginGuard } from "./loginGuard";
 import { projectGuard } from "./projectGuard";
 import { sdkGuard } from "./sdkGuard";
 import { sitesGuard } from "./sitesGuard";
+import { t } from "../utils/translation";
 import type { Action, Guards, SdkGuardedFunction } from "./types";
 
 type WithGuardsArgs = { scopes: Guards };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const withGuards = <
 	T extends { predefinedConfigPath?: string; [name: string]: any },
 >(
@@ -30,9 +30,13 @@ export const withGuards = <
 		try {
 			const action = sdkGuard(handler);
 			await action(args);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (error: any) {
-			output.error(error?.message);
+		} catch (error) {
+			if (error instanceof Error) {
+				output.error(error?.message);
+				return;
+			}
+
+			output.error(`${t('unexpectedError')} ${JSON.stringify(error)}`)
 		}
 	};
 };
