@@ -1,13 +1,17 @@
-import { promises as fs } from "node:fs";
+import { promises as fsPromises } from "node:fs";
+
+interface FsError extends Error {
+  code?: string;
+}
 
 export const fileExists = async (path: string) => {
 	try {
-		const stat = await fs.stat(path);
+		const stat = await fsPromises.stat(path);
 
 		return stat.isFile();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (e: any) {
-		if (e.code === "ENOENT") {
+	} catch (e) {
+		const err = e as FsError;
+		if (err.code === "ENOENT") {
 			return false;
 		}
 
