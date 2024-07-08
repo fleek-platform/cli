@@ -19,8 +19,13 @@ export const verifyDomainAction: SdkGuardedFunction<
 		id: args.id,
 		hostname: args.hostname,
 		sdk,
-		choicesFilter: (domain: Domain) => !domain.isVerified,
+		choicesFilter: (domain: Domain) => domain.isVerified,
 	});
+
+	if (!domain) {
+		output.error(t('noEnsRecordFoundUnexpectedly'));
+		return;
+	}
 
 	if (domain.status === "ACTIVE") {
 		output.success(t("domainAlreadyVerified", { hostname: domain.hostname }));
