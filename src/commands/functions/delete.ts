@@ -13,6 +13,13 @@ const deleteAction: SdkGuardedFunction<DeleteActionArgs> = async ({
 	args,
 }) => {
 	const functionToDelete = await getFunctionOrPrompt({ name: args.name, sdk });
+
+	if (!functionToDelete) {
+		output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+
+		return;
+	}
+	
 	await sdk.functions().delete({ id: functionToDelete.id });
 
 	output.printNewLine();

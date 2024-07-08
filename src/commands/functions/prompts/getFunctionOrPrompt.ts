@@ -12,7 +12,7 @@ type GetFunctionOrPromptArgs = {
 export const getFunctionOrPrompt = async ({
 	name,
 	sdk,
-}: GetFunctionOrPromptArgs): Promise<FleekFunction> => {
+}: GetFunctionOrPromptArgs): Promise<FleekFunction | undefined> => {
 	if (name) {
 		return sdk.functions().get({ name });
 	}
@@ -28,5 +28,9 @@ export const getFunctionOrPrompt = async ({
 		choices: functions.map((f) => ({ title: f.name, value: f.id })),
 	});
 
-	return functions.find((f) => f.id === selectedFunctionId)!;
+	const fnMatch = functions.find((f) => f.id === selectedFunctionId);
+
+	if (!fnMatch) return;
+
+	return fnMatch;
 };
