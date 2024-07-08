@@ -24,11 +24,11 @@ export const sitesGuard = async ({
 		const sdk = getSdkClient();
 
 		if (!sdk) {
-			output.error(t('unexpectedError'));
-						
+			output.error(t("unexpectedError"));
+
 			return false;
 		}
-		
+
 		await initConfiguration({ sdk });
 	}
 };

@@ -1,15 +1,15 @@
 import { output } from "../cli";
+import { t } from "../utils/translation";
 import { loginGuard } from "./loginGuard";
 import { projectGuard } from "./projectGuard";
 import { sdkGuard } from "./sdkGuard";
 import { sitesGuard } from "./sitesGuard";
-import { t } from "../utils/translation";
 import type { Action, Guards, SdkGuardedFunction } from "./types";
 
 type WithGuardsArgs = { scopes: Guards };
 
 export const withGuards = <
-	T extends { predefinedConfigPath?: string; [name: string]: any },
+	T extends { predefinedConfigPath?: string; [name: string]: Object | undefined },
 >(
 	handler: SdkGuardedFunction<T>,
 	{ scopes }: WithGuardsArgs,
@@ -36,7 +36,7 @@ export const withGuards = <
 				return;
 			}
 
-			output.error(`${t('unexpectedError')} ${JSON.stringify(error)}`)
+			output.error(`${t("unexpectedError")} ${JSON.stringify(error)}`);
 		}
 	};
 };
