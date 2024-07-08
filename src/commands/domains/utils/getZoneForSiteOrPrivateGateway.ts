@@ -15,7 +15,11 @@ export const getZoneForSiteOrPrivateGateway = async (
 	args: GetZoneForSiteOrPrivateGatewayArgs,
 ): Promise<Pick<Zone, "id"> | null> => {
 	if ("privateGateway" in args) {
-		return args.privateGateway.zone!;
+		const { privateGateway: { zone } } = args;
+
+		if (!zone) return null;
+		
+		return zone;
 	}
 
 	const existingZones = args.site.zones?.filter(
