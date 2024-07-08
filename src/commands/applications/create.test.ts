@@ -31,17 +31,17 @@ describe("Create application", () => {
 		});
 
 		it("should handle errors gracefully (non-intrusive)", () => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const arg: any = "foobar.xyz";
+			const arg = "foobar.xyz";
 
-			expect(whitelistArgParser(arg)).toBeUndefined();
+			// The argument is of wrong ds purposely for testing
+			expect(whitelistArgParser(arg as unknown as string[])).toBeUndefined();
 		});
 
 		it("should handle errors gracefully (show error message)", () => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const arg: any = "foobar.xyz";
+			const arg = "foobar.xyz";
 
-			expect(whitelistArgParser(arg)).toBeUndefined();
+			// The argument is of wrong ds purposely for testing
+			expect(whitelistArgParser(arg as unknown as string[])).toBeUndefined();
 			expect(fakeOutput.error).toHaveBeenCalledOnce();
 			expect(fakeOutput.error).toHaveBeenCalledWith(
 				"Unexpected data argument.",
