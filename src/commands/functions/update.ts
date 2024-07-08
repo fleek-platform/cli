@@ -1,43 +1,66 @@
-import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
-import { withGuards } from '../../guards/withGuards';
-import { t } from '../../utils/translation';
-import { getFunctionNameOrPrompt } from './prompts/getFunctionNameOrPrompt';
-import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
-import { getFunctionSlugOrPrompt } from './prompts/getFunctionSlugOrPrompt';
-import { getFunctionStatusOrPrompt } from './prompts/getFunctionStatusOrPrompt';
+import { output } from "../../cli";
+import type { SdkGuardedFunction } from "../../guards/types";
+import { withGuards } from "../../guards/withGuards";
+import { t } from "../../utils/translation";
+import { getFunctionNameOrPrompt } from "./prompts/getFunctionNameOrPrompt";
+import { getFunctionOrPrompt } from "./prompts/getFunctionOrPrompt";
+import { getFunctionSlugOrPrompt } from "./prompts/getFunctionSlugOrPrompt";
+import { getFunctionStatusOrPrompt } from "./prompts/getFunctionStatusOrPrompt";
 
 type UpdateFunctionArgs = {
-  functionName?: string;
-  name?: string;
-  slug?: string;
-  status?: string;
+	functionName?: string;
+	name?: string;
+	slug?: string;
+	status?: string;
 };
 
-const updateAction: SdkGuardedFunction<UpdateFunctionArgs> = async ({ args, sdk }) => {
-  if (!args.name && !args.slug && !args.status) {
-    output.error(t('functionUpdateArgsNotValid', { param1: 'name', param2: 'slug', param3: 'status' }));
+const updateAction: SdkGuardedFunction<UpdateFunctionArgs> = async ({
+	args,
+	sdk,
+}) => {
+	if (!args.name && !args.slug && !args.status) {
+		output.error(
+			t("functionUpdateArgsNotValid", {
+				param1: "name",
+				param2: "slug",
+				param3: "status",
+			}),
+		);
 
-    return;
-  }
+		return;
+	}
 
-  const name = args.name ? await getFunctionNameOrPrompt({ name: args.name }) : undefined;
-  const slug = args.slug ? await getFunctionSlugOrPrompt({ slug: args.slug }) : undefined;
-  const status = args.status ? await getFunctionStatusOrPrompt({ status: args.status }) : undefined;
+	const name = args.name
+		? await getFunctionNameOrPrompt({ name: args.name })
+		: undefined;
+	const slug = args.slug
+		? await getFunctionSlugOrPrompt({ slug: args.slug })
+		: undefined;
+	const status = args.status
+		? await getFunctionStatusOrPrompt({ status: args.status })
+		: undefined;
 
-  const fleekFunction = await getFunctionOrPrompt({ name: args.functionName, sdk });
+	const fleekFunction = await getFunctionOrPrompt({
+		name: args.functionName,
+		sdk,
+	});
 
-  await sdk.functions().update({ id: fleekFunction.id, slug, status, name });
+	await sdk.functions().update({ id: fleekFunction.id, slug, status, name });
 
-  output.printNewLine();
-  output.success(t('commonItemActionSuccess', { subject: t('function'), action: t('updated') }));
-  output.printNewLine();
+	output.printNewLine();
+	output.success(
+		t("commonItemActionSuccess", {
+			subject: t("function"),
+			action: t("updated"),
+		}),
+	);
+	output.printNewLine();
 };
 
 export const updateActionHandler = withGuards(updateAction, {
-  scopes: {
-    authenticated: true,
-    project: true,
-    site: false,
-  },
+	scopes: {
+		authenticated: true,
+		project: true,
+		site: false,
+	},
 });

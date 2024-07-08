@@ -1,48 +1,51 @@
-import { UnauthenticatedError } from '@fleek-platform/errors';
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { getDefined } from '../defined';
+import { UnauthenticatedError } from "@fleek-platform/errors";
+import { FleekSdk, PersonalAccessTokenService } from "@fleek-platform/sdk";
+import { getDefined } from "../defined";
 
-import { output } from '../cli';
-import { config } from '../config';
-import { loginGuard } from './loginGuard';
-import { Action, SdkGuardedFunction } from './types';
+import { output } from "../cli";
+import { config } from "../config";
+import { loginGuard } from "./loginGuard";
+import type { Action, SdkGuardedFunction } from "./types";
 
 type SdkGuardArgs<T> = SdkGuardedFunction<T>;
 
 export const getSdkClient = () => {
-  const personalAccessToken = config.personalAccessToken.get();
-  const projectId = config.projectId.get();
+	const personalAccessToken = config.personalAccessToken.get();
+	const projectId = config.projectId.get();
 
-  if (!personalAccessToken) {
-    return;
-  }
+	if (!personalAccessToken) {
+		return;
+	}
 
-  const accessTokenService = new PersonalAccessTokenService({ projectId, personalAccessToken });
-  const sdk = new FleekSdk({
-    accessTokenService,
-    graphqlServiceApiUrl: getDefined('SDK__GRAPHQL_API_URL'),
-    ipfsStorageApiUrl: getDefined('SDK__IPFS__STORAGE_API_URL'),
-    uploadProxyApiUrl: getDefined('SDK__UPLOAD_PROXY_API_URL'),
-  });
+	const accessTokenService = new PersonalAccessTokenService({
+		projectId,
+		personalAccessToken,
+	});
+	const sdk = new FleekSdk({
+		accessTokenService,
+		graphqlServiceApiUrl: getDefined("SDK__GRAPHQL_API_URL"),
+		ipfsStorageApiUrl: getDefined("SDK__IPFS__STORAGE_API_URL"),
+		uploadProxyApiUrl: getDefined("SDK__UPLOAD_PROXY_API_URL"),
+	});
 
-  return sdk;
+	return sdk;
 };
 
 export const sdkGuard = <T>(func: SdkGuardArgs<T>): Action<T> => {
-  return async (args: T = {} as T) => {
-    await loginGuard();
+	return async (args: T = {} as T) => {
+		await loginGuard();
 
-    const sdk = getSdkClient();
+		const sdk = getSdkClient();
 
-    if (!sdk) {
-      throw new UnauthenticatedError();
-    }
+		if (!sdk) {
+			throw new UnauthenticatedError();
+		}
 
-    try {
-      await func({ sdk, args });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      output.error(error?.toString());
-    }
-  };
+		try {
+			await func({ sdk, args });
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			output.error(error?.toString());
+		}
+	};
 };

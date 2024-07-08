@@ -1,3 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes } from "crypto";
 
-export const generateVerificationSessionId = () => randomBytes(16).toString('hex');
+export const generateVerificationSessionId = () =>
+	randomBytes(16).toString("hex");

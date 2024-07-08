@@ -1,29 +1,37 @@
-import { ApplicationsNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk } from '@fleek-platform/sdk';
+import { ApplicationsNotFoundError } from "@fleek-platform/errors";
+import type { FleekSdk } from "@fleek-platform/sdk";
 
-import { selectPrompt } from '../../../prompts/selectPrompt';
-import { t } from '../../../utils/translation';
+import { selectPrompt } from "../../../prompts/selectPrompt";
+import { t } from "../../../utils/translation";
 
 type GetApplicationOrPromptArgs = {
-  id?: string;
-  sdk: FleekSdk;
+	id?: string;
+	sdk: FleekSdk;
 };
 
-export const getApplicationOrPrompt = async ({ id, sdk }: GetApplicationOrPromptArgs) => {
-  if (id) {
-    return sdk.applications().get({ id });
-  }
+export const getApplicationOrPrompt = async ({
+	id,
+	sdk,
+}: GetApplicationOrPromptArgs) => {
+	if (id) {
+		return sdk.applications().get({ id });
+	}
 
-  const applications = await sdk.applications().list();
+	const applications = await sdk.applications().list();
 
-  if (applications.length === 0) {
-    throw new ApplicationsNotFoundError({});
-  }
+	if (applications.length === 0) {
+		throw new ApplicationsNotFoundError({});
+	}
 
-  const selectedApplicationId = await selectPrompt({
-    message: `${t('selectApp')}:`,
-    choices: applications.map((application) => ({ title: application.name, value: application.id })),
-  });
+	const selectedApplicationId = await selectPrompt({
+		message: `${t("selectApp")}:`,
+		choices: applications.map((application) => ({
+			title: application.name,
+			value: application.id,
+		})),
+	});
 
-  return applications.find((application) => application.id === selectedApplicationId)!;
+	return applications.find(
+		(application) => application.id === selectedApplicationId,
+	)!;
 };

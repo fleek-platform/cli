@@ -1,37 +1,43 @@
-import { PrivateGatewaysNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk } from '@fleek-platform/sdk';
+import { PrivateGatewaysNotFoundError } from "@fleek-platform/errors";
+import type { FleekSdk } from "@fleek-platform/sdk";
 
-import { selectPrompt } from '../../../prompts/selectPrompt';
-import { t } from '../../../utils/translation';
+import { selectPrompt } from "../../../prompts/selectPrompt";
+import { t } from "../../../utils/translation";
 
 type GetPrivateGatewayOrPromptArgs = {
-  id?: string;
-  slug?: string;
-  sdk: FleekSdk;
+	id?: string;
+	slug?: string;
+	sdk: FleekSdk;
 };
 
-export const getPrivateGatewayOrPrompt = async ({ id, slug, sdk }: GetPrivateGatewayOrPromptArgs) => {
-  if (id) {
-    return sdk.privateGateways().get({ id });
-  }
+export const getPrivateGatewayOrPrompt = async ({
+	id,
+	slug,
+	sdk,
+}: GetPrivateGatewayOrPromptArgs) => {
+	if (id) {
+		return sdk.privateGateways().get({ id });
+	}
 
-  if (slug) {
-    return sdk.privateGateways().getBySlug({ slug });
-  }
+	if (slug) {
+		return sdk.privateGateways().getBySlug({ slug });
+	}
 
-  const privateGateways = await sdk.privateGateways().list();
+	const privateGateways = await sdk.privateGateways().list();
 
-  if (privateGateways.length === 0) {
-    throw new PrivateGatewaysNotFoundError({});
-  }
+	if (privateGateways.length === 0) {
+		throw new PrivateGatewaysNotFoundError({});
+	}
 
-  const selectedPrivateGatewayId = await selectPrompt({
-    message: `${t('commonSelectXFromList', { subject: t('privateGateway') })}:`,
-    choices: privateGateways.map((privateGateway) => ({
-      title: `${privateGateway.name} (${privateGateway.slug})`,
-      value: privateGateway.id,
-    })),
-  });
+	const selectedPrivateGatewayId = await selectPrompt({
+		message: `${t("commonSelectXFromList", { subject: t("privateGateway") })}:`,
+		choices: privateGateways.map((privateGateway) => ({
+			title: `${privateGateway.name} (${privateGateway.slug})`,
+			value: privateGateway.id,
+		})),
+	});
 
-  return privateGateways.find((privateGateway) => privateGateway.id === selectedPrivateGatewayId)!;
+	return privateGateways.find(
+		(privateGateway) => privateGateway.id === selectedPrivateGatewayId,
+	)!;
 };

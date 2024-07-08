@@ -1,24 +1,28 @@
-import { ProjectInvalidNameError } from '@fleek-platform/errors';
-import { isProjectNameValid } from '@fleek-platform/utils-validation';
+import { ProjectInvalidNameError } from "@fleek-platform/errors";
+import { isProjectNameValid } from "@fleek-platform/utils-validation";
 
-import { textPrompt } from '../../../prompts/textPrompt';
-import { t } from '../../../utils/translation';
+import { textPrompt } from "../../../prompts/textPrompt";
+import { t } from "../../../utils/translation";
 
 type GetProjectNameOrPromptArgs = {
-  name?: string;
+	name?: string;
 };
 
-export const getProjectNameOrPrompt = async ({ name }: GetProjectNameOrPromptArgs) => {
-  if (name && isProjectNameValid({ name })) {
-    return name;
-  }
+export const getProjectNameOrPrompt = async ({
+	name,
+}: GetProjectNameOrPromptArgs) => {
+	if (name && isProjectNameValid({ name })) {
+		return name;
+	}
 
-  if (name && !isProjectNameValid({ name })) {
-    throw new ProjectInvalidNameError({ name });
-  }
+	if (name && !isProjectNameValid({ name })) {
+		throw new ProjectInvalidNameError({ name });
+	}
 
-  return textPrompt({
-    message: `${t('enterProjectName')}:`,
-    validate: (partialName) => isProjectNameValid({ name: partialName }) || t('mustHaveXandYValidChars', { min: '3', max: '30' }),
-  });
+	return textPrompt({
+		message: `${t("enterProjectName")}:`,
+		validate: (partialName) =>
+			isProjectNameValid({ name: partialName }) ||
+			t("mustHaveXandYValidChars", { min: "3", max: "30" }),
+	});
 };

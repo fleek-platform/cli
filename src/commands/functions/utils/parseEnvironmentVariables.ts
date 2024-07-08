@@ -1,8 +1,8 @@
-import dotenv from 'dotenv';
-import fs from 'fs';
+import fs from "fs";
+import dotenv from "dotenv";
 
-import { output } from '../../../cli';
-import { t } from '../../../utils/translation';
+import { output } from "../../../cli";
+import { t } from "../../../utils/translation";
 
 export type EnvironmentVariables = { [key: string]: string };
 
@@ -10,64 +10,70 @@ export type ParseEnvironmentVariablesArgs = { env: string[] };
 export type ParseEnvironmentVariablesFileArgs = { envFile: string };
 export type GetEnvironmentVariablesArgs = { env: string[]; envFile?: string };
 
-export const parseEnvironmentVariablesFile = (args: ParseEnvironmentVariablesFileArgs): EnvironmentVariables => {
-  const { envFile } = args;
+export const parseEnvironmentVariablesFile = (
+	args: ParseEnvironmentVariablesFileArgs,
+): EnvironmentVariables => {
+	const { envFile } = args;
 
-  if (!fs.statSync(envFile).isFile()) {
-    output.mistake(t('filePathNotFound', { envFile }));
+	if (!fs.statSync(envFile).isFile()) {
+		output.mistake(t("filePathNotFound", { envFile }));
 
-    return {};
-  }
+		return {};
+	}
 
-  try {
-    const envFileContent = fs.readFileSync(envFile);
-    const config = dotenv.parse(envFileContent);
+	try {
+		const envFileContent = fs.readFileSync(envFile);
+		const config = dotenv.parse(envFileContent);
 
-    return config;
-  } catch (err) {
-    output.mistake(t('envFileParseError', { envFile }));
+		return config;
+	} catch (err) {
+		output.mistake(t("envFileParseError", { envFile }));
 
-    return {};
-  }
+		return {};
+	}
 };
 
-export const parseEnvironmentVariables = (args: ParseEnvironmentVariablesArgs): EnvironmentVariables => {
-  const { env } = args;
+export const parseEnvironmentVariables = (
+	args: ParseEnvironmentVariablesArgs,
+): EnvironmentVariables => {
+	const { env } = args;
 
-  return env.reduce<{ [key: string]: string }>((acc, curr) => {
-    const [key, value] = curr.split('=');
+	return env.reduce<{ [key: string]: string }>((acc, curr) => {
+		const [key, value] = curr.split("=");
 
-    let varValue = value;
+		let varValue = value;
 
-    if (!varValue) {
-      // eslint-disable-next-line no-process-env
-      const envValue = process.env[key];
+		if (!varValue) {
+			// eslint-disable-next-line no-process-env
+			const envValue = process.env[key];
 
-      if (!envValue) {
-        output.mistake(t('missingEnvVar', { key }));
+			if (!envValue) {
+				output.mistake(t("missingEnvVar", { key }));
 
-        return acc;
-      }
+				return acc;
+			}
 
-      varValue = envValue;
-    }
+			varValue = envValue;
+		}
 
-    acc[key] = varValue;
+		acc[key] = varValue;
 
-    return acc;
-  }, {});
+		return acc;
+	}, {});
 };
 
-export const getEnvironmentVariables = (args: GetEnvironmentVariablesArgs): EnvironmentVariables => {
-  const { env, envFile } = args;
+export const getEnvironmentVariables = (
+	args: GetEnvironmentVariablesArgs,
+): EnvironmentVariables => {
+	const { env, envFile } = args;
 
-  const environmentVariables = parseEnvironmentVariables({ env });
+	const environmentVariables = parseEnvironmentVariables({ env });
 
-  let envFileContent: EnvironmentVariables = {};
+	let envFileContent: EnvironmentVariables = {};
 
-  if (envFile) {
-    envFileContent = parseEnvironmentVariablesFile({ envFile });
-  }
+	if (envFile) {
+		envFileContent = parseEnvironmentVariablesFile({ envFile });
+	}
 
-  return { ...envFileContent, ...environmentVariables };
+	return { ...envFileContent, ...environmentVariables };
 };

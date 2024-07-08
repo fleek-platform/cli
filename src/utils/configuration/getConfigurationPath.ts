@@ -1,36 +1,46 @@
-import { FleekConfigMissingFileError } from '@fleek-platform/errors';
-import { constants, promises as fs } from 'fs';
-import { join as joinPath } from 'path';
+import { constants, promises as fs } from "fs";
+import { join as joinPath } from "path";
+import { FleekConfigMissingFileError } from "@fleek-platform/errors";
 
 type GetConfigurationPathArgs = {
-  predefinedConfigPath?: string;
+	predefinedConfigPath?: string;
 };
 
-export const getConfigurationPath = async ({ predefinedConfigPath }: GetConfigurationPathArgs) => {
-  if (predefinedConfigPath) {
-    const absolutePath = joinPath(process.cwd(), predefinedConfigPath);
+export const getConfigurationPath = async ({
+	predefinedConfigPath,
+}: GetConfigurationPathArgs) => {
+	if (predefinedConfigPath) {
+		const absolutePath = joinPath(process.cwd(), predefinedConfigPath);
 
-    return fs
-      .access(absolutePath, constants.R_OK)
-      .then(() => absolutePath)
-      .catch(() => Promise.reject(new FleekConfigMissingFileError({ configPath: predefinedConfigPath })));
-  }
+		return fs
+			.access(absolutePath, constants.R_OK)
+			.then(() => absolutePath)
+			.catch(() =>
+				Promise.reject(
+					new FleekConfigMissingFileError({ configPath: predefinedConfigPath }),
+				),
+			);
+	}
 
-  // Sorted by priority, we return only the first match
-  const supposedFilenames = ['fleek.config.ts', 'fleek.config.js', 'fleek.config.json'];
+	// Sorted by priority, we return only the first match
+	const supposedFilenames = [
+		"fleek.config.ts",
+		"fleek.config.js",
+		"fleek.config.json",
+	];
 
-  for (const supposedFilename of supposedFilenames) {
-    const absolutePath = joinPath(process.cwd(), supposedFilename);
+	for (const supposedFilename of supposedFilenames) {
+		const absolutePath = joinPath(process.cwd(), supposedFilename);
 
-    const isSupposedFileAccessible = await fs
-      .access(absolutePath, constants.R_OK)
-      .then(() => true)
-      .catch(() => false);
+		const isSupposedFileAccessible = await fs
+			.access(absolutePath, constants.R_OK)
+			.then(() => true)
+			.catch(() => false);
 
-    if (isSupposedFileAccessible) {
-      return absolutePath;
-    }
-  }
+		if (isSupposedFileAccessible) {
+			return absolutePath;
+		}
+	}
 
-  throw new FleekConfigMissingFileError({});
+	throw new FleekConfigMissingFileError({});
 };

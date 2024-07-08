@@ -1,57 +1,65 @@
-import { FleekSdk } from '@fleek-platform/sdk';
-import { getFleekDefaultGatewayBySlug } from '@fleek-platform/utils-gateways';
+import type { FleekSdk } from "@fleek-platform/sdk";
+import { getFleekDefaultGatewayBySlug } from "@fleek-platform/utils-gateways";
 
-import { Output } from '../../../output/Output';
-import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
-import { t } from '../../../utils/translation';
-import { returnDeploymentWhenFinished } from './returnDeploymentWhenFinished';
+import type { Output } from "../../../output/Output";
+import { checkPeriodicallyUntil } from "../../../utils/checkPeriodicallyUntil";
+import { t } from "../../../utils/translation";
+import { returnDeploymentWhenFinished } from "./returnDeploymentWhenFinished";
 
 type WaitUntilDeploymentFinishedAndInformUserArgs = {
-  sdk: FleekSdk;
-  deploymentId: string;
-  siteId: string;
-  slug: string;
-  hostname?: string;
-  hash: string;
-  output: Output;
+	sdk: FleekSdk;
+	deploymentId: string;
+	siteId: string;
+	slug: string;
+	hostname?: string;
+	hash: string;
+	output: Output;
 };
 
 export const waitUntilDeploymentFinishedAndInformUser = async ({
-  sdk,
-  siteId,
-  slug,
-  hostname,
-  deploymentId,
-  hash,
-  output,
+	sdk,
+	siteId,
+	slug,
+	hostname,
+	deploymentId,
+	hash,
+	output,
 }: WaitUntilDeploymentFinishedAndInformUserArgs) => {
-  const deploymentStatus = await checkPeriodicallyUntil({
-    conditionFn: returnDeploymentWhenFinished({ sdk, deploymentId }),
-    period: 6_000,
-    tries: 30,
-  });
+	const deploymentStatus = await checkPeriodicallyUntil({
+		conditionFn: returnDeploymentWhenFinished({ sdk, deploymentId }),
+		period: 6_000,
+		tries: 30,
+	});
 
-  if (!deploymentStatus) {
-    output.warn(t('warnSubjectProcessIsLong', { subject: t('processOfDeployment') }));
-    output.printNewLine();
+	if (!deploymentStatus) {
+		output.warn(
+			t("warnSubjectProcessIsLong", { subject: t("processOfDeployment") }),
+		);
+		output.printNewLine();
 
-    output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('deploymentStatus') })}`);
-    output.log(output.textColor(`fleek sites deployments --id ${siteId}`, 'cyan'));
+		output.log(
+			`${t("commonWaitAndCheckStatusViaCmd", { subject: t("deploymentStatus") })}`,
+		);
+		output.log(
+			output.textColor(`fleek sites deployments --id ${siteId}`, "cyan"),
+		);
 
-    return;
-  }
+		return;
+	}
 
-  if (deploymentStatus === 'RELEASE_FAILED') {
-    output.error(t('deployNotFinishTryAgain'));
-    output.printNewLine();
+	if (deploymentStatus === "RELEASE_FAILED") {
+		output.error(t("deployNotFinishTryAgain"));
+		output.printNewLine();
 
-    return;
-  }
+		return;
+	}
 
-  output.success(`${t('deployed')}!`);
-  output.printNewLine();
-  output.log(t('siteIPFSCid', { hash }));
+	output.success(`${t("deployed")}!`);
+	output.printNewLine();
+	output.log(t("siteIPFSCid", { hash }));
 
-  output.hint(`${t('visitViaGateway')}:`);
-  output.link(hostname ? `https://${hostname}` : getFleekDefaultGatewayBySlug({ slug }));
+	output.hint(`${t("visitViaGateway")}:`);
+	output.link(
+		hostname ? `https://${hostname}` : getFleekDefaultGatewayBySlug({ slug }),
+	);
 };

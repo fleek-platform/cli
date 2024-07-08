@@ -1,46 +1,46 @@
 type HandlerArgs = Buffer;
 
 export const usePressAnyKey = () => {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const cancel = { current: () => {} };
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	const cancel = { current: () => {} };
 
-  const waitForAnyKey = async () =>
-    new Promise((resolve, reject) => {
-      const stopWaiting = () => {
-        process.stdin.removeListener('data', handler);
+	const waitForAnyKey = async () =>
+		new Promise((resolve, reject) => {
+			const stopWaiting = () => {
+				process.stdin.removeListener("data", handler);
 
-        if (process.stdin.isTTY) {
-          process.stdin.setRawMode(false);
-        }
+				if (process.stdin.isTTY) {
+					process.stdin.setRawMode(false);
+				}
 
-        process.stdin.pause();
-      };
+				process.stdin.pause();
+			};
 
-      const handler = (buffer: HandlerArgs) => {
-        stopWaiting();
+			const handler = (buffer: HandlerArgs) => {
+				stopWaiting();
 
-        const bytes = Array.from(buffer);
+				const bytes = Array.from(buffer);
 
-        if (bytes.length && bytes[0] === 3) {
-          process.exit(1);
-        }
+				if (bytes.length && bytes[0] === 3) {
+					process.exit(1);
+				}
 
-        process.nextTick(resolve);
-      };
+				process.nextTick(resolve);
+			};
 
-      cancel.current = () => {
-        stopWaiting();
-        reject('Canceled');
-      };
+			cancel.current = () => {
+				stopWaiting();
+				reject("Canceled");
+			};
 
-      process.stdin.resume();
+			process.stdin.resume();
 
-      if (process.stdin.isTTY) {
-        process.stdin.setRawMode(true);
-      }
+			if (process.stdin.isTTY) {
+				process.stdin.setRawMode(true);
+			}
 
-      process.stdin.once('data', handler);
-    });
+			process.stdin.once("data", handler);
+		});
 
-  return { waitForAnyKey, cancel: () => cancel.current() };
+	return { waitForAnyKey, cancel: () => cancel.current() };
 };

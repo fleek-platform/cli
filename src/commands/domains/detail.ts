@@ -1,68 +1,75 @@
-import { DomainStatus } from '@fleek-platform/sdk';
+import type { DomainStatus } from "@fleek-platform/sdk";
 
-import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
-import { withGuards } from '../../guards/withGuards';
-import { t } from '../../utils/translation';
-import { getDomainOrPrompt } from './prompts/getDomainOrPrompt';
+import { output } from "../../cli";
+import type { SdkGuardedFunction } from "../../guards/types";
+import { withGuards } from "../../guards/withGuards";
+import { t } from "../../utils/translation";
+import { getDomainOrPrompt } from "./prompts/getDomainOrPrompt";
 
 type DetailDomainActionOptions = {
-  hostname?: string;
-  id?: string;
+	hostname?: string;
+	id?: string;
 };
 
-const domainCreationPending: DomainStatus[] = ['CREATING', 'VERIFYING'];
+const domainCreationPending: DomainStatus[] = ["CREATING", "VERIFYING"];
 
-const domainCreationFailed: DomainStatus[] = ['CREATING_FAILED', 'VERIFYING_FAILED'];
+const domainCreationFailed: DomainStatus[] = [
+	"CREATING_FAILED",
+	"VERIFYING_FAILED",
+];
 
-export const detailDomainAction: SdkGuardedFunction<DetailDomainActionOptions> = async ({ sdk, args }) => {
-  const domain = await getDomainOrPrompt({
-    id: args.id,
-    hostname: args.hostname,
-    sdk,
-  });
+export const detailDomainAction: SdkGuardedFunction<
+	DetailDomainActionOptions
+> = async ({ sdk, args }) => {
+	const domain = await getDomainOrPrompt({
+		id: args.id,
+		hostname: args.hostname,
+		sdk,
+	});
 
-  if (domainCreationPending.includes(domain.status)) {
-    output.printNewLine();
-    output.warn(t('domainCreationPending'));
+	if (domainCreationPending.includes(domain.status)) {
+		output.printNewLine();
+		output.warn(t("domainCreationPending"));
 
-    return;
-  }
+		return;
+	}
 
-  if (domainCreationFailed.includes(domain.status)) {
-    output.printNewLine();
-    output.error(t('domainCreationFailed'));
+	if (domainCreationFailed.includes(domain.status)) {
+		output.printNewLine();
+		output.error(t("domainCreationFailed"));
 
-    return;
-  }
+		return;
+	}
 
-  output.table([
-    {
-      Hostname: domain.hostname,
-      'Created At': domain.createdAt,
-      Status: domain.status,
-    },
-  ]);
+	output.table([
+		{
+			Hostname: domain.hostname,
+			"Created At": domain.createdAt,
+			Status: domain.status,
+		},
+	]);
 
-  output.log(`${t('configDomainAsTable')}:`);
+	output.log(`${t("configDomainAsTable")}:`);
 
-  output.table(
-    domain.dnsConfigs.map((domain: {
-      type: string;
-      name: string;
-      value: string;
-    }) => ({
-      Type: domain.type,
-      Name: domain.name,
-      Value: domain.value,
-    }))
-  );
+	output.table(
+		domain.dnsConfigs.map(
+			(domain: {
+				type: string;
+				name: string;
+				value: string;
+			}) => ({
+				Type: domain.type,
+				Name: domain.name,
+				Value: domain.value,
+			}),
+		),
+	);
 };
 
 export const detailDomainActionHandler = withGuards(detailDomainAction, {
-  scopes: {
-    authenticated: true,
-    project: true,
-    site: false,
-  },
+	scopes: {
+		authenticated: true,
+		project: true,
+		site: false,
+	},
 });
