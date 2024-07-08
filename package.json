@@ -18,8 +18,12 @@
     "clean:generated": "rm -rf generated",
     "clean:node": "rm -rf node_modules",
     "cp:polyfills": "cp -r ./polyfills ./dist",
+    "format": "npx @biomejs/biome format --write ./src",
+    "format:check": "npx @biomejs/biome format ./src",
+    "format:multi": "npx @biomejs/biome check --write ./src",
     "increaseVersion": "pnpm version prerelease --preid dev",
-    "lint": "eslint --fix --ext .ts ./src && eslint --fix --ext .js ./bin",
+    "lint": "npx @biomejs/biome lint --write ./src",
+    "lint:check": "npx @biomejs/biome lint ./src",
     "release": "pnpm publish --access=public --no-git-checks",
     "scripts:replace-env-vars": "node -r dotenv/config ./.scripts/replaceKeys.js",
     "transpile": "tsc -p tsconfig.json && pnpm scripts:replace-env-vars",
@@ -57,6 +61,7 @@
     "update-notifier-cjs": "^5.1.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.6",
     "@fleek-platform/errors": "^2.1.1",
     "@fleek-platform/sdk": "^2.1.5",
