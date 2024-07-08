@@ -15,8 +15,13 @@ type UpdateApplicationArgs = {
 const updateApplicationAction: SdkGuardedFunction<
 	UpdateApplicationArgs
 > = async ({ sdk, args }) => {
-	// TODO: Change SDK's whitelistDomains to whitelistDomains
 	const application = await getApplicationOrPrompt({ id: args.id, sdk });
+
+	if (!application) {
+		output.error(t('noAppFoundUnexpectedly'));
+		
+		return;
+	}
 
 	const name = await enterApplicationNameOrPrompt({
 		name: args.name,

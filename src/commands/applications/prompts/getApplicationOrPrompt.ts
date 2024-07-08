@@ -31,7 +31,11 @@ export const getApplicationOrPrompt = async ({
 		})),
 	});
 
-	return applications.find(
+	const appMatch = applications.find(
 		(application) => application.id === selectedApplicationId,
-	)!;
+	);
+
+	if (!appMatch) return;
+	
+	return appMatch;
 };
