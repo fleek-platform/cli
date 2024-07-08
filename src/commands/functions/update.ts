@@ -45,6 +45,12 @@ const updateAction: SdkGuardedFunction<UpdateFunctionArgs> = async ({
 		sdk,
 	});
 
+	if (!fleekFunction) {
+		output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+
+		return;
+	}
+
 	await sdk.functions().update({ id: fleekFunction.id, slug, status, name });
 
 	output.printNewLine();
