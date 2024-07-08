@@ -19,8 +19,20 @@ const ciAction: SdkGuardedFunction<CiActionArgs> = async ({ args }) => {
 		provider: args?.provider as CIProvider,
 	});
 
-	const personalAccessToken = config.personalAccessToken.get()!;
-	const projectId = config.projectId.get()!;
+	const personalAccessToken = config.personalAccessToken.get();
+	const projectId = config.projectId.get();
+
+	if (!personalAccessToken) {
+		output.error(t('noPatFoundUnexpectedly'));
+
+		return;
+	}
+
+	if (!projectId) {
+		output.error(t('noProjectIdFoundUnexpectedly'));
+
+		return;
+	}
 
 	switch (provider) {
 		case "github":
