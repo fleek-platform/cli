@@ -13,7 +13,7 @@ export const getSiteToAssignRecordOrPrompt = async ({
 	sdk,
 	siteId,
 	siteSlug,
-}: GetSiteToAssignRecordOrPromptArgs): Promise<Site | null> => {
+}: GetSiteToAssignRecordOrPromptArgs): Promise<Site | undefined | null> => {
 	if (!siteId && !siteSlug) {
 		const shouldSiteAssignToRecord = await confirmPrompt({
 			message: "Do you want to assign new IPNS record to the site?",

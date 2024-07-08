@@ -19,6 +19,12 @@ export const deleteDomainAction: SdkGuardedFunction<
 		sdk,
 	});
 
+	if (!domain) {
+		output.error(t("expectedNotFoundGeneric", { name: "domain" }));
+
+		return;
+	}
+
 	output.spinner(t("deletingDomain"));
 
 	await sdk.domains().deleteDomain({ domainId: domain.id });

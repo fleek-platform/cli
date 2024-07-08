@@ -13,6 +13,12 @@ const deleteApplicationAction: SdkGuardedFunction<
 > = async ({ sdk, args }) => {
 	const application = await getApplicationOrPrompt({ id: args.id, sdk });
 
+	if (!application) {
+		output.error(t("expectedNotFoundGeneric", { name: "application" }));
+
+		return;
+	}
+
 	await sdk.applications().delete({ id: application.id });
 
 	output.printNewLine();

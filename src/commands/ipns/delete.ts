@@ -15,6 +15,12 @@ const deleteAction: SdkGuardedFunction<DeleteActionArgs> = async ({
 }) => {
 	const foundRecord = await getRecordOrPrompt({ sdk, name: args.name });
 
+	if (!foundRecord) {
+		output.error(t("expectedNotFoundGeneric", { name: "record" }));
+
+		return;
+	}
+
 	const shouldDeleteRecord = await confirmDeleteRecordPrompt();
 
 	if (!shouldDeleteRecord) {

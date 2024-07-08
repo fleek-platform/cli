@@ -18,6 +18,12 @@ export const detailEnsRecordsAction: SdkGuardedFunction<
 		sdk,
 	});
 
+	if (!ensRecord) {
+		output.error(t("expectedNotFoundGeneric", { name: "ENS Record" }));
+
+		return;
+	}
+
 	output.table([
 		{
 			ENS: ensRecord.name,

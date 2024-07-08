@@ -12,6 +12,13 @@ const listDeploymentsAction: SdkGuardedFunction<
 	ListDeploymentActionArgs
 > = async ({ sdk, args }) => {
 	const functionToList = await getFunctionOrPrompt({ sdk, name: args.name });
+
+	if (!functionToList) {
+		output.error(t("expectedNotFoundGeneric", { name: "function" }));
+
+		return;
+	}
+
 	const deployments = await sdk
 		.functions()
 		.listDeployments({ functionId: functionToList.id });

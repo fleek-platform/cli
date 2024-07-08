@@ -19,6 +19,12 @@ export const deleteEnsAction: SdkGuardedFunction<
 		sdk,
 	});
 
+	if (!ensRecord) {
+		output.error(t("expectedNotFoundGeneric", { name: "ENS record" }));
+
+		return;
+	}
+
 	output.spinner(t("ensDeleting"));
 
 	await sdk.ens().delete({ id: ensRecord.id });

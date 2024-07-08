@@ -27,6 +27,12 @@ export const detailDomainAction: SdkGuardedFunction<
 		sdk,
 	});
 
+	if (!domain) {
+		output.error(t("expectedNotFoundGeneric", { name: "domain" }));
+
+		return;
+	}
+
 	if (domainCreationPending.includes(domain.status)) {
 		output.printNewLine();
 		output.warn(t("domainCreationPending"));

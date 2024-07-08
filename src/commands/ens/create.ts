@@ -26,6 +26,12 @@ export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
 		sdk,
 	});
 
+	if (!site) {
+		output.error(t("expectedNotFoundGeneric", { name: "site" }));
+
+		return;
+	}
+
 	const ipnsRecord = await getIpnsRecordOrPrompt({
 		name: args.ipns,
 		sdk,

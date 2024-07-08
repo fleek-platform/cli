@@ -15,6 +15,14 @@ type InitConfigurationArgs = {
 
 export const initConfiguration = async ({ sdk }: InitConfigurationArgs) => {
 	const site = await chooseOrCreateSite({ sdk });
+
+	if (!site) {
+		// TODO: Revise the initConfiguration
+		console.error("Unexpected error");
+
+		return;
+	}
+
 	const distDir = await enterDirectoryPathPrompt({
 		message: t("specifyDistDirToSiteUpl"),
 	});

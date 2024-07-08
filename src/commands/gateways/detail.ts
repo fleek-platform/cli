@@ -20,6 +20,12 @@ export const detailPrivateGatewayAction: SdkGuardedFunction<
 		slug: args.slug,
 	});
 
+	if (!privateGateway) {
+		output.error(t("expectedNotFoundGeneric", { name: "private gateway" }));
+
+		return;
+	}
+
 	output.table([
 		{
 			ID: privateGateway.id,
