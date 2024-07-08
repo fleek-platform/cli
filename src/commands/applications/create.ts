@@ -20,7 +20,8 @@ export const whitelistArgParser = (listArg: string[] | undefined) => {
 		}
 
 		return listArg[0].split(",").reduce((acc: string[], curr: string) => {
-			return [...acc, curr.trim()];
+			acc.push(curr.trim());
+			return acc;
 		}, [] as Whitelist);
 	} catch (err) {
 		if (err instanceof Error) {
