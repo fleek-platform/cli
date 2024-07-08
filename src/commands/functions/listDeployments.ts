@@ -1,34 +1,34 @@
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { t } from '../../utils/translation'
-import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { t } from '../../utils/translation';
+import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 
 type ListDeploymentActionArgs = {
-  name?: string
-}
+  name?: string;
+};
 
 const listDeploymentsAction: SdkGuardedFunction<
   ListDeploymentActionArgs
 > = async ({ sdk, args }) => {
-  const functionToList = await getFunctionOrPrompt({ sdk, name: args.name })
+  const functionToList = await getFunctionOrPrompt({ sdk, name: args.name });
 
   if (!functionToList) {
-    output.error(t('expectedNotFoundGeneric', { name: 'function' }))
+    output.error(t('expectedNotFoundGeneric', { name: 'function' }));
 
-    return
+    return;
   }
 
   const deployments = await sdk
     .functions()
-    .listDeployments({ functionId: functionToList.id })
+    .listDeployments({ functionId: functionToList.id });
 
   if (!deployments?.length) {
-    output.warn(t('noYYet', { name: 'deployments' }))
-    output.log(t('youCanDoXUsingFolCmd', { action: t('deployNewFunction') }))
-    output.log('fleek functions deploy')
+    output.warn(t('noYYet', { name: 'deployments' }));
+    output.log(t('youCanDoXUsingFolCmd', { action: t('deployNewFunction') }));
+    output.log('fleek functions deploy');
 
-    return
+    return;
   }
 
   output.table(
@@ -37,8 +37,8 @@ const listDeploymentsAction: SdkGuardedFunction<
       CID: d.cid,
       'Created At': d.createdAt,
     })),
-  )
-}
+  );
+};
 
 export const listDeploymentsActionHandler = withGuards(listDeploymentsAction, {
   scopes: {
@@ -46,4 +46,4 @@ export const listDeploymentsActionHandler = withGuards(listDeploymentsAction, {
     project: true,
     site: false,
   },
-})
+});

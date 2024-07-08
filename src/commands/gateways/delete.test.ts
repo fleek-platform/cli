@@ -1,20 +1,20 @@
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { output } from '../../cli'
-import type { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil'
-import { deletePrivateGatewayAction } from './delete'
-import { getPrivateGatewayOrPrompt } from './prompts/getPrivateGatewayOrPrompt'
+import { output } from '../../cli';
+import type { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
+import { deletePrivateGatewayAction } from './delete';
+import { getPrivateGatewayOrPrompt } from './prompts/getPrivateGatewayOrPrompt';
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => {
   const checkPeriodicallyUntil = async <T>({
     conditionFn,
   }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
-    return conditionFn()
-  }
+    return conditionFn();
+  };
 
-  return { checkPeriodicallyUntil }
-})
+  return { checkPeriodicallyUntil };
+});
 
 vi.mock('./prompts/getPrivateGatewayOrPrompt', () => ({
   getPrivateGatewayOrPrompt: vi.fn().mockResolvedValue({
@@ -23,7 +23,7 @@ vi.mock('./prompts/getPrivateGatewayOrPrompt', () => ({
     name: 'first gateway',
     zone: { id: 'firstZoneId' },
   }),
-}))
+}));
 
 vi.mock('../../cli', () => {
   const output = {
@@ -33,35 +33,35 @@ vi.mock('../../cli', () => {
     spinner: vi.fn(),
     quoted: vi.fn().mockImplementation((text: string) => `"${text}"`),
     printNewLine: vi.fn(),
-  }
+  };
 
-  return { output }
-})
+  return { output };
+});
 
 vi.mock('@fleek-platform/sdk', () => {
-  const FleekSdkMock = vi.fn()
+  const FleekSdkMock = vi.fn();
 
   const privateGateways = {
     delete: vi.fn(),
-  }
+  };
 
-  FleekSdkMock.prototype.privateGateways = () => privateGateways
+  FleekSdkMock.prototype.privateGateways = () => privateGateways;
 
-  return { FleekSdk: FleekSdkMock, PersonalAccessTokenService: vi.fn() }
-})
+  return { FleekSdk: FleekSdkMock, PersonalAccessTokenService: vi.fn() };
+});
 
 type TestContext = {
-  fakeSdk: FleekSdk
-}
+  fakeSdk: FleekSdk;
+};
 
 describe('Delete private gateway', () => {
   beforeEach<TestContext>(async (context) => {
     const accessTokenService = new PersonalAccessTokenService({
       personalAccessToken: '',
-    })
+    });
 
-    context.fakeSdk = new FleekSdk({ accessTokenService })
-  })
+    context.fakeSdk = new FleekSdk({ accessTokenService });
+  });
 
   it<TestContext>('should delete private gateway by its id', async (context) => {
     await expect(
@@ -69,22 +69,22 @@ describe('Delete private gateway', () => {
         sdk: context.fakeSdk,
         args: { id: 'firstPrivateGatewayId' },
       }),
-    ).resolves.toBeUndefined()
+    ).resolves.toBeUndefined();
 
     expect(getPrivateGatewayOrPrompt).toHaveBeenCalledWith({
       sdk: context.fakeSdk,
       id: 'firstPrivateGatewayId',
-    })
+    });
     expect(context.fakeSdk.privateGateways().delete).toHaveBeenCalledWith({
       id: 'firstPrivateGatewayId',
-    })
+    });
 
-    expect(output.spinner).toHaveBeenCalledWith('Deleting private gateway')
+    expect(output.spinner).toHaveBeenCalledWith('Deleting private gateway');
     expect(output.success).toHaveBeenCalledWith(
       'The Private Gateway "first gateway" has been successfully deleted.',
-    )
-    expect(output.error).not.toHaveBeenCalled()
-  })
+    );
+    expect(output.error).not.toHaveBeenCalled();
+  });
 
   it<TestContext>('should delete private gateway by its slug', async (context) => {
     await expect(
@@ -92,20 +92,20 @@ describe('Delete private gateway', () => {
         sdk: context.fakeSdk,
         args: { slug: 'first-blue-fish' },
       }),
-    ).resolves.toBeUndefined()
+    ).resolves.toBeUndefined();
 
     expect(getPrivateGatewayOrPrompt).toHaveBeenCalledWith({
       sdk: context.fakeSdk,
       slug: 'first-blue-fish',
-    })
+    });
     expect(context.fakeSdk.privateGateways().delete).toHaveBeenCalledWith({
       id: 'firstPrivateGatewayId',
-    })
+    });
 
-    expect(output.spinner).toHaveBeenCalledWith('Deleting private gateway')
+    expect(output.spinner).toHaveBeenCalledWith('Deleting private gateway');
     expect(output.success).toHaveBeenCalledWith(
       'The Private Gateway "first gateway" has been successfully deleted.',
-    )
-    expect(output.error).not.toHaveBeenCalled()
-  })
-})
+    );
+    expect(output.error).not.toHaveBeenCalled();
+  });
+});

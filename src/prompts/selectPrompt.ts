@@ -1,18 +1,18 @@
-import { eraseLines } from '../output/utils/eraseLines'
-import { type PromptArgs, prompt } from './prompt'
+import { eraseLines } from '../output/utils/eraseLines';
+import { type PromptArgs, prompt } from './prompt';
 
 type Choice<T> = {
-  title: string
-  value?: T
-  disabled?: boolean | undefined
-  selected?: boolean | undefined
-  description?: string | undefined
-}
+  title: string;
+  value?: T;
+  disabled?: boolean | undefined;
+  selected?: boolean | undefined;
+  description?: string | undefined;
+};
 
 type SelectPromptArgs<T> = Omit<PromptArgs, 'type'> & {
-  choices: Choice<T>[]
-  initial?: number
-}
+  choices: Choice<T>[];
+  initial?: number;
+};
 
 export const selectPrompt = async <T>({
   message,
@@ -27,12 +27,12 @@ export const selectPrompt = async <T>({
       choices,
       initial,
       onCancel,
-    })
+    });
 
     if (choices.some((choice) => choice.value === selectedValue)) {
-      return selectedValue as T
+      return selectedValue as T;
     }
 
-    process.stdout.write(eraseLines(2))
+    process.stdout.write(eraseLines(2));
   }
-}
+};

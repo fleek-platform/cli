@@ -1,16 +1,16 @@
-import { promises as fs } from 'node:fs'
-import chalk from 'chalk'
+import { promises as fs } from 'node:fs';
+import chalk from 'chalk';
 
-import type { Output } from '../../../output/Output'
-import { t } from '../../../utils/translation'
+import type { Output } from '../../../output/Output';
+import { t } from '../../../utils/translation';
 
 type SaveDeploymentWorkflowYamlArgs = {
-  yamlPath: string
-  yamlContent: string
-  projectId: string
-  personalAccessToken: string
-  output: Output
-}
+  yamlPath: string;
+  yamlContent: string;
+  projectId: string;
+  personalAccessToken: string;
+  output: Output;
+};
 
 export const saveDeploymentWorkflowYaml = async ({
   yamlContent,
@@ -20,16 +20,16 @@ export const saveDeploymentWorkflowYaml = async ({
   output,
 }: SaveDeploymentWorkflowYamlArgs) => {
   try {
-    await fs.writeFile(yamlPath, yamlContent)
-    output.printNewLine()
+    await fs.writeFile(yamlPath, yamlContent);
+    output.printNewLine();
     output.success(
       t('githubActionWrkflSavedTo', {
         path: chalk.underline(chalk.cyan(yamlPath)),
       }),
-    )
-    output.printNewLine()
+    );
+    output.printNewLine();
 
-    output.chore(`${t('setSecretsInGithugRepoSettings')}:`)
+    output.chore(`${t('setSecretsInGithugRepoSettings')}:`);
     output.table([
       {
         Name: 'FLEEK_TOKEN',
@@ -39,10 +39,10 @@ export const saveDeploymentWorkflowYaml = async ({
         Name: 'FLEEK_PROJECT_ID',
         Value: projectId,
       },
-    ])
+    ]);
 
-    output.printNewLine()
+    output.printNewLine();
   } catch (e) {
-    output.error(t('failSaveGenYaml', { yamlPath }))
+    output.error(t('failSaveGenYaml', { yamlPath }));
   }
-}
+};

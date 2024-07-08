@@ -1,57 +1,57 @@
-import fs from 'node:fs'
+import fs from 'node:fs';
 import {
   getIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,
-} from '@fleek-platform/utils-ipfs'
+} from '@fleek-platform/utils-ipfs';
 
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { t } from '../../utils/translation'
-import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains'
-import { uploadPathOnIpfs } from './utils/uploadPathOnIpfs'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { t } from '../../utils/translation';
+import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
+import { uploadPathOnIpfs } from './utils/uploadPathOnIpfs';
 
 type AddActionArgs = {
-  path: string
-}
+  path: string;
+};
 
 const addAction: SdkGuardedFunction<AddActionArgs> = async ({ sdk, args }) => {
   if (!fs.existsSync(args.path)) {
-    output.error(t('filePathNotFound', { path: args.path }))
-    output.printNewLine()
+    output.error(t('filePathNotFound', { path: args.path }));
+    output.printNewLine();
 
-    return
+    return;
   }
 
-  output.spinner(t('uploadingFiles'))
+  output.spinner(t('uploadingFiles'));
 
-  const root = await uploadPathOnIpfs({ sdk, path: args.path })
+  const root = await uploadPathOnIpfs({ sdk, path: args.path });
 
   if (!root) {
-    output.error(t('uploadFailureSomeReason'))
-    output.printNewLine()
+    output.error(t('uploadFailureSomeReason'));
+    output.printNewLine();
 
-    return
+    return;
   }
 
   const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
     sdk,
-  })
+  });
 
-  const hash = root.cid.toString()
-  const successMsg = t('uploadPathSuccessWithCID', { path: args.path, hash })
+  const hash = root.cid.toString();
+  const successMsg = t('uploadPathSuccessWithCID', { path: args.path, hash });
 
-  output.success(successMsg)
-  output.printNewLine()
+  output.success(successMsg);
+  output.printNewLine();
 
   if (privateGatewayDomains.length === 0) {
-    output.hint(`${t('getFileFromPubAddr')}:`)
-    output.link(getIpfsGatewayUrl(hash))
+    output.hint(`${t('getFileFromPubAddr')}:`);
+    output.link(getIpfsGatewayUrl(hash));
 
-    return
+    return;
   }
 
-  output.log(`${t('visitViaPvtGw')}:`)
+  output.log(`${t('visitViaPvtGw')}:`);
 
   for (const privateGatewayDomain of privateGatewayDomains) {
     output.link(
@@ -59,9 +59,9 @@ const addAction: SdkGuardedFunction<AddActionArgs> = async ({ sdk, args }) => {
         hostname: privateGatewayDomain.hostname,
         hash,
       }),
-    )
+    );
   }
-}
+};
 
 export const addActionHandler = withGuards(addAction, {
   scopes: {
@@ -69,4 +69,4 @@ export const addActionHandler = withGuards(addAction, {
     project: true,
     site: false,
   },
-})
+});

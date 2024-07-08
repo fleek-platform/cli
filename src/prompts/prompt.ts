@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import prompts, { type PromptObject } from 'prompts'
+import prompts, { type PromptObject } from 'prompts';
 
 export type PromptArgs = Omit<PromptObject, 'name'> & {
-  onCancel?: () => void
-}
+  onCancel?: () => void;
+};
 
 export const prompt = async <T = string>({
   onCancel,
@@ -16,11 +16,11 @@ export const prompt = async <T = string>({
     },
     {
       onCancel: () => {
-        onCancel?.()
-        process.exit(0)
+        onCancel?.();
+        process.exit(0);
       },
     },
-  )
+  );
 
-  return value as T
-}
+  return value as T;
+};

@@ -1,16 +1,16 @@
-import { FleekFunctionsNotFoundError } from '@fleek-platform/errors'
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk'
-import { type Mock, describe, expect, it, vi } from 'vitest'
+import { FleekFunctionsNotFoundError } from '@fleek-platform/errors';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
-import { selectPrompt } from '../../../prompts/selectPrompt'
-import { getFunctionOrPrompt } from './getFunctionOrPrompt'
+import { selectPrompt } from '../../../prompts/selectPrompt';
+import { getFunctionOrPrompt } from './getFunctionOrPrompt';
 
 vi.mock('../../../prompts/selectPrompt', () => ({
   selectPrompt: vi.fn().mockResolvedValue('secondFunctionId'),
-}))
+}));
 
 vi.mock('@fleek-platform/sdk', () => {
-  const FleekSdkMock = vi.fn()
+  const FleekSdkMock = vi.fn();
 
   const functions = {
     get: vi.fn().mockResolvedValue({
@@ -35,19 +35,19 @@ vi.mock('@fleek-platform/sdk', () => {
         id: 'secondFunctionId',
       },
     ]),
-  }
+  };
 
-  FleekSdkMock.prototype.functions = () => functions
+  FleekSdkMock.prototype.functions = () => functions;
 
-  return { FleekSdk: FleekSdkMock, PersonalAccessTokenService: vi.fn() }
-})
+  return { FleekSdk: FleekSdkMock, PersonalAccessTokenService: vi.fn() };
+});
 
 describe('Get function by name, or let the user choose from list', () => {
   it('Return function by its name', async () => {
     const accessTokenService = new PersonalAccessTokenService({
       personalAccessToken: '',
-    })
-    const fakeSdk = new FleekSdk({ accessTokenService })
+    });
+    const fakeSdk = new FleekSdk({ accessTokenService });
 
     await expect(
       getFunctionOrPrompt({ sdk: fakeSdk, name: 'firstFunctionName' }),
@@ -55,41 +55,40 @@ describe('Get function by name, or let the user choose from list', () => {
       name: 'firstFunctionName',
       slug: 'first-first-first',
       id: 'firstFunctionId',
-    })
+    });
 
     expect(fakeSdk.functions().get).toHaveBeenCalledWith({
       name: 'firstFunctionName',
-    })
-  })
+    });
+  });
 
   it('Let the user choose from list and return chosen function', async () => {
     const accessTokenService = new PersonalAccessTokenService({
       personalAccessToken: '',
-    })
-    const fakeSdk = new FleekSdk({ accessTokenService })
+    });
+    const fakeSdk = new FleekSdk({ accessTokenService });
 
     await expect(getFunctionOrPrompt({ sdk: fakeSdk })).resolves.toEqual({
       name: 'secondFunctionName',
       slug: 'second-second-second',
       id: 'secondFunctionId',
-    })
+    });
 
-    expect(fakeSdk.functions().list).toHaveBeenCalledOnce()
-    expect(selectPrompt).toHaveBeenCalledOnce()
-  })
+    expect(fakeSdk.functions().list).toHaveBeenCalledOnce();
+    expect(selectPrompt).toHaveBeenCalledOnce();
+  });
 
   it('should throw if no functions exist', async () => {
     const accessTokenService = new PersonalAccessTokenService({
       personalAccessToken: '',
-    })
-    const fakeSdk = new FleekSdk({ accessTokenService })
-
-    ;(fakeSdk.functions().list as Mock).mockResolvedValue([])
+    });
+    const fakeSdk = new FleekSdk({ accessTokenService });
+    (fakeSdk.functions().list as Mock).mockResolvedValue([]);
     await expect(getFunctionOrPrompt({ sdk: fakeSdk })).rejects.toThrowError(
       new FleekFunctionsNotFoundError({}),
-    )
+    );
 
-    expect(fakeSdk.functions().list).toHaveBeenCalledOnce()
-    expect(selectPrompt).not.toHaveBeenCalled()
-  })
-})
+    expect(fakeSdk.functions().list).toHaveBeenCalledOnce();
+    expect(selectPrompt).not.toHaveBeenCalled();
+  });
+});

@@ -1,42 +1,42 @@
-import { InvalidCidError } from '@fleek-platform/errors'
-import { CID } from 'multiformats'
+import { InvalidCidError } from '@fleek-platform/errors';
+import { CID } from 'multiformats';
 
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { t } from '../../utils/translation'
-import { createOutputTable } from './utils/CreateOutputTable'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { t } from '../../utils/translation';
+import { createOutputTable } from './utils/CreateOutputTable';
 
-import type { StoragePin } from '@fleek-platform/sdk'
+import type { StoragePin } from '@fleek-platform/sdk';
 
 type GetActionArgs = {
-  cid?: string
-  name?: string
-}
+  cid?: string;
+  name?: string;
+};
 
 export const getStorageAction: SdkGuardedFunction<GetActionArgs> = async ({
   sdk,
   args,
 }) => {
-  const { cid, name } = args
-  let storage: StoragePin[] | undefined
+  const { cid, name } = args;
+  let storage: StoragePin[] | undefined;
 
   if (typeof name === 'string') {
-    const splitFilename = name.split('.')
-    const extension = (splitFilename.length > 1 && splitFilename.pop()) || ''
-    const filename = splitFilename.join('.')
-    storage = await sdk.storage().getByFilename({ filename, extension })
+    const splitFilename = name.split('.');
+    const extension = (splitFilename.length > 1 && splitFilename.pop()) || '';
+    const filename = splitFilename.join('.');
+    storage = await sdk.storage().getByFilename({ filename, extension });
   } else if (cid) {
     try {
-      CID.parse(cid)
+      CID.parse(cid);
     } catch (err) {
-      throw new InvalidCidError({ name: cid })
+      throw new InvalidCidError({ name: cid });
     }
 
     try {
-      storage = [await sdk.storage().get({ cid })]
+      storage = [await sdk.storage().get({ cid })];
     } catch (err) {
-      storage = undefined
+      storage = undefined;
     }
   }
 
@@ -46,16 +46,16 @@ export const getStorageAction: SdkGuardedFunction<GetActionArgs> = async ({
         type: `${cid ? 'cid' : 'name'}`,
         value: cid || name || '',
       }),
-    )
-    output.log(t('storageAddSuggestion'))
-    output.log('fleek storage add <file_path>')
+    );
+    output.log(t('storageAddSuggestion'));
+    output.log('fleek storage add <file_path>');
 
-    return
+    return;
   }
 
-  const table = await createOutputTable({ sdk, storage })
-  output.table(table)
-}
+  const table = await createOutputTable({ sdk, storage });
+  output.table(table);
+};
 
 export const getStorageActionHandler = withGuards(getStorageAction, {
   scopes: {
@@ -63,4 +63,4 @@ export const getStorageActionHandler = withGuards(getStorageAction, {
     project: true,
     site: false,
   },
-})
+});

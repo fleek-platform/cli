@@ -1,8 +1,8 @@
-import { name as nameValidation } from '@fleek-platform/utils-validation'
+import { name as nameValidation } from '@fleek-platform/utils-validation';
 
 type IsNameValidArgs = {
-  name: string
-}
+  name: string;
+};
 
 export const isNameValid = ({ name }: IsNameValidArgs) =>
-  nameValidation.safeParse(name).success
+  nameValidation.safeParse(name).success;

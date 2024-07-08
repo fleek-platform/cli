@@ -1,7 +1,7 @@
-import { confirmPrompt } from '../../../prompts/confirmPrompt'
-import { t } from '../../../utils/translation'
+import { confirmPrompt } from '../../../prompts/confirmPrompt';
+import { t } from '../../../utils/translation';
 
-type ConfirmFileOverridePromptArgs = { path: string }
+type ConfirmFileOverridePromptArgs = { path: string };
 
 export const confirmFileOverridePrompt = async ({
   path,
@@ -9,4 +9,4 @@ export const confirmFileOverridePrompt = async ({
   confirmPrompt({
     message: t('fileExistAskIfOverwrite', { path }),
     initial: true,
-  })
+  });

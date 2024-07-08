@@ -1,54 +1,54 @@
-import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 
 type WaitUntilFileAvailableArgs = {
-  cid: string
-}
+  cid: string;
+};
 
 export const waitUntilFileAvailable = async ({
   cid,
 }: WaitUntilFileAvailableArgs) => {
-  const timeout = 10000
+  const timeout = 10000;
   const gatewayPatterns = [
     'https://{cid}.ipfs.dweb.link',
     'https://{cid}.ipfs.w3s.link',
     'https://{cid}.ipfs.cf-ipfs.com',
     'https://ipfs.io/ipfs/{cid}',
     'https://fleek.ipfs.io/ipfs/{cid}',
-  ]
+  ];
   const createUrlPromises = () =>
     gatewayPatterns.map((pattern: string) => {
-      const url = pattern.replace(/\{(\w+)\}/g, cid)
+      const url = pattern.replace(/\{(\w+)\}/g, cid);
       const fetchPromise = fetch(url).then((response) => {
         if (!response.ok) {
           // eslint-disable-next-line fleek-custom/no-default-error
-          throw new Error(`Request failed for ${url}`)
+          throw new Error(`Request failed for ${url}`);
         }
 
-        return response
-      })
+        return response;
+      });
 
       const timeoutPromise = new Promise((_, reject) =>
         setTimeout(
           () => reject(new Error(`timeout fetching content from ${url}`)),
           timeout,
         ),
-      )
+      );
 
-      return Promise.race([fetchPromise, timeoutPromise])
-    })
+      return Promise.race([fetchPromise, timeoutPromise]);
+    });
 
   return checkPeriodicallyUntil({
     conditionFn: async () => {
-      const urlPromises = createUrlPromises()
+      const urlPromises = createUrlPromises();
       try {
-        await Promise.any(urlPromises)
+        await Promise.any(urlPromises);
 
-        return true
+        return true;
       } catch {
-        return false
+        return false;
       }
     },
     period: 6000,
     tries: 50,
-  })
-}
+  });
+};

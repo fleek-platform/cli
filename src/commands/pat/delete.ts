@@ -1,11 +1,11 @@
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { deletePersonalAccessToken } from './utils/deletePersonalAccessToken'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { deletePersonalAccessToken } from './utils/deletePersonalAccessToken';
 
 type DeletePersonalAccessTokenArgs = {
-  personalAccessTokenId: string
-}
+  personalAccessTokenId: string;
+};
 
 const deletePersonalAccessTokenAction: SdkGuardedFunction<
   DeletePersonalAccessTokenArgs
@@ -14,8 +14,8 @@ const deletePersonalAccessTokenAction: SdkGuardedFunction<
     id: args.personalAccessTokenId,
     output,
     sdk,
-  })
-}
+  });
+};
 
 export const deletePersonalAccessTokenActionHandler = withGuards(
   deletePersonalAccessTokenAction,
@@ -26,4 +26,4 @@ export const deletePersonalAccessTokenActionHandler = withGuards(
       site: false,
     },
   },
-)
+);

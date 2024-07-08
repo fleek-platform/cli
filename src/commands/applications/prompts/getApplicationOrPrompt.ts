@@ -1,26 +1,26 @@
-import { ApplicationsNotFoundError } from '@fleek-platform/errors'
-import type { FleekSdk } from '@fleek-platform/sdk'
+import { ApplicationsNotFoundError } from '@fleek-platform/errors';
+import type { FleekSdk } from '@fleek-platform/sdk';
 
-import { selectPrompt } from '../../../prompts/selectPrompt'
-import { t } from '../../../utils/translation'
+import { selectPrompt } from '../../../prompts/selectPrompt';
+import { t } from '../../../utils/translation';
 
 type GetApplicationOrPromptArgs = {
-  id?: string
-  sdk: FleekSdk
-}
+  id?: string;
+  sdk: FleekSdk;
+};
 
 export const getApplicationOrPrompt = async ({
   id,
   sdk,
 }: GetApplicationOrPromptArgs) => {
   if (id) {
-    return sdk.applications().get({ id })
+    return sdk.applications().get({ id });
   }
 
-  const applications = await sdk.applications().list()
+  const applications = await sdk.applications().list();
 
   if (applications.length === 0) {
-    throw new ApplicationsNotFoundError({})
+    throw new ApplicationsNotFoundError({});
   }
 
   const selectedApplicationId = await selectPrompt({
@@ -29,13 +29,13 @@ export const getApplicationOrPrompt = async ({
       title: application.name,
       value: application.id,
     })),
-  })
+  });
 
   const appMatch = applications.find(
     (application) => application.id === selectedApplicationId,
-  )
+  );
 
-  if (!appMatch) return
+  if (!appMatch) return;
 
-  return appMatch
-}
+  return appMatch;
+};

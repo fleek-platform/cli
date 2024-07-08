@@ -1,7 +1,7 @@
-import { confirmPrompt } from '../../../prompts/confirmPrompt'
-import { t } from '../../../utils/translation'
+import { confirmPrompt } from '../../../prompts/confirmPrompt';
+import { t } from '../../../utils/translation';
 
-type ConfirmWorkflowCustomPathPromptArgs = { path: string }
+type ConfirmWorkflowCustomPathPromptArgs = { path: string };
 
 export const confirmWorkflowCustomPathPrompt = async ({
   path,
@@ -9,4 +9,4 @@ export const confirmWorkflowCustomPathPrompt = async ({
   confirmPrompt({
     message: t('workflowToBeSavePathOrOther', { path }),
     initial: false,
-  })
+  });

@@ -1,17 +1,17 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { createActionHandler } from './create'
-import { deleteActionHandler } from './delete'
-import { listActionHandler } from './list'
-import { publishActionHandler } from './publish'
-import { resolveActionHandler } from './resolve'
+import { t } from '../../utils/translation';
+import { createActionHandler } from './create';
+import { deleteActionHandler } from './delete';
+import { listActionHandler } from './list';
+import { publishActionHandler } from './publish';
+import { resolveActionHandler } from './resolve';
 
 export default (program: Command) => {
   const cmd = program
     .command('ipns')
     .option('-h, --help', 'Print help')
-    .description(t('ipnsDescription'))
+    .description(t('ipnsDescription'));
 
   cmd
     .command('create')
@@ -32,7 +32,7 @@ export default (program: Command) => {
     )
     .action((options: { siteId?: string; siteSlug?: string }) =>
       createActionHandler(options),
-    )
+    );
 
   cmd
     .command('publish')
@@ -41,12 +41,12 @@ export default (program: Command) => {
     .option('--hash <string>', t('ipnsPublishOptionHashDesc'))
     .action((options: { name: string; hash: string }) =>
       publishActionHandler(options),
-    )
+    );
 
   cmd
     .command('list')
     .description(t('ipnsListDescription'))
-    .action(() => listActionHandler())
+    .action(() => listActionHandler());
 
   cmd
     .command('delete')
@@ -59,16 +59,16 @@ export default (program: Command) => {
         action: t('delete'),
       }),
     )
-    .action((options: { name: string }) => deleteActionHandler(options))
+    .action((options: { name: string }) => deleteActionHandler(options));
 
   cmd
     .command('resolve')
     .description(t('ipnsResolveDescription'))
     .argument('<name>', t('ipnsResolveArgName'))
-    .action((name: string) => resolveActionHandler({ name }))
+    .action((name: string) => resolveActionHandler({ name }));
 
   cmd
     .command('help')
     .description(t('printHelp'))
-    .action(() => cmd.help())
-}
+    .action(() => cmd.help());
+};

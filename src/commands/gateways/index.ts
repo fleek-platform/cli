@@ -1,21 +1,21 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { createPrivateGatewayActionHandler } from './create'
-import { deletePrivateGatewayActionHandler } from './delete'
-import { detailPrivateGatewayActionHandler } from './detail'
-import { listPrivateGatewaysActionHandler } from './list'
+import { t } from '../../utils/translation';
+import { createPrivateGatewayActionHandler } from './create';
+import { deletePrivateGatewayActionHandler } from './delete';
+import { detailPrivateGatewayActionHandler } from './detail';
+import { listPrivateGatewaysActionHandler } from './list';
 
 export default (program: Command) => {
   const cmd = program
     .command('gateways')
     .option('-h', '--help', t('printHelp'))
-    .description(t('gatewaysCmdDescription'))
+    .description(t('gatewaysCmdDescription'));
 
   cmd
     .command('list')
     .description(t('listAllPrvGwForSelectProject'))
-    .action(() => listPrivateGatewaysActionHandler())
+    .action(() => listPrivateGatewaysActionHandler());
 
   cmd
     .command('detail')
@@ -36,7 +36,7 @@ export default (program: Command) => {
     .description(t('gatewayShowDetails'))
     .action((options: { id?: string; slug?: string }) =>
       detailPrivateGatewayActionHandler(options),
-    )
+    );
 
   cmd
     .command('create')
@@ -44,7 +44,7 @@ export default (program: Command) => {
     .description(t('gatewayCreateCmdDesc'))
     .action((options: { name?: string }) =>
       createPrivateGatewayActionHandler(options),
-    )
+    );
 
   cmd
     .command('delete')
@@ -67,7 +67,7 @@ export default (program: Command) => {
     .description(t('gatewayDelete'))
     .action((options: { id?: string; slug?: string }) =>
       deletePrivateGatewayActionHandler(options),
-    )
+    );
 
-  cmd.command('help').description(t('printHelp'))
-}
+  cmd.command('help').description(t('printHelp'));
+};

@@ -1,11 +1,11 @@
-import { join as joinPath } from 'node:path'
+import { join as joinPath } from 'node:path';
 
-import { output } from '../../../cli'
-import { textPrompt } from '../../../prompts/textPrompt'
-import { t } from '../../../utils/translation'
-import { directoryExists } from '../utils/directoryExists'
+import { output } from '../../../cli';
+import { textPrompt } from '../../../prompts/textPrompt';
+import { t } from '../../../utils/translation';
+import { directoryExists } from '../utils/directoryExists';
 
-type EnterDirectoryPathPromptArgs = { message: string }
+type EnterDirectoryPathPromptArgs = { message: string };
 
 export const enterDirectoryPathPrompt = async ({
   message,
@@ -14,18 +14,18 @@ export const enterDirectoryPathPrompt = async ({
     message,
     validate: async (path) => {
       if (!path) {
-        return t('specifyValidDir')
+        return t('specifyValidDir');
       }
 
-      const isDirectory = await directoryExists(joinPath(process.cwd(), path))
+      const isDirectory = await directoryExists(joinPath(process.cwd(), path));
 
-      return isDirectory ? true : t('specifyValidDir')
+      return isDirectory ? true : t('specifyValidDir');
     },
     onCancel: () => {
-      output.warn(t('specifyValidDir'))
-      output.error(t('exiting'))
+      output.warn(t('specifyValidDir'));
+      output.error(t('exiting'));
     },
-  })
+  });
 
-  return path
-}
+  return path;
+};

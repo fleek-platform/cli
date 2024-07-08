@@ -1,17 +1,17 @@
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { t } from '../../utils/translation'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { t } from '../../utils/translation';
 
 export const listPersonalAccessTokensAction: SdkGuardedFunction = async ({
   sdk,
 }) => {
-  const personalAccessTokens = await sdk.user().listPersonalAccessTokens()
+  const personalAccessTokens = await sdk.user().listPersonalAccessTokens();
 
   if (personalAccessTokens.length === 0) {
-    output.warn(t('noYYet', { name: t('personalAccessToken') }))
+    output.warn(t('noYYet', { name: t('personalAccessToken') }));
 
-    return
+    return;
   }
 
   output.table(
@@ -21,8 +21,8 @@ export const listPersonalAccessTokensAction: SdkGuardedFunction = async ({
       Name: name ?? '',
       Token: maskedToken,
     })),
-  )
-}
+  );
+};
 
 export const listPersonalAccessTokensActionHandler = withGuards(
   listPersonalAccessTokensAction,
@@ -33,4 +33,4 @@ export const listPersonalAccessTokensActionHandler = withGuards(
       site: false,
     },
   },
-)
+);

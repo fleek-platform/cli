@@ -1,7 +1,7 @@
-import { confirmPrompt } from '../../../prompts/confirmPrompt'
-import { t } from '../../../utils/translation'
+import { confirmPrompt } from '../../../prompts/confirmPrompt';
+import { t } from '../../../utils/translation';
 
-type ConfirmInstallCommandPromptArgs = { installCommand: string }
+type ConfirmInstallCommandPromptArgs = { installCommand: string };
 
 export const confirmInstallCommandPrompt = async ({
   installCommand,
@@ -9,4 +9,4 @@ export const confirmInstallCommandPrompt = async ({
   confirmPrompt({
     message: t('isGenInstallCmdCorrect', { installCommand }),
     initial: true,
-  })
+  });

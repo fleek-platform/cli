@@ -1,40 +1,40 @@
-import { output } from '../../cli'
-import { config } from '../../config'
-import { sdkGuard } from '../../guards/sdkGuard'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { t } from '../../utils/translation'
-import { createProjectActionHandler } from './create'
-import { getProjectOrPrompt } from './prompts/getProjectOrPrompt'
+import { output } from '../../cli';
+import { config } from '../../config';
+import { sdkGuard } from '../../guards/sdkGuard';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { t } from '../../utils/translation';
+import { createProjectActionHandler } from './create';
+import { getProjectOrPrompt } from './prompts/getProjectOrPrompt';
 
 type SwitchProjectActionArgs = {
-  id?: string
-}
+  id?: string;
+};
 
 export const switchProjectAction: SdkGuardedFunction<
   SwitchProjectActionArgs
 > = async ({ sdk, args }) => {
   const project = await getProjectOrPrompt({ sdk, id: args.id }).catch(
     () => null,
-  )
+  );
 
   if (project === null) {
-    output.log(t('projectsSwitchNeedCreateFirst'))
-    await createProjectActionHandler()
+    output.log(t('projectsSwitchNeedCreateFirst'));
+    await createProjectActionHandler();
 
-    return
+    return;
   }
 
   if (!project) {
-    output.log(t('noProjectIdFoundUnexpectedly'))
+    output.log(t('noProjectIdFoundUnexpectedly'));
 
-    return
+    return;
   }
 
-  config.projectId.set(project.id)
+  config.projectId.set(project.id);
 
-  output.printNewLine()
-  output.success(t('projectsSwitchSuccess', { name: project.name }))
-  output.printNewLine()
-}
+  output.printNewLine();
+  output.success(t('projectsSwitchSuccess', { name: project.name }));
+  output.printNewLine();
+};
 
-export const switchProjectActionHandler = sdkGuard(switchProjectAction)
+export const switchProjectActionHandler = sdkGuard(switchProjectAction);

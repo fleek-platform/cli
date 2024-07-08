@@ -1,19 +1,19 @@
-import { FleekConfigInvalidContentError } from '@fleek-platform/errors'
-import { validateConfigurationWithResult } from '@fleek-platform/utils-validation'
+import { FleekConfigInvalidContentError } from '@fleek-platform/errors';
+import { validateConfigurationWithResult } from '@fleek-platform/utils-validation';
 
-import { readConfigurationFile } from './readConfigurationFile'
-import type { FleekRootConfig } from './types'
+import { readConfigurationFile } from './readConfigurationFile';
+import type { FleekRootConfig } from './types';
 
 type LoadConfigurationArgs = {
-  predefinedConfigPath?: string
-}
+  predefinedConfigPath?: string;
+};
 
 export const loadConfiguration = async ({
   predefinedConfigPath,
 }: LoadConfigurationArgs): Promise<FleekRootConfig> => {
   const { configuration, configPath } = await readConfigurationFile({
     predefinedConfigPath,
-  })
+  });
 
   return validateConfigurationWithResult({ configuration }).catch(
     (error: Error) =>
@@ -23,5 +23,5 @@ export const loadConfiguration = async ({
           validationResult: error.message,
         }),
       ),
-  )
-}
+  );
+};

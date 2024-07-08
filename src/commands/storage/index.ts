@@ -1,19 +1,21 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { output } from '../../cli'
-import { t } from '../../utils/translation'
-import { addStorageActionHandler } from './add'
-import { deleteStorageActionHandler } from './delete'
-import { getStorageActionHandler } from './get'
-import { listStorageActionHandler } from './list'
+import { output } from '../../cli';
+import { t } from '../../utils/translation';
+import { addStorageActionHandler } from './add';
+import { deleteStorageActionHandler } from './delete';
+import { getStorageActionHandler } from './get';
+import { listStorageActionHandler } from './list';
 
 export default (program: Command) => {
-  const cmd = program.command('storage').description(t('storageCmdDescription'))
+  const cmd = program
+    .command('storage')
+    .description(t('storageCmdDescription'));
 
   cmd
     .command('list')
     .description(t('storageListDescription'))
-    .action(() => listStorageActionHandler())
+    .action(() => listStorageActionHandler());
 
   const getStorage = cmd
     .command('get')
@@ -22,7 +24,7 @@ export default (program: Command) => {
     .option(
       '-n, --name <filenameWithExtension>',
       t('storageNameOption', { action: t('get') }),
-    )
+    );
 
   getStorage.action((options: { cid?: string; name?: string }) => {
     if ((!options.name && !options.cid) || (options.name && options.cid)) {
@@ -30,17 +32,17 @@ export default (program: Command) => {
         !getStorage.args.includes('help') &&
         !getStorage.optsWithGlobals().help
       ) {
-        output.error(t('storageMissingOptCidOrName'))
+        output.error(t('storageMissingOptCidOrName'));
       }
 
-      output.printNewLine()
-      getStorage.outputHelp()
+      output.printNewLine();
+      getStorage.outputHelp();
 
-      return
+      return;
     }
 
-    return getStorageActionHandler({ cid: options.cid, name: options.name })
-  })
+    return getStorageActionHandler({ cid: options.cid, name: options.name });
+  });
 
   const deleteStorage = cmd
     .command('delete')
@@ -49,7 +51,7 @@ export default (program: Command) => {
     .option(
       '-n, --name <filenameWithExtension>',
       t('storageNameOption', { action: t('delete') }),
-    )
+    );
 
   deleteStorage.action((options: { cid?: string; name?: string }) => {
     if ((!options.name && !options.cid) || (options.name && options.cid)) {
@@ -57,21 +59,21 @@ export default (program: Command) => {
         !getStorage.args.includes('help') &&
         !getStorage.optsWithGlobals().help
       ) {
-        output.error(t('storageMissingOptCidOrName'))
+        output.error(t('storageMissingOptCidOrName'));
       }
 
-      output.printNewLine()
-      deleteStorage.outputHelp()
+      output.printNewLine();
+      deleteStorage.outputHelp();
 
-      return
+      return;
     }
 
-    return deleteStorageActionHandler({ cid: options.cid, name: options.name })
-  })
+    return deleteStorageActionHandler({ cid: options.cid, name: options.name });
+  });
 
   cmd
     .command('add')
     .description(t('storageAddDescription'))
     .argument('<path>', t('ipfsAddPathDescription'))
-    .action((path: string) => addStorageActionHandler({ path }))
-}
+    .action((path: string) => addStorageActionHandler({ path }));
+};

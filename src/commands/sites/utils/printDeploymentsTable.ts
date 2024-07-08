@@ -1,21 +1,23 @@
-import type { Deployment } from '@fleek-platform/sdk'
+import type { Deployment } from '@fleek-platform/sdk';
 
-import type { Output } from '../../../output/Output'
-import { t } from '../../../utils/translation'
+import type { Output } from '../../../output/Output';
+import { t } from '../../../utils/translation';
 
 type PrintDeploymentsTableArgs = {
-  output: Output
-  deployments: Deployment[]
-}
+  output: Output;
+  deployments: Deployment[];
+};
 
 export const printDeploymentsTable = ({
   output,
   deployments,
 }: PrintDeploymentsTableArgs) => {
   if (deployments.length === 0) {
-    output.warn(t('noYForXYet', { name: t('deployments'), subject: t('site') }))
+    output.warn(
+      t('noYForXYet', { name: t('deployments'), subject: t('site') }),
+    );
 
-    return
+    return;
   }
 
   output.table(
@@ -26,5 +28,5 @@ export const printDeploymentsTable = ({
       Status: status,
       CID: cid,
     })),
-  )
-}
+  );
+};

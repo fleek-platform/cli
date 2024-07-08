@@ -1,20 +1,20 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { createApplicationActionHandler } from './create'
-import { deleteApplicationActionHandler } from './delete'
-import { listApplicationsActionHandler } from './list'
-import { updateApplicationActionHandler } from './update'
+import { t } from '../../utils/translation';
+import { createApplicationActionHandler } from './create';
+import { deleteApplicationActionHandler } from './delete';
+import { listApplicationsActionHandler } from './list';
+import { updateApplicationActionHandler } from './update';
 
 export default (program: Command) => {
   const cmd = program
     .command('applications')
-    .description(t('appCmdDescription'))
+    .description(t('appCmdDescription'));
 
   cmd
     .command('list')
     .description(t('listAllAppForProject'))
-    .action(listApplicationsActionHandler)
+    .action(listApplicationsActionHandler);
 
   cmd
     .command('create')
@@ -23,7 +23,7 @@ export default (program: Command) => {
     .description(t('createNewAppClient'))
     .action((options: { name?: string; whitelistDomains?: string[] }) =>
       createApplicationActionHandler(options),
-    )
+    );
 
   cmd
     .command('update')
@@ -41,7 +41,7 @@ export default (program: Command) => {
     .action(
       (options: { id?: string; name?: string; whitelistDomains?: string[] }) =>
         updateApplicationActionHandler(options),
-    )
+    );
 
   cmd
     .command('delete')
@@ -56,5 +56,5 @@ export default (program: Command) => {
     )
     .action((options: { id?: string }) =>
       deleteApplicationActionHandler(options),
-    )
-}
+    );
+};

@@ -1,13 +1,13 @@
-import { IpnsRecordsNotFoundError } from '@fleek-platform/errors'
-import type { FleekSdk, IpnsRecord } from '@fleek-platform/sdk'
+import { IpnsRecordsNotFoundError } from '@fleek-platform/errors';
+import type { FleekSdk, IpnsRecord } from '@fleek-platform/sdk';
 
-import { selectPrompt } from '../../../prompts/selectPrompt'
-import { t } from '../../../utils/translation'
+import { selectPrompt } from '../../../prompts/selectPrompt';
+import { t } from '../../../utils/translation';
 
 type GetRecordOrPromptArgs = {
-  sdk: FleekSdk
-  name?: string
-}
+  sdk: FleekSdk;
+  name?: string;
+};
 
 export const getRecordOrPrompt = async ({
   sdk,
@@ -16,13 +16,13 @@ export const getRecordOrPrompt = async ({
   Omit<IpnsRecord, '__typename' | 'createdAt' | 'updatedAt'> | undefined
 > => {
   if (name) {
-    return await sdk.ipns().getRecord({ name })
+    return await sdk.ipns().getRecord({ name });
   }
 
-  const records = await sdk.ipns().listRecords()
+  const records = await sdk.ipns().listRecords();
 
   if (records.length === 0) {
-    throw new IpnsRecordsNotFoundError()
+    throw new IpnsRecordsNotFoundError();
   }
 
   const ipnsRecordId = await selectPrompt({
@@ -31,11 +31,11 @@ export const getRecordOrPrompt = async ({
       title: record.name,
       value: record.id,
     })),
-  })
+  });
 
-  const ipnsRecordMatch = records.find((record) => record.id === ipnsRecordId)
+  const ipnsRecordMatch = records.find((record) => record.id === ipnsRecordId);
 
-  if (!ipnsRecordMatch) return
+  if (!ipnsRecordMatch) return;
 
-  return ipnsRecordMatch
-}
+  return ipnsRecordMatch;
+};

@@ -1,17 +1,17 @@
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { t } from '../../utils/translation'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { t } from '../../utils/translation';
 
 export const listPrivateGatewaysAction: SdkGuardedFunction<
   Record<string, never>
 > = async ({ sdk }) => {
-  const privateGateways = await sdk.privateGateways().list()
+  const privateGateways = await sdk.privateGateways().list();
 
   if (privateGateways.length === 0) {
-    output.log(t('noPrivateGateways'))
+    output.log(t('noPrivateGateways'));
 
-    return
+    return;
   }
 
   output.table(
@@ -21,12 +21,12 @@ export const listPrivateGatewaysAction: SdkGuardedFunction<
       Name: name,
       'Created At': createdAt,
     })),
-  )
-}
+  );
+};
 
 export const listPrivateGatewaysActionHandler = withGuards(
   listPrivateGatewaysAction,
   {
     scopes: { authenticated: true, project: true, site: false },
   },
-)
+);

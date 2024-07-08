@@ -1,7 +1,7 @@
-import type { Choice } from 'prompts'
+import type { Choice } from 'prompts';
 
-import { selectPrompt } from '../../../prompts/selectPrompt'
-import { t } from '../../../utils/translation'
+import { selectPrompt } from '../../../prompts/selectPrompt';
+import { t } from '../../../utils/translation';
 
 const providerChoices: Choice[] = [
   {
@@ -9,26 +9,26 @@ const providerChoices: Choice[] = [
     description: t('githubActionGenDescription'),
     value: 'github',
   },
-]
+];
 
-export type CIProvider = 'github'
+export type CIProvider = 'github';
 
 type GetCIProviderOrPromptArgs = {
-  provider?: CIProvider | undefined
-}
+  provider?: CIProvider | undefined;
+};
 
 export const getCIProviderOrPrompt = async (
   args?: GetCIProviderOrPromptArgs,
 ): Promise<CIProvider> => {
   if (args?.provider) {
-    return args.provider
+    return args.provider;
   }
 
   const provider = await selectPrompt({
     message: `${t('selectProviderForBuildDeploySite')}:`,
     choices: providerChoices,
     initial: 0,
-  })
+  });
 
-  return provider
-}
+  return provider;
+};

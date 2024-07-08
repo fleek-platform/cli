@@ -1,1 +1,1 @@
-declare module 'update-notifier-cjs'
+declare module 'update-notifier-cjs';

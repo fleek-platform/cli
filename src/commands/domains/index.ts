@@ -1,23 +1,25 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { createDomainActionHandler } from './create'
-import { deleteDomainActionHandler } from './delete'
-import { detailDomainActionHandler } from './detail'
-import { listDomainsActionHandler } from './list'
-import { verifyDomainActionHandler } from './verify'
+import { t } from '../../utils/translation';
+import { createDomainActionHandler } from './create';
+import { deleteDomainActionHandler } from './delete';
+import { detailDomainActionHandler } from './detail';
+import { listDomainsActionHandler } from './list';
+import { verifyDomainActionHandler } from './verify';
 
 export default (program: Command) => {
   const cmd = program
     .command('domains')
     .option('-h, --help', t('printHelp'))
-    .description(t('domainsDesc'))
+    .description(t('domainsDesc'));
 
   cmd
     .command('list')
     .option('--siteId <string>', t('siteIDDomainAssignTo'))
     .description(t('listAllDomainsSelectProject'))
-    .action((options: { siteId?: string }) => listDomainsActionHandler(options))
+    .action((options: { siteId?: string }) =>
+      listDomainsActionHandler(options),
+    );
 
   cmd
     .command('detail')
@@ -26,7 +28,7 @@ export default (program: Command) => {
     .description(t('showDomainDetails'))
     .action((options: { id?: string; hostname?: string }) =>
       detailDomainActionHandler(options),
-    )
+    );
 
   cmd
     .command('create')
@@ -38,12 +40,12 @@ export default (program: Command) => {
     .description(t('createDomainForSiteOrGw'))
     .action(
       (options: {
-        privateGatewayName?: string
-        siteId?: string
-        siteSlug?: string
-        hostname?: string
+        privateGatewayName?: string;
+        siteId?: string;
+        siteSlug?: string;
+        hostname?: string;
       }) => createDomainActionHandler(options),
-    )
+    );
 
   cmd
     .command('delete')
@@ -66,7 +68,7 @@ export default (program: Command) => {
     .description(t('deleteDomain'))
     .action((options: { hostname?: string }) =>
       deleteDomainActionHandler(options),
-    )
+    );
 
   cmd
     .command('verify')
@@ -75,7 +77,7 @@ export default (program: Command) => {
     .description(t('verifyDomainConfig'))
     .action((options: { hostname?: string }) =>
       verifyDomainActionHandler(options),
-    )
+    );
 
-  cmd.command('help').description(t('printHelp'))
-}
+  cmd.command('help').description(t('printHelp'));
+};

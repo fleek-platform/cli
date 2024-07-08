@@ -1,22 +1,22 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { ciActionHandler } from './ci'
-import { deployActionHandler } from './deploy'
-import { initActionHandler } from './init'
-import { listActionHandler } from './list'
-import { listDeploymentsActionHandler } from './listDeployments'
+import { t } from '../../utils/translation';
+import { ciActionHandler } from './ci';
+import { deployActionHandler } from './deploy';
+import { initActionHandler } from './init';
+import { listActionHandler } from './list';
+import { listDeploymentsActionHandler } from './listDeployments';
 
 export default (program: Command) => {
   const cmd = program
     .command('sites')
     .option('-h, --help', t('printHelp'))
-    .description(t('sitesDescription'))
+    .description(t('sitesDescription'));
 
   cmd
     .command('init')
     .description(t('sitesInitDescription'))
-    .action(() => initActionHandler())
+    .action(() => initActionHandler());
 
   cmd
     .command('ci')
@@ -28,7 +28,7 @@ export default (program: Command) => {
         predefinedConfigPath: options.config,
         provider: options.provider,
       }),
-    )
+    );
 
   cmd
     .command('deploy')
@@ -36,12 +36,12 @@ export default (program: Command) => {
     .option('-c, --config <fleekConfigPath>', t('deploySpecifyPathJson'))
     .action((options: { config?: string }) =>
       deployActionHandler({ predefinedConfigPath: options.config }),
-    )
+    );
 
   cmd
     .command('list')
     .description(t('listSitesDesc'))
-    .action(() => listActionHandler())
+    .action(() => listActionHandler());
 
   cmd
     .command('deployments')
@@ -56,10 +56,10 @@ export default (program: Command) => {
     .description(t('deploymentsListForSelectedSite'))
     .action((options: { id?: string; slug?: string }) =>
       listDeploymentsActionHandler(options),
-    )
+    );
 
   cmd
     .command('help')
     .description(t('printHelp'))
-    .action(() => cmd.help())
-}
+    .action(() => cmd.help());
+};

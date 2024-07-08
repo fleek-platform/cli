@@ -2,20 +2,20 @@ import {
   FleekConfigInvalidContentError,
   FleekConfigMissingFileError,
   type FleekError,
-} from '@fleek-platform/errors'
+} from '@fleek-platform/errors';
 
-import { output } from '../../cli'
-import type { SdkGuardedFunction } from '../../guards/types'
-import { withGuards } from '../../guards/withGuards'
-import { loadConfiguration } from '../../utils/configuration/loadConfiguration'
-import { t } from '../../utils/translation'
-import { confirmFileOverridePrompt } from './prompts/confirmFileOverridePrompt'
-import { initConfiguration } from './utils/initCongifuration'
+import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
+import { withGuards } from '../../guards/withGuards';
+import { loadConfiguration } from '../../utils/configuration/loadConfiguration';
+import { t } from '../../utils/translation';
+import { confirmFileOverridePrompt } from './prompts/confirmFileOverridePrompt';
+import { initConfiguration } from './utils/initCongifuration';
 
 const initAction: SdkGuardedFunction = async ({ sdk }) => {
   const configLoadingResult = await loadConfiguration({})
     .then(() => {
-      return { isContentValid: true, isFilePresent: true } as const
+      return { isContentValid: true, isFilePresent: true } as const;
     })
     .catch((e: FleekError<unknown>) => {
       if (e instanceof FleekConfigInvalidContentError) {
@@ -23,22 +23,22 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
           isContentValid: false,
           isFilePresent: true,
           configPath: e.data.configPath,
-        } as const
+        } as const;
       }
 
       if (e instanceof FleekConfigMissingFileError) {
-        return { isContentValid: false, isFilePresent: false } as const
+        return { isContentValid: false, isFilePresent: false } as const;
       }
 
-      throw e
-    })
+      throw e;
+    });
 
   if (configLoadingResult.isContentValid && configLoadingResult.isFilePresent) {
-    output.error(t('configFileExists'))
-    output.printNewLine()
-    output.log(t('siteAlreadyExists'))
+    output.error(t('configFileExists'));
+    output.printNewLine();
+    output.log(t('siteAlreadyExists'));
 
-    return
+    return;
   }
 
   if (
@@ -47,19 +47,19 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
   ) {
     const overrideInvalidConfig = await confirmFileOverridePrompt({
       path: configLoadingResult.configPath,
-    })
+    });
 
     if (!overrideInvalidConfig) {
-      return
+      return;
     }
   }
 
-  await initConfiguration({ sdk })
+  await initConfiguration({ sdk });
 
-  output.printNewLine()
-  output.success(t('fleekConfigSaved'))
-  output.printNewLine()
-}
+  output.printNewLine();
+  output.success(t('fleekConfigSaved'));
+  output.printNewLine();
+};
 
 export const initActionHandler = withGuards(initAction, {
   scopes: {
@@ -67,4 +67,4 @@ export const initActionHandler = withGuards(initAction, {
     project: true,
     site: false,
   },
-})
+});

@@ -1,15 +1,15 @@
-import { DomainsNotFoundError } from '@fleek-platform/errors'
-import type { Domain, FleekSdk } from '@fleek-platform/sdk'
+import { DomainsNotFoundError } from '@fleek-platform/errors';
+import type { Domain, FleekSdk } from '@fleek-platform/sdk';
 
-import { selectPrompt } from '../../../prompts/selectPrompt'
-import { t } from '../../../utils/translation'
+import { selectPrompt } from '../../../prompts/selectPrompt';
+import { t } from '../../../utils/translation';
 
 type GetDomainOrPromptArgs = {
-  id?: string
-  hostname?: string
-  sdk: FleekSdk
-  choicesFilter?: (domain: Domain) => boolean
-}
+  id?: string;
+  hostname?: string;
+  sdk: FleekSdk;
+  choicesFilter?: (domain: Domain) => boolean;
+};
 
 export const getDomainOrPrompt = async ({
   id,
@@ -18,19 +18,19 @@ export const getDomainOrPrompt = async ({
   choicesFilter,
 }: GetDomainOrPromptArgs): Promise<Domain | undefined> => {
   if (id) {
-    return sdk.domains().get({ domainId: id })
+    return sdk.domains().get({ domainId: id });
   }
 
   if (hostname) {
-    return sdk.domains().getByHostname({ hostname })
+    return sdk.domains().getByHostname({ hostname });
   }
 
-  const allDomains = await sdk.domains().list()
+  const allDomains = await sdk.domains().list();
 
-  const domains = choicesFilter ? allDomains.filter(choicesFilter) : allDomains
+  const domains = choicesFilter ? allDomains.filter(choicesFilter) : allDomains;
 
   if (!domains.length) {
-    throw new DomainsNotFoundError()
+    throw new DomainsNotFoundError();
   }
 
   const selectedDomainId = await selectPrompt({
@@ -39,11 +39,11 @@ export const getDomainOrPrompt = async ({
       title: domain.hostname,
       value: domain.id,
     })),
-  })
+  });
 
-  const domain = domains.find((domain) => domain.id === selectedDomainId)
+  const domain = domains.find((domain) => domain.id === selectedDomainId);
 
-  if (!domain) return
+  if (!domain) return;
 
-  return domain
-}
+  return domain;
+};

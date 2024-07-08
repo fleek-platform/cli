@@ -1,17 +1,17 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { createEnsActionHandler } from './create'
-import { deleteEnsActionHandler } from './delete'
-import { detailEnsRecordsActionHandler } from './detail'
-import { listEnsRecordsActionHandler } from './list'
-import { verifyEnsRecordActionHandler } from './verify'
+import { t } from '../../utils/translation';
+import { createEnsActionHandler } from './create';
+import { deleteEnsActionHandler } from './delete';
+import { detailEnsRecordsActionHandler } from './detail';
+import { listEnsRecordsActionHandler } from './list';
+import { verifyEnsRecordActionHandler } from './verify';
 
 export default (program: Command) => {
   const cmd = program
     .command('ens')
     .option('-h, --help', t('printHelp'))
-    .description(t('ensCmdDescription'))
+    .description(t('ensCmdDescription'));
 
   cmd
     .command('create')
@@ -22,12 +22,12 @@ export default (program: Command) => {
     .description(t('ensCreateRecord'))
     .action(
       (options: {
-        siteId?: string
-        siteSlug?: string
-        name?: string
-        ipns?: string
+        siteId?: string;
+        siteSlug?: string;
+        name?: string;
+        ipns?: string;
       }) => createEnsActionHandler(options),
-    )
+    );
 
   cmd
     .command('detail')
@@ -42,7 +42,7 @@ export default (program: Command) => {
     .description(t('ensShowDetails'))
     .action((options: { id?: string; name?: string }) =>
       detailEnsRecordsActionHandler(options),
-    )
+    );
 
   cmd
     .command('list')
@@ -50,7 +50,7 @@ export default (program: Command) => {
     .description(t('ensListAllForProject'))
     .action((options: { siteId?: string }) =>
       listEnsRecordsActionHandler(options),
-    )
+    );
 
   cmd
     .command('delete')
@@ -73,7 +73,7 @@ export default (program: Command) => {
     .description(t('ensDelete'))
     .action((options: { id?: string; name?: string }) =>
       deleteEnsActionHandler(options),
-    )
+    );
 
   cmd
     .command('verify')
@@ -96,7 +96,7 @@ export default (program: Command) => {
     .description(t('ensVerifyIsConfig'))
     .action((options: { id?: string; name?: string }) =>
       verifyEnsRecordActionHandler(options),
-    )
+    );
 
-  cmd.command('help').description(t('printHelp'))
-}
+  cmd.command('help').description(t('printHelp'));
+};

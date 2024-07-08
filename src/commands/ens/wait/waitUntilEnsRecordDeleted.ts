@@ -1,11 +1,11 @@
-import type { EnsRecord, FleekSdk } from '@fleek-platform/sdk'
+import type { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
 
-import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 
 type WaitUntilEnsRecordDeletedArgs = {
-  ensRecord: EnsRecord
-  sdk: FleekSdk
-}
+  ensRecord: EnsRecord;
+  sdk: FleekSdk;
+};
 
 export const waitUntilEnsRecordDeleted = async ({
   ensRecord,
@@ -20,5 +20,5 @@ export const waitUntilEnsRecordDeleted = async ({
         .catch(() => true),
     period: 6_000,
     tries: 10,
-  })
-}
+  });
+};

@@ -1,14 +1,14 @@
-import { confirmIncludeBuildCommandPrompt } from '../prompts/confirmIncludeBuildCommandPrompt'
-import { enterBuildCommandPrompt } from '../prompts/enterBuildCommandPrompt'
+import { confirmIncludeBuildCommandPrompt } from '../prompts/confirmIncludeBuildCommandPrompt';
+import { enterBuildCommandPrompt } from '../prompts/enterBuildCommandPrompt';
 
 export const selectBuildCommandOrSkip = async () => {
-  const includeBuildCommand = await confirmIncludeBuildCommandPrompt()
+  const includeBuildCommand = await confirmIncludeBuildCommandPrompt();
 
   if (!includeBuildCommand) {
-    return
+    return;
   }
 
-  const buildCommand = await enterBuildCommandPrompt()
+  const buildCommand = await enterBuildCommandPrompt();
 
-  return buildCommand
-}
+  return buildCommand;
+};

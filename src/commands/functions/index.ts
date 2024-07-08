@@ -1,27 +1,27 @@
-import type { Command } from 'commander'
+import type { Command } from 'commander';
 
-import { t } from '../../utils/translation'
-import { createActionHandler } from './create'
-import { deleteActionHandler } from './delete'
-import { deployActionHandler } from './deploy'
-import { listActionHandler } from './list'
-import { listDeploymentsActionHandler } from './listDeployments'
-import { updateActionHandler } from './update'
+import { t } from '../../utils/translation';
+import { createActionHandler } from './create';
+import { deleteActionHandler } from './delete';
+import { deployActionHandler } from './deploy';
+import { listActionHandler } from './list';
+import { listDeploymentsActionHandler } from './listDeployments';
+import { updateActionHandler } from './update';
 
 type DeployOptions = {
-  path?: string
-  name?: string
-  noBundle: boolean
-  private: boolean
-  env?: string[]
-  envFile?: string
-}
+  path?: string;
+  name?: string;
+  noBundle: boolean;
+  private: boolean;
+  env?: string[];
+  envFile?: string;
+};
 
 export default (program: Command) => {
   const cmd = program
     .command('functions')
     .option('-h, --help', t('printHelp'))
-    .description(t('functionsDescription'))
+    .description(t('functionsDescription'));
 
   cmd
     .command('create')
@@ -29,7 +29,7 @@ export default (program: Command) => {
     .description(t('functionsCreateDescription'))
     .action((options: { name?: string }) =>
       createActionHandler({ name: options.name }),
-    )
+    );
 
   cmd
     .command('delete')
@@ -37,7 +37,7 @@ export default (program: Command) => {
     .option('-n, --name <functionName>', t('functionName'))
     .action((options: { name?: string }) =>
       deleteActionHandler({ name: options.name }),
-    )
+    );
 
   cmd
     .command('update')
@@ -48,10 +48,10 @@ export default (program: Command) => {
     .option('--status <newStatus>', t('functionStatus'))
     .action(
       (options: {
-        functionName?: string
-        name?: string
-        slug?: string
-        status?: string
+        functionName?: string;
+        name?: string;
+        slug?: string;
+        status?: string;
       }) =>
         updateActionHandler({
           functionName: options.functionName,
@@ -59,7 +59,7 @@ export default (program: Command) => {
           slug: options.slug,
           status: options.status,
         }),
-    )
+    );
 
   cmd
     .command('deploy')
@@ -82,12 +82,12 @@ export default (program: Command) => {
         env: options.env ?? [],
         envFile: options.envFile,
       }),
-    )
+    );
 
   cmd
     .command('list')
     .description(t('listFunctionsDesc'))
-    .action(() => listActionHandler())
+    .action(() => listActionHandler());
 
   cmd
     .command('deployments')
@@ -95,10 +95,10 @@ export default (program: Command) => {
     .description(t('deploymentsListForSelectedFunction'))
     .action((options: { name?: string }) =>
       listDeploymentsActionHandler(options),
-    )
+    );
 
   cmd
     .command('help')
     .description(t('printHelp'))
-    .action(() => cmd.help())
-}
+    .action(() => cmd.help());
+};

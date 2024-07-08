@@ -1,22 +1,22 @@
-import Conf from 'conf'
+import Conf from 'conf';
 
-import { secrets } from './secrets'
+import { secrets } from './secrets';
 
 type ConfSchema = {
-  personalAccessToken: string | undefined
-  projectId: string | undefined
-}
+  personalAccessToken: string | undefined;
+  projectId: string | undefined;
+};
 
 const schema = {
   personalAccessToken: { type: 'string' },
   projectId: { type: 'string' },
-} as const
+} as const;
 
 const conf = new Conf<ConfSchema>({
   schema,
   projectName: 'fleek',
   configName: 'global',
-})
+});
 
 export const config = {
   personalAccessToken: {
@@ -30,4 +30,4 @@ export const config = {
     clear: () => conf.delete('projectId'),
   },
   clear: () => conf.clear(),
-}
+};

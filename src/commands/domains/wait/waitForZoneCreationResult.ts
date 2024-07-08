@@ -1,11 +1,11 @@
-import type { FleekSdk, Zone } from '@fleek-platform/sdk'
+import type { FleekSdk, Zone } from '@fleek-platform/sdk';
 
-import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 
 type WaitForZoneCreationResultArgs = {
-  sdk: FleekSdk
-  zone: Pick<Zone, 'id'>
-}
+  sdk: FleekSdk;
+  zone: Pick<Zone, 'id'>;
+};
 
 export const waitForZoneCreationResult = async ({
   zone,
@@ -13,14 +13,14 @@ export const waitForZoneCreationResult = async ({
 }: WaitForZoneCreationResultArgs) => {
   return checkPeriodicallyUntil({
     conditionFn: async () => {
-      const checkedZone = await sdk.domains().getZone({ id: zone.id })
+      const checkedZone = await sdk.domains().getZone({ id: zone.id });
 
       return checkedZone.status === 'CREATED' ||
         checkedZone.status === 'CREATING_FAILED'
         ? checkedZone.status
-        : null
+        : null;
     },
     period: 6_000,
     tries: 10,
-  })
-}
+  });
+};

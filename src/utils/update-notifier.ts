@@ -1,29 +1,29 @@
-import chalk from 'chalk'
-import updateNotifier from 'update-notifier-cjs'
+import chalk from 'chalk';
+import updateNotifier from 'update-notifier-cjs';
 
-import { t } from '../utils/translation'
+import { t } from '../utils/translation';
 
-const hours = 4 // Number of hours for the interval
-const updateCheckInterval = 1000 * 60 * 60 * hours
+const hours = 4; // Number of hours for the interval
+const updateCheckInterval = 1000 * 60 * 60 * hours;
 
 type CheckForPackageUpdatesArgs = {
-  pkg: string
-  updateCheckInternal: number
-}
+  pkg: string;
+  updateCheckInternal: number;
+};
 
 export const checkForPackageUpdates = async (
   pkg: CheckForPackageUpdatesArgs,
 ) => {
-  const notifier = updateNotifier({ pkg, updateCheckInterval })
+  const notifier = updateNotifier({ pkg, updateCheckInterval });
 
   if (!notifier.update) {
-    return
+    return;
   }
 
-  const { current, latest, name } = notifier.update
+  const { current, latest, name } = notifier.update;
 
-  const installCmd = chalk.yellow(`npm i -g ${name}`)
-  const verifyCmd = chalk.yellow('fleek version')
+  const installCmd = chalk.yellow(`npm i -g ${name}`);
+  const verifyCmd = chalk.yellow('fleek version');
 
   const message = t('updateAvailable', {
     updateRequired: t('updateRequired'),
@@ -38,7 +38,7 @@ export const checkForPackageUpdates = async (
     options: {
       bold: true,
     },
-  })
+  });
 
   notifier.notify({
     message,
@@ -49,5 +49,5 @@ export const checkForPackageUpdates = async (
       borderColor: 'yellow',
       borderStyle: 'round',
     },
-  })
-}
+  });
+};

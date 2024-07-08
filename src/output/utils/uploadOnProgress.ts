@@ -1,4 +1,4 @@
-import type cliProgress from 'cli-progress'
+import type cliProgress from 'cli-progress';
 
 export const uploadOnProgress = (progressBar: cliProgress.SingleBar) => {
   return ({
@@ -6,12 +6,12 @@ export const uploadOnProgress = (progressBar: cliProgress.SingleBar) => {
     totalSize,
   }: { loadedSize: number; totalSize?: number }) => {
     if (loadedSize === 0) {
-      progressBar.start(totalSize ?? loadedSize, loadedSize)
+      progressBar.start(totalSize ?? loadedSize, loadedSize);
     } else if (loadedSize === totalSize) {
-      progressBar.update(loadedSize)
-      progressBar.stop()
+      progressBar.update(loadedSize);
+      progressBar.stop();
     } else {
-      progressBar.update(loadedSize)
+      progressBar.update(loadedSize);
     }
-  }
-}
+  };
+};

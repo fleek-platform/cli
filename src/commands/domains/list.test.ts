@@ -1,8 +1,8 @@
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk'
-import { type Mock, describe, expect, it, vi } from 'vitest'
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
-import { output as fakeOutput } from '../../cli'
-import { listDomainsAction } from './list'
+import { output as fakeOutput } from '../../cli';
+import { listDomainsAction } from './list';
 
 vi.mock('../../cli', () => {
   const output = {
@@ -11,13 +11,13 @@ vi.mock('../../cli', () => {
     checkmark: vi.fn().mockReturnValue('V'),
     printNewLine: vi.fn(),
     mistake: vi.fn(),
-  }
+  };
 
-  return { output }
-})
+  return { output };
+});
 
 vi.mock('@fleek-platform/sdk', () => {
-  const FleekSdkMock = vi.fn()
+  const FleekSdkMock = vi.fn();
 
   const domains = {
     list: vi.fn().mockResolvedValue([
@@ -48,31 +48,31 @@ vi.mock('@fleek-platform/sdk', () => {
         createdAt: '2023-02-02T00:00:00.000Z',
       },
     ]),
-  }
+  };
 
-  FleekSdkMock.prototype.domains = () => domains
+  FleekSdkMock.prototype.domains = () => domains;
 
   const sites = {
     get: vi
       .fn()
       .mockResolvedValue({ id: 'testSiteId', zones: [{ id: 'testZoneId' }] }),
-  }
+  };
 
-  FleekSdkMock.prototype.sites = () => sites
+  FleekSdkMock.prototype.sites = () => sites;
 
-  return { FleekSdk: FleekSdkMock, PersonalAccessTokenService: vi.fn() }
-})
+  return { FleekSdk: FleekSdkMock, PersonalAccessTokenService: vi.fn() };
+});
 
 describe('List all domains', () => {
   it('List all domains assigned to selected project', async () => {
     const accessTokenService = new PersonalAccessTokenService({
       personalAccessToken: '',
-    })
-    const fakeSdk = new FleekSdk({ accessTokenService })
+    });
+    const fakeSdk = new FleekSdk({ accessTokenService });
 
     await expect(
       listDomainsAction({ sdk: fakeSdk, args: {} }),
-    ).resolves.toBeUndefined()
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.table).toHaveBeenCalledWith([
       {
@@ -85,40 +85,39 @@ describe('List all domains', () => {
         Status: 'CREATED',
         'Created At': '2023-02-02T00:00:00.000Z',
       },
-    ])
-  })
+    ]);
+  });
 
   it('List all domains for given siteId', async () => {
     const accessTokenService = new PersonalAccessTokenService({
       personalAccessToken: '',
-    })
-    const fakeSdk = new FleekSdk({ accessTokenService })
-
-    ;(fakeSdk.domains().listByZoneId as Mock).mockResolvedValueOnce([
+    });
+    const fakeSdk = new FleekSdk({ accessTokenService });
+    (fakeSdk.domains().listByZoneId as Mock).mockResolvedValueOnce([
       {
         id: 'firstDomainId',
         hostname: 'first.xyz',
         status: 'ACTIVE',
         createdAt: '2023-02-01T00:00:00.000Z',
       },
-    ])
+    ]);
 
     await expect(
       listDomainsAction({ sdk: fakeSdk, args: { siteId: 'testSiteId' } }),
-    ).resolves.toBeUndefined()
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.sites().get as Mock).toHaveBeenNthCalledWith(1, {
       id: 'testSiteId',
-    })
+    });
     expect(fakeSdk.domains().listByZoneId as Mock).toHaveBeenNthCalledWith(1, {
       zoneId: 'testZoneId',
-    })
+    });
     expect(fakeOutput.table).toHaveBeenCalledWith([
       {
         Hostname: 'first.xyz',
         Status: 'ACTIVE',
         'Created At': '2023-02-01T00:00:00.000Z',
       },
-    ])
-  })
-})
+    ]);
+  });
+});

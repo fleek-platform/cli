@@ -15,7 +15,7 @@ export const supportedRuntimeModules = [
   'url',
   'util',
   'zlib',
-]
+];
 
 export const unsupportedRuntimeModules = [
   'assert/strict',
@@ -52,4 +52,4 @@ export const unsupportedRuntimeModules = [
   'wasi',
   'webcrypto',
   'worker_threads',
-]
+];

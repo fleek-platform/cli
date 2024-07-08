@@ -1,12 +1,12 @@
-import type { Client } from '@fleek-platform/sdk'
+import type { Client } from '@fleek-platform/sdk';
 
-import { checkPeriodicallyUntil } from '../checkPeriodicallyUntil'
+import { checkPeriodicallyUntil } from '../checkPeriodicallyUntil';
 
 type WaitForPersonalAccessTokenFromVerificationSessionArgs = {
-  verificationSessionId: string
-  client: Client
-  name?: string
-}
+  verificationSessionId: string;
+  client: Client;
+  name?: string;
+};
 
 export const waitForPersonalAccessTokenFromVerificationSession = async ({
   verificationSessionId,
@@ -23,10 +23,10 @@ export const waitForPersonalAccessTokenFromVerificationSession = async ({
             { where: { id: verificationSessionId }, data: { name } },
           ],
         })
-        .catch(() => null)
+        .catch(() => null);
 
-      return response?.createPersonalAccessTokenFromVerificationSession ?? null
+      return response?.createPersonalAccessTokenFromVerificationSession ?? null;
     },
     period: 2_000,
     tries: 500,
-  })
+  });
