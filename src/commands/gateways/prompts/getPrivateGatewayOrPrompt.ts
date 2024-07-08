@@ -37,7 +37,11 @@ export const getPrivateGatewayOrPrompt = async ({
 		})),
 	});
 
-	return privateGateways.find(
+	const matchPrivateGw = privateGateways.find(
 		(privateGateway) => privateGateway.id === selectedPrivateGatewayId,
-	)!;
+	);
+
+	if (!matchPrivateGw) return;
+	
+	return matchPrivateGw;
 };

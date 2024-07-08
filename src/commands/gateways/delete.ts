@@ -18,6 +18,12 @@ export const deletePrivateGatewayAction: SdkGuardedFunction<
 		slug: args.slug,
 	});
 
+	if (!privateGateway) {
+		output.error(t('noPrivateGatewaysFoundUnexpectedly'));
+
+		return;
+	}
+
 	output.spinner(t("deletingGateway"));
 
 	await sdk.privateGateways().delete({ id: privateGateway.id });
