@@ -10,6 +10,8 @@ Fleek CLI provides a unified command line interface to Fleek Services.
 
 * [🤖 Install](#install)
 * [👷‍♀️Development](#development)
+  - [Code format](#code-format)
+  - [Changeset](#changeset)
 * [📖 Docs](https://fleek.xyz/docs)
 * [🙏 Contributing](#contributing)
   - [Branching strategy](#branching-strategy)
@@ -88,6 +90,46 @@ fleek
 ```
 
 Learn the Fleek-platform CLI basic commands [here](#basic-commands). For extended documentation visit our [documentation site](https://fleek.xyz/docs).
+
+### Code Format
+
+Format, linting is provide by [biomejs](https://biomejs.dev). The configuration is available as:
+
+```
+biome.json
+```
+
+The available commands are the following.
+
+Format the source-code and modify/write changes in-file:
+
+```sh
+pnpm format
+```
+
+Check for the source-code format only:
+
+```sh
+pnpm format:check
+```
+
+Lint and modify/write changes in-file:
+
+```sh
+pnpm lint
+```
+
+Lint checks only:
+
+```sh
+pnpm lint:check
+```
+
+Format and lint the source-code (write):
+
+```sh
+pnpm format:unsafe
+```
 
 ### Changeset
 
