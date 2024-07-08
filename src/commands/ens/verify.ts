@@ -22,6 +22,12 @@ export const verifyEnsRecordAction: SdkGuardedFunction<
 		choicesFilter: (ens: EnsRecord) => ens.status !== "ACTIVE",
 	});
 
+	if (!ensRecord) {
+		output.error(t('noEnsRecordFoundUnexpectedly'));
+
+		return;
+	}
+
 	if (ensRecord.status === "ACTIVE") {
 		output.success(
 			t("ensRecordNameAlreadyVerif", { ensRecordName: ensRecord.name }),

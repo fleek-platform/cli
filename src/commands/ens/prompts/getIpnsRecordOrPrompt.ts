@@ -14,7 +14,7 @@ export const getIpnsRecordOrPrompt = async ({
 	name,
 	sdk,
 	siteId,
-}: GetIpnsRecordOrPromptArgs): Promise<IpnsRecord> => {
+}: GetIpnsRecordOrPromptArgs): Promise<IpnsRecord | undefined> => {
 	if (name) {
 		return await sdk.ipns().getRecord({ name });
 	}
@@ -31,11 +31,15 @@ export const getIpnsRecordOrPrompt = async ({
 
 	const selectedIpnsRecordId = await selectPrompt({
 		message: `${t("ipnsSelect")}:`,
-		choices: ipnsRecords.map((record) => ({
+		choices: ipnsRecords.map((record: Record<"name" | "id", string>) => ({
 			title: record.name,
 			value: record.id,
 		})),
 	});
 
-	return ipnsRecords.find((record) => record.id === selectedIpnsRecordId)!;
+	const record = ipnsRecords.find((record) => record.id === selectedIpnsRecordId);
+
+	if (!record) return;
+
+	return record;
 };
