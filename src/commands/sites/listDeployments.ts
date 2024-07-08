@@ -3,6 +3,7 @@ import type { SdkGuardedFunction } from "../../guards/types";
 import { withGuards } from "../../guards/withGuards";
 import { getSiteOrPrompt } from "./prompts/getSiteOrPrompt";
 import { printDeploymentsTable } from "./utils/printDeploymentsTable";
+import { t } from '../../utils/translation';
 
 type ListDeploymentsActionArgs = {
 	id?: string;
@@ -13,6 +14,12 @@ const listDeploymentsAction: SdkGuardedFunction<
 	ListDeploymentsActionArgs
 > = async ({ sdk, args }) => {
 	const site = await getSiteOrPrompt({ id: args.id, slug: args.slug, sdk });
+
+	if (!site) {
+		output.error(t('expectedNotFoundGeneric', { name: 'site'}))
+
+		return;
+	}
 
 	printDeploymentsTable({ output, deployments: site.deployments });
 };
