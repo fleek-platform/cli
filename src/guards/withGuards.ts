@@ -9,7 +9,10 @@ import type { Action, Guards, SdkGuardedFunction } from "./types";
 type WithGuardsArgs = { scopes: Guards };
 
 export const withGuards = <
-	T extends { predefinedConfigPath?: string; [name: string]: Object | undefined },
+	T extends {
+		predefinedConfigPath?: string;
+		[name: string]: string | undefined;
+	},
 >(
 	handler: SdkGuardedFunction<T>,
 	{ scopes }: WithGuardsArgs,
