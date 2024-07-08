@@ -22,6 +22,13 @@ export const sitesGuard = async ({
 		output.printNewLine();
 
 		const sdk = getSdkClient();
-		await initConfiguration({ sdk: sdk! });
+
+		if (!sdk) {
+			output.error(t('unexpectedError'));
+						
+			return false;
+		}
+		
+		await initConfiguration({ sdk });
 	}
 };
