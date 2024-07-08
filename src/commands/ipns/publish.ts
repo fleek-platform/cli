@@ -18,6 +18,12 @@ const publishAction: SdkGuardedFunction<PublishActionArgs> = async ({
 }) => {
 	const record = await getRecordOrPrompt({ sdk, name: args.name });
 
+	if (!record) {
+		output.error(t('recordsNotFoundUnexpectedly'));
+
+		return;
+	}
+
 	const hash = await getHashOrPrompt({ hash: args.hash });
 
 	await sdk.ipns().publishRecord({ id: record.id, hash });

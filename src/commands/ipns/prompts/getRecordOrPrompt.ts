@@ -13,7 +13,7 @@ export const getRecordOrPrompt = async ({
 	sdk,
 	name,
 }: GetRecordOrPromptArgs): Promise<
-	Omit<IpnsRecord, "__typename" | "createdAt" | "updatedAt">
+	Omit<IpnsRecord, "__typename" | "createdAt" | "updatedAt"> | undefined
 > => {
 	if (name) {
 		return await sdk.ipns().getRecord({ name });
@@ -33,5 +33,9 @@ export const getRecordOrPrompt = async ({
 		})),
 	});
 
-	return records.find((record) => record.id === ipnsRecordId)!;
+	const ipnsRecordMatch = records.find((record) => record.id === ipnsRecordId);
+
+	if (!ipnsRecordMatch) return;
+
+	return ipnsRecordMatch;
 };

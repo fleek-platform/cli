@@ -22,6 +22,7 @@
   "ipfsAddDescription": "Upload file to IPFS",
   "ipfsAddPathDescription": "The location of a file or directory by specifying its path",
   "recordsNotFound": "There are no matching records.",
+  "recordsNotFoundUnexpectedly": "Unexpectedly no records were found. Contact support for help",
   "ipnsDescription": "Utilize the InterPlanetary Naming System (IPNS) service for decentralized and secure content addressing.",
   "ipnsCreateDescription": "Create a new IPNS record.",
   "ipnsPublishDescription": "Publish the record name corresponding to the specified IPFS hash using IPNS",
