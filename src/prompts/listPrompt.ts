@@ -1,8 +1,8 @@
-import { type PromptArgs, prompt } from "./prompt";
+import { type PromptArgs, prompt } from './prompt'
 
-type ListPromptArgs = Omit<PromptArgs, "type" | "initial"> & {
-  initial?: string[];
-};
+type ListPromptArgs = Omit<PromptArgs, 'type' | 'initial'> & {
+  initial?: string[]
+}
 
 export const listPrompt = async ({
   message,
@@ -10,9 +10,9 @@ export const listPrompt = async ({
   onCancel,
 }: ListPromptArgs): Promise<string[]> => {
   return prompt<string[]>({
-    type: "list",
+    type: 'list',
     message,
-    initial: initial?.join(", "),
+    initial: initial?.join(', '),
     onCancel,
-  });
-};
+  })
+}

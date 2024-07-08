@@ -1,13 +1,13 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
-import { getEnsRecordOrPrompt } from "./prompts/getEnsRecordOrPrompt";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
+import { getEnsRecordOrPrompt } from './prompts/getEnsRecordOrPrompt'
 
 export type DetailEnsRecordsActionArgs = {
-  id?: string;
-  name?: string;
-};
+  id?: string
+  name?: string
+}
 
 export const detailEnsRecordsAction: SdkGuardedFunction<
   DetailEnsRecordsActionArgs
@@ -16,31 +16,31 @@ export const detailEnsRecordsAction: SdkGuardedFunction<
     id: args.id,
     name: args.name,
     sdk,
-  });
+  })
 
   if (!ensRecord) {
-    output.error(t("expectedNotFoundGeneric", { name: "ENS Record" }));
+    output.error(t('expectedNotFoundGeneric', { name: 'ENS Record' }))
 
-    return;
+    return
   }
 
   output.table([
     {
       ENS: ensRecord.name,
       Status: ensRecord.status,
-      "Created At": ensRecord.createdAt,
+      'Created At': ensRecord.createdAt,
     },
-  ]);
+  ])
 
-  output.log(`${t("ensConfigAsTable")}:`);
+  output.log(`${t('ensConfigAsTable')}:`)
 
   output.table([
     {
-      Name: "Content Hash",
+      Name: 'Content Hash',
       Value: `ipns://${ensRecord.ipnsRecord.name}`,
     },
-  ]);
-};
+  ])
+}
 
 export const detailEnsRecordsActionHandler = withGuards(
   detailEnsRecordsAction,
@@ -51,4 +51,4 @@ export const detailEnsRecordsActionHandler = withGuards(
       site: false,
     },
   },
-);
+)

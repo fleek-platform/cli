@@ -1,19 +1,19 @@
-import { createClient } from "@fleek-platform/sdk";
-import { describe, expect, it, vi } from "vitest";
+import { createClient } from '@fleek-platform/sdk'
+import { describe, expect, it, vi } from 'vitest'
 
-import { output } from "../../cli";
-import { config } from "../../config";
-import { getVerificationSessionLink } from "../../utils/token/showVerificationSessionLink";
-import { waitForPersonalAccessTokenFromVerificationSession } from "../../utils/token/waitForPersonalAccessTokenFromVerificationSession";
-import { loginActionHandler } from "./login";
+import { output } from '../../cli'
+import { config } from '../../config'
+import { getVerificationSessionLink } from '../../utils/token/showVerificationSessionLink'
+import { waitForPersonalAccessTokenFromVerificationSession } from '../../utils/token/waitForPersonalAccessTokenFromVerificationSession'
+import { loginActionHandler } from './login'
 
-vi.mock("crypto", () => ({
+vi.mock('crypto', () => ({
   randomBytes: vi.fn().mockReturnValue({
-    toString: vi.fn().mockReturnValue("mockVerificationSession"),
+    toString: vi.fn().mockReturnValue('mockVerificationSession'),
   }),
-}));
+}))
 
-vi.mock("../../cli", () => {
+vi.mock('../../cli', () => {
   const output = {
     chore: vi.fn(),
     log: vi.fn(),
@@ -21,12 +21,12 @@ vi.mock("../../cli", () => {
     success: vi.fn(),
     spinner: vi.fn(),
     printNewLine: vi.fn(),
-  };
+  }
 
-  return { output };
-});
+  return { output }
+})
 
-vi.mock("../../config", () => ({
+vi.mock('../../config', () => ({
   config: {
     personalAccessToken: {
       set: vi.fn(),
@@ -36,69 +36,69 @@ vi.mock("../../config", () => ({
       clear: vi.fn(),
     },
   },
-}));
+}))
 
 // Assumes user goes ahead with the flow and logs in
-vi.mock("@fleek-platform/sdk", () => {
-  const MockClient = vi.fn();
+vi.mock('@fleek-platform/sdk', () => {
+  const MockClient = vi.fn()
   MockClient.prototype.mutation = vi.fn().mockResolvedValue({
-    createPersonalAccessTokenFromVerificationSession: "mockPat",
-  });
+    createPersonalAccessTokenFromVerificationSession: 'mockPat',
+  })
 
-  const createClientMock = vi.fn().mockReturnValue(new MockClient());
+  const createClientMock = vi.fn().mockReturnValue(new MockClient())
 
-  return { createClient: createClientMock };
-});
+  return { createClient: createClientMock }
+})
 
-describe("Login", async () => {
-  it("should request token from verification session", async () => {
-    const mockClient = createClient({ url: "" });
+describe('Login', async () => {
+  it('should request token from verification session', async () => {
+    const mockClient = createClient({ url: '' })
     const result = await waitForPersonalAccessTokenFromVerificationSession({
-      verificationSessionId: "mockVerificationSession",
+      verificationSessionId: 'mockVerificationSession',
       client: mockClient,
-    });
+    })
 
-    expect(result).toBe("mockPat");
+    expect(result).toBe('mockPat')
     expect(mockClient.mutation).toHaveBeenCalledWith({
       createPersonalAccessTokenFromVerificationSession: [
         {
           data: { name: undefined },
           where: {
-            id: "mockVerificationSession",
+            id: 'mockVerificationSession',
           },
         },
       ],
-    });
-  });
+    })
+  })
 
-  it("should log the messages correctly", async () => {
+  it('should log the messages correctly', async () => {
     await loginActionHandler({
-      uiAppUrl: "",
-      authApiUrl: "",
-    });
+      uiAppUrl: '',
+      authApiUrl: '',
+    })
 
     expect(output.chore).toHaveBeenCalledWith(
-      "Please follow the link to log in to Fleek Platform.",
-    );
+      'Please follow the link to log in to Fleek Platform.',
+    )
 
     expect(output.spinner).toHaveBeenCalledWith(
       getVerificationSessionLink({
-        uiAppUrl: "",
-        verificationSessionId: "mockVerificationSession",
+        uiAppUrl: '',
+        verificationSessionId: 'mockVerificationSession',
       }),
-    );
+    )
     expect(output.success).toHaveBeenCalledWith(
-      "You are now logged in to the Fleek Platform.",
-    );
-  });
+      'You are now logged in to the Fleek Platform.',
+    )
+  })
 
-  it("should update config correctly", async () => {
+  it('should update config correctly', async () => {
     await loginActionHandler({
-      uiAppUrl: "",
-      authApiUrl: "",
-    });
+      uiAppUrl: '',
+      authApiUrl: '',
+    })
 
-    expect(config.personalAccessToken.set).toHaveBeenCalledWith("mockPat");
-    expect(config.projectId.clear).toHaveBeenCalled();
-  });
-});
+    expect(config.personalAccessToken.set).toHaveBeenCalledWith('mockPat')
+    expect(config.projectId.clear).toHaveBeenCalled()
+  })
+})

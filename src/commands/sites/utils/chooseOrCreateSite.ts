@@ -1,37 +1,37 @@
-import type { FleekSdk, Site } from "@fleek-platform/sdk";
+import type { FleekSdk, Site } from '@fleek-platform/sdk'
 
-import { output } from "../../../cli";
-import { t } from "../../../utils/translation";
-import { confirmUseExistingSitePrompt } from "../prompts/confirmUseExistingSitePrompt";
-import { getSiteOrPrompt } from "../prompts/getSiteOrPrompt";
-import { createSite } from "./createSite";
+import { output } from '../../../cli'
+import { t } from '../../../utils/translation'
+import { confirmUseExistingSitePrompt } from '../prompts/confirmUseExistingSitePrompt'
+import { getSiteOrPrompt } from '../prompts/getSiteOrPrompt'
+import { createSite } from './createSite'
 
-type ChooseOrCreateSiteArgs = { sdk: FleekSdk };
+type ChooseOrCreateSiteArgs = { sdk: FleekSdk }
 
 export const chooseOrCreateSite = async ({
   sdk,
 }: ChooseOrCreateSiteArgs): Promise<Site | undefined> => {
-  const sites = await sdk.sites().list();
+  const sites = await sdk.sites().list()
 
   if (!sites.length) {
-    output.warn(t("noSitesFound"));
+    output.warn(t('noSitesFound'))
 
-    return createSite({ sdk });
+    return createSite({ sdk })
   }
 
-  const useExistingSite = await confirmUseExistingSitePrompt();
+  const useExistingSite = await confirmUseExistingSitePrompt()
 
   if (useExistingSite) {
-    const site = getSiteOrPrompt({ sdk });
+    const site = getSiteOrPrompt({ sdk })
 
     if (!site) {
-      output.error(t("expectedNotFoundGeneric", { name: "site" }));
+      output.error(t('expectedNotFoundGeneric', { name: 'site' }))
 
-      return;
+      return
     }
 
-    return site;
+    return site
   }
 
-  return createSite({ sdk });
-};
+  return createSite({ sdk })
+}

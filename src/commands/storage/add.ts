@@ -1,43 +1,43 @@
-import { promises as fs, existsSync } from "node:fs";
-import { basename } from "node:path";
+import { promises as fs, existsSync } from 'node:fs'
+import { basename } from 'node:path'
 import {
   getCfIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,
-} from "@fleek-platform/utils-ipfs";
-import cliProgress from "cli-progress";
-import { filesFromPaths } from "files-from-path";
+} from '@fleek-platform/utils-ipfs'
+import cliProgress from 'cli-progress'
+import { filesFromPaths } from 'files-from-path'
 
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { uploadOnProgress } from "../../output/utils/uploadOnProgress";
-import { t } from "../../utils/translation";
-import { getAllActivePrivateGatewayDomains } from "../gateways/utils/getAllPrivateGatewayDomains";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { uploadOnProgress } from '../../output/utils/uploadOnProgress'
+import { t } from '../../utils/translation'
+import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains'
 
 type AddStorageActionArgs = {
-  path: string;
-};
+  path: string
+}
 
 export const addStorageAction: SdkGuardedFunction<
   AddStorageActionArgs
 > = async ({ sdk, args }) => {
   if (!existsSync(args.path)) {
-    output.error(t("filePathNotFound", { path: args.path }));
+    output.error(t('filePathNotFound', { path: args.path }))
 
-    return;
+    return
   }
 
   const progressBar = new cliProgress.SingleBar(
     {
       format:
-        "Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}",
+        'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
     },
     cliProgress.Presets.shades_grey,
-  );
-  const stat = await fs.stat(args.path);
+  )
+  const stat = await fs.stat(args.path)
 
-  const directoryName = basename(args.path);
-  const files = await filesFromPaths([args.path]);
+  const directoryName = basename(args.path)
+  const files = await filesFromPaths([args.path])
   const storage = stat.isDirectory()
     ? await sdk.storage().uploadVirtualDirectory({
         files,
@@ -47,37 +47,37 @@ export const addStorageAction: SdkGuardedFunction<
     : await sdk.storage().uploadFile({
         file: files[0],
         onUploadProgress: uploadOnProgress(progressBar),
-      });
+      })
 
   if (!storage) {
-    output.error(t("somethingWrongDurUpload"));
+    output.error(t('somethingWrongDurUpload'))
 
-    return;
+    return
   }
 
-  const hash = storage?.pin.cid.toString();
+  const hash = storage?.pin.cid.toString()
 
   if (storage.duplicate) {
-    output.warn(t("fileAlreadyExistWarn", { path: args.path }));
+    output.warn(t('fileAlreadyExistWarn', { path: args.path }))
 
-    output.printNewLine();
+    output.printNewLine()
   } else {
-    output.success(t("storageUploadSuccessCid", { cid: hash }));
-    output.printNewLine();
+    output.success(t('storageUploadSuccessCid', { cid: hash }))
+    output.printNewLine()
   }
 
   const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
     sdk,
-  });
+  })
 
   if (privateGatewayDomains.length === 0) {
-    output.log(t("visitViaGateway"));
-    output.link(getCfIpfsGatewayUrl(hash));
+    output.log(t('visitViaGateway'))
+    output.link(getCfIpfsGatewayUrl(hash))
 
-    return;
+    return
   }
 
-  output.log(t("visitViaPvtGw"));
+  output.log(t('visitViaPvtGw'))
 
   for (const privateGatewayDomain of privateGatewayDomains) {
     output.link(
@@ -85,11 +85,11 @@ export const addStorageAction: SdkGuardedFunction<
         hostname: privateGatewayDomain.hostname,
         hash,
       }),
-    );
+    )
   }
 
-  output.printNewLine();
-};
+  output.printNewLine()
+}
 
 export const addStorageActionHandler = withGuards(addStorageAction, {
   scopes: {
@@ -97,4 +97,4 @@ export const addStorageActionHandler = withGuards(addStorageAction, {
     project: true,
     site: false,
   },
-});
+})

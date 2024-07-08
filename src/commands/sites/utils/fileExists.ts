@@ -1,20 +1,20 @@
-import { promises as fsPromises } from "node:fs";
+import { promises as fsPromises } from 'node:fs'
 
 interface FsError extends Error {
-  code?: string;
+  code?: string
 }
 
 export const fileExists = async (path: string) => {
   try {
-    const stat = await fsPromises.stat(path);
+    const stat = await fsPromises.stat(path)
 
-    return stat.isFile();
+    return stat.isFile()
   } catch (e) {
-    const err = e as FsError;
-    if (err.code === "ENOENT") {
-      return false;
+    const err = e as FsError
+    if (err.code === 'ENOENT') {
+      return false
     }
 
-    throw e;
+    throw e
   }
-};
+}

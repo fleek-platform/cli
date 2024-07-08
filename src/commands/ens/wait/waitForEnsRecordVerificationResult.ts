@@ -1,11 +1,11 @@
-import type { FleekSdk } from "@fleek-platform/sdk";
+import type { FleekSdk } from '@fleek-platform/sdk'
 
-import { checkPeriodicallyUntil } from "../../../utils/checkPeriodicallyUntil";
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
 
 type WaitForEnsRecordVerificationResultArgs = {
-  id: string;
-  sdk: FleekSdk;
-};
+  id: string
+  sdk: FleekSdk
+}
 
 export const waitForEnsRecordVerificationResult = async ({
   id,
@@ -13,14 +13,14 @@ export const waitForEnsRecordVerificationResult = async ({
 }: WaitForEnsRecordVerificationResultArgs) => {
   return checkPeriodicallyUntil({
     conditionFn: async () => {
-      const checkedEns = await sdk.ens().get({ id });
+      const checkedEns = await sdk.ens().get({ id })
 
-      return checkedEns.status === "ACTIVE" ||
-        checkedEns.status === "VERIFYING_FAILED"
+      return checkedEns.status === 'ACTIVE' ||
+        checkedEns.status === 'VERIFYING_FAILED'
         ? checkedEns.status
-        : null;
+        : null
     },
     period: 6_000,
     tries: 10,
-  });
-};
+  })
+}

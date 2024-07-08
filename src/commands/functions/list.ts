@@ -1,17 +1,17 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
 
 const listAction: SdkGuardedFunction = async ({ sdk }) => {
-  const functions = await sdk.functions().list();
+  const functions = await sdk.functions().list()
 
   if (!functions?.length) {
-    output.warn(t("noYYet", { name: "functions" }));
-    output.log(t("youCanDoXUsingFolCmd", { action: t("createNewFunction") }));
-    output.log("fleek functions create");
+    output.warn(t('noYYet', { name: 'functions' }))
+    output.log(t('youCanDoXUsingFolCmd', { action: t('createNewFunction') }))
+    output.log('fleek functions create')
 
-    return;
+    return
   }
 
   output.table(
@@ -22,8 +22,8 @@ const listAction: SdkGuardedFunction = async ({ sdk }) => {
       InvokeUrl: f.invokeUrl,
       Status: f.status,
     })),
-  );
-};
+  )
+}
 
 export const listActionHandler = withGuards(listAction, {
   scopes: {
@@ -31,4 +31,4 @@ export const listActionHandler = withGuards(listAction, {
     project: true,
     site: false,
   },
-});
+})

@@ -1,11 +1,11 @@
-import type { FleekSdk } from "@fleek-platform/sdk";
+import type { FleekSdk } from '@fleek-platform/sdk'
 
-import { checkPeriodicallyUntil } from "../../../utils/checkPeriodicallyUntil";
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
 
 type WaitForDomainCreationResultArgs = {
-  sdk: FleekSdk;
-  hostname: string;
-};
+  sdk: FleekSdk
+  hostname: string
+}
 
 export const waitForDomainCreationResult = async ({
   hostname,
@@ -13,13 +13,13 @@ export const waitForDomainCreationResult = async ({
 }: WaitForDomainCreationResultArgs) => {
   return checkPeriodicallyUntil({
     conditionFn: async () => {
-      const domain = await sdk.domains().getByHostname({ hostname });
+      const domain = await sdk.domains().getByHostname({ hostname })
 
-      return domain.status === "CREATED" || domain.status === "CREATING_FAILED"
+      return domain.status === 'CREATED' || domain.status === 'CREATING_FAILED'
         ? domain.status
-        : null;
+        : null
     },
     period: 6_000,
     tries: 10,
-  });
-};
+  })
+}

@@ -1,13 +1,13 @@
-import type { FleekSdk } from "@fleek-platform/sdk";
+import type { FleekSdk } from '@fleek-platform/sdk'
 
-import type { Output } from "../../../output/Output";
-import { t } from "../../../utils/translation";
+import type { Output } from '../../../output/Output'
+import { t } from '../../../utils/translation'
 
 type DeletePersonalAccessTokenArgs = {
-  output: Output;
-  sdk: FleekSdk;
-  id: string;
-};
+  output: Output
+  sdk: FleekSdk
+  id: string
+}
 
 export const deletePersonalAccessToken = async ({
   output,
@@ -17,19 +17,19 @@ export const deletePersonalAccessToken = async ({
   const success = await sdk
     .user()
     .deletePersonalAccessToken({ id })
-    .catch(() => false);
+    .catch(() => false)
 
   if (!success) {
-    output.error(t("patIdNotExistForUsr"));
+    output.error(t('patIdNotExistForUsr'))
 
-    return;
+    return
   }
 
-  output.printNewLine();
+  output.printNewLine()
   output.success(
-    t("commonItemActionSuccess", {
-      subject: t("personalAccessToken"),
-      action: t("deleted"),
+    t('commonItemActionSuccess', {
+      subject: t('personalAccessToken'),
+      action: t('deleted'),
     }),
-  );
-};
+  )
+}

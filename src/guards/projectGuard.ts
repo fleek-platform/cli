@@ -1,18 +1,18 @@
-import { output } from "../cli";
-import { switchProjectAction } from "../commands/projects/switch";
-import { config } from "../config";
-import { t } from "../utils/translation";
-import { sdkGuard } from "./sdkGuard";
+import { output } from '../cli'
+import { switchProjectAction } from '../commands/projects/switch'
+import { config } from '../config'
+import { t } from '../utils/translation'
+import { sdkGuard } from './sdkGuard'
 
 export const projectGuard = async () => {
-  const projectId = config.projectId.get();
+  const projectId = config.projectId.get()
 
   if (projectId) {
-    return;
+    return
   }
 
-  output.warn(t("projectSelectRequiredStarPrjFlow"));
-  output.printNewLine();
+  output.warn(t('projectSelectRequiredStarPrjFlow'))
+  output.printNewLine()
 
-  await sdkGuard(switchProjectAction)();
-};
+  await sdkGuard(switchProjectAction)()
+}

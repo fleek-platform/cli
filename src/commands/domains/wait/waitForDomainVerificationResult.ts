@@ -1,11 +1,11 @@
-import type { Domain, FleekSdk } from "@fleek-platform/sdk";
+import type { Domain, FleekSdk } from '@fleek-platform/sdk'
 
-import { checkPeriodicallyUntil } from "../../../utils/checkPeriodicallyUntil";
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
 
 type WaitForDomainVerificationResultArgs = {
-  domain: Domain;
-  sdk: FleekSdk;
-};
+  domain: Domain
+  sdk: FleekSdk
+}
 
 export const waitForDomainVerificationResult = async ({
   domain,
@@ -13,14 +13,14 @@ export const waitForDomainVerificationResult = async ({
 }: WaitForDomainVerificationResultArgs) => {
   return checkPeriodicallyUntil({
     conditionFn: async () => {
-      const checkedDomain = await sdk.domains().get({ domainId: domain.id });
+      const checkedDomain = await sdk.domains().get({ domainId: domain.id })
 
-      return checkedDomain.status === "ACTIVE" ||
-        checkedDomain.status === "VERIFYING_FAILED"
+      return checkedDomain.status === 'ACTIVE' ||
+        checkedDomain.status === 'VERIFYING_FAILED'
         ? checkedDomain.status
-        : null;
+        : null
     },
     period: 6_000,
     tries: 10,
-  });
-};
+  })
+}

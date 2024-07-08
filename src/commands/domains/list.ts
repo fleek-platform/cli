@@ -1,34 +1,34 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
-import { getSiteDomains } from "./utils/getSiteDomains";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
+import { getSiteDomains } from './utils/getSiteDomains'
 
 export type ListDomainsActionArgs = {
-  siteId?: string;
-};
+  siteId?: string
+}
 
 export const listDomainsAction: SdkGuardedFunction<
   ListDomainsActionArgs
 > = async ({ sdk, args }) => {
   const domains = args.siteId
     ? await getSiteDomains({ siteId: args.siteId, sdk })
-    : await sdk.domains().list();
+    : await sdk.domains().list()
 
   if (domains.length === 0) {
-    output.mistake(t("noDomainsAssocFound"));
+    output.mistake(t('noDomainsAssocFound'))
 
-    return;
+    return
   }
 
   output.table(
     domains.map(({ hostname, createdAt, status }) => ({
       Hostname: hostname,
-      "Created At": createdAt,
+      'Created At': createdAt,
       Status: status,
     })),
-  );
-};
+  )
+}
 
 export const listDomainsActionHandler = withGuards(listDomainsAction, {
   scopes: {
@@ -36,4 +36,4 @@ export const listDomainsActionHandler = withGuards(listDomainsAction, {
     project: true,
     site: false,
   },
-});
+})

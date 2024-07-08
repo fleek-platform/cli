@@ -1,11 +1,11 @@
-import type { Domain, FleekSdk } from "@fleek-platform/sdk";
+import type { Domain, FleekSdk } from '@fleek-platform/sdk'
 
-import { checkPeriodicallyUntil } from "../../../utils/checkPeriodicallyUntil";
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
 
 type WaitUntilDomainDeletedArgs = {
-  domain: Domain;
-  sdk: FleekSdk;
-};
+  domain: Domain
+  sdk: FleekSdk
+}
 
 export const waitUntilDomainDeleted = async ({
   domain,
@@ -20,5 +20,5 @@ export const waitUntilDomainDeleted = async ({
         .catch(() => true),
     period: 6_000,
     tries: 10,
-  });
-};
+  })
+}

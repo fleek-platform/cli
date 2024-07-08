@@ -1,19 +1,19 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
-import { parseWhitelistDomains } from "./utils/parser";
-import { truncateAndJoinStrings } from "./utils/truncateAndJoinStrings";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
+import { parseWhitelistDomains } from './utils/parser'
+import { truncateAndJoinStrings } from './utils/truncateAndJoinStrings'
 
 export const listApplicationsAction: SdkGuardedFunction<
   Record<string, never>
 > = async ({ sdk }) => {
-  const applications = await sdk.applications().list();
+  const applications = await sdk.applications().list()
 
   if (applications.length === 0) {
-    output.log(t("noYYet", { name: `${t("sdkPoweredApp")} ${t("clientId")}` }));
+    output.log(t('noYYet', { name: `${t('sdkPoweredApp')} ${t('clientId')}` }))
 
-    return;
+    return
   }
 
   output.table(
@@ -33,24 +33,24 @@ export const listApplicationsAction: SdkGuardedFunction<
         const uniqueWhitelistDomains = parseWhitelistDomains({
           whiteLabelDomains,
           whitelistDomains,
-        });
+        })
 
         return {
           ID: id,
           Name: name,
-          "Client ID": clientId,
-          "White list domains": truncateAndJoinStrings({
+          'Client ID': clientId,
+          'White list domains': truncateAndJoinStrings({
             input: uniqueWhitelistDomains.map(
               (whitelistDomain) => whitelistDomain.hostname,
             ),
             truncateOnPosition: 3,
           }),
-          "Created At": createdAt,
-        };
+          'Created At': createdAt,
+        }
       },
     ),
-  );
-};
+  )
+}
 
 export const listApplicationsActionHandler = withGuards(
   listApplicationsAction,
@@ -61,4 +61,4 @@ export const listApplicationsActionHandler = withGuards(
       site: false,
     },
   },
-);
+)

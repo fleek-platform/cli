@@ -1,14 +1,14 @@
-import type { FleekSdk, IpnsRecord } from "@fleek-platform/sdk";
+import type { FleekSdk, IpnsRecord } from '@fleek-platform/sdk'
 
-import { output } from "../../../cli";
-import { selectPrompt } from "../../../prompts/selectPrompt";
-import { t } from "../../../utils/translation";
+import { output } from '../../../cli'
+import { selectPrompt } from '../../../prompts/selectPrompt'
+import { t } from '../../../utils/translation'
 
 type GetIpnsRecordOrPromptArgs = {
-  name?: string;
-  siteId: string;
-  sdk: FleekSdk;
-};
+  name?: string
+  siteId: string
+  sdk: FleekSdk
+}
 
 export const getIpnsRecordOrPrompt = async ({
   name,
@@ -16,32 +16,32 @@ export const getIpnsRecordOrPrompt = async ({
   siteId,
 }: GetIpnsRecordOrPromptArgs): Promise<IpnsRecord | undefined> => {
   if (name) {
-    return await sdk.ipns().getRecord({ name });
+    return await sdk.ipns().getRecord({ name })
   }
 
-  const ipnsRecords = await sdk.ipns().listRecords();
+  const ipnsRecords = await sdk.ipns().listRecords()
 
   if (!ipnsRecords.length) {
-    output.spinner(t("ipnsNotLinkCreating"));
-    const record = await sdk.ipns().createRecordForSite({ siteId });
-    output.stopSpinner();
+    output.spinner(t('ipnsNotLinkCreating'))
+    const record = await sdk.ipns().createRecordForSite({ siteId })
+    output.stopSpinner()
 
-    return record;
+    return record
   }
 
   const selectedIpnsRecordId = await selectPrompt({
-    message: `${t("ipnsSelect")}:`,
-    choices: ipnsRecords.map((record: Record<"name" | "id", string>) => ({
+    message: `${t('ipnsSelect')}:`,
+    choices: ipnsRecords.map((record: Record<'name' | 'id', string>) => ({
       title: record.name,
       value: record.id,
     })),
-  });
+  })
 
   const record = ipnsRecords.find(
     (record) => record.id === selectedIpnsRecordId,
-  );
+  )
 
-  if (!record) return;
+  if (!record) return
 
-  return record;
-};
+  return record
+}

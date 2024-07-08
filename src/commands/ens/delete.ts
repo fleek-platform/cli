@@ -1,14 +1,14 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
-import { getEnsRecordOrPrompt } from "./prompts/getEnsRecordOrPrompt";
-import { waitUntilEnsRecordDeleted } from "./wait/waitUntilEnsRecordDeleted";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
+import { getEnsRecordOrPrompt } from './prompts/getEnsRecordOrPrompt'
+import { waitUntilEnsRecordDeleted } from './wait/waitUntilEnsRecordDeleted'
 
 export type DeleteEnsRecordActionArgs = {
-  id?: string;
-  name?: string;
-};
+  id?: string
+  name?: string
+}
 
 export const deleteEnsAction: SdkGuardedFunction<
   DeleteEnsRecordActionArgs
@@ -17,34 +17,34 @@ export const deleteEnsAction: SdkGuardedFunction<
     id: args.id,
     name: args.name,
     sdk,
-  });
+  })
 
   if (!ensRecord) {
-    output.error(t("expectedNotFoundGeneric", { name: "ENS record" }));
+    output.error(t('expectedNotFoundGeneric', { name: 'ENS record' }))
 
-    return;
+    return
   }
 
-  output.spinner(t("ensDeleting"));
+  output.spinner(t('ensDeleting'))
 
-  await sdk.ens().delete({ id: ensRecord.id });
+  await sdk.ens().delete({ id: ensRecord.id })
 
-  const isDeleted = await waitUntilEnsRecordDeleted({ sdk, ensRecord });
+  const isDeleted = await waitUntilEnsRecordDeleted({ sdk, ensRecord })
 
   if (!isDeleted) {
-    output.error(t("ensCannotDelete", { ensRecordName: ensRecord.name }));
+    output.error(t('ensCannotDelete', { ensRecordName: ensRecord.name }))
 
-    return;
+    return
   }
 
-  output.printNewLine();
+  output.printNewLine()
   output.success(
-    t("commonItemActionSuccess", {
-      subject: `${t("ens")} "${ensRecord.name}"`,
-      action: t("deleted"),
+    t('commonItemActionSuccess', {
+      subject: `${t('ens')} "${ensRecord.name}"`,
+      action: t('deleted'),
     }),
-  );
-};
+  )
+}
 
 export const deleteEnsActionHandler = withGuards(deleteEnsAction, {
   scopes: {
@@ -52,4 +52,4 @@ export const deleteEnsActionHandler = withGuards(deleteEnsAction, {
     project: true,
     site: false,
   },
-});
+})

@@ -1,54 +1,54 @@
-import { output } from "../../cli";
-import { config } from "../../config";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
+import { output } from '../../cli'
+import { config } from '../../config'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
 import {
   type CIProvider,
   getCIProviderOrPrompt,
-} from "./prompts/getCIProviderOrPrompt";
-import { prepareGitHubActionsIntegration } from "./utils/prepareGitHubActionsIntegration";
+} from './prompts/getCIProviderOrPrompt'
+import { prepareGitHubActionsIntegration } from './utils/prepareGitHubActionsIntegration'
 
 type CiActionArgs = {
-  predefinedConfigPath?: string;
-  provider?: string;
-};
+  predefinedConfigPath?: string
+  provider?: string
+}
 
 const ciAction: SdkGuardedFunction<CiActionArgs> = async ({ args }) => {
   const provider = await getCIProviderOrPrompt({
     provider: args?.provider as CIProvider,
-  });
+  })
 
-  const personalAccessToken = config.personalAccessToken.get();
-  const projectId = config.projectId.get();
+  const personalAccessToken = config.personalAccessToken.get()
+  const projectId = config.projectId.get()
 
   if (!personalAccessToken) {
-    output.error(t("noPatFoundUnexpectedly"));
+    output.error(t('noPatFoundUnexpectedly'))
 
-    return;
+    return
   }
 
   if (!projectId) {
-    output.error(t("noProjectIdFoundUnexpectedly"));
+    output.error(t('noProjectIdFoundUnexpectedly'))
 
-    return;
+    return
   }
 
   switch (provider) {
-    case "github":
+    case 'github':
       await prepareGitHubActionsIntegration({
         projectId,
         personalAccessToken,
         fleekConfigPath: args.predefinedConfigPath,
         output,
-      });
-      break;
+      })
+      break
     default:
-      output.error(t("providerNotSupported"));
+      output.error(t('providerNotSupported'))
 
-      return;
+      return
   }
-};
+}
 
 export const ciActionHandler = withGuards(ciAction, {
   scopes: {
@@ -56,4 +56,4 @@ export const ciActionHandler = withGuards(ciAction, {
     site: true,
     authenticated: true,
   },
-});
+})

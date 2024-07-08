@@ -1,6 +1,6 @@
-import { type PromptArgs, prompt } from "./prompt";
+import { type PromptArgs, prompt } from './prompt'
 
-type ConfirmPromptArgs = Omit<PromptArgs, "type"> & { initial: boolean };
+type ConfirmPromptArgs = Omit<PromptArgs, 'type'> & { initial: boolean }
 
 export const confirmPrompt = async ({
   message,
@@ -8,9 +8,9 @@ export const confirmPrompt = async ({
   onCancel,
 }: ConfirmPromptArgs): Promise<boolean> => {
   return prompt<boolean>({
-    type: "confirm",
+    type: 'confirm',
     message,
     initial,
     onCancel,
-  });
-};
+  })
+}

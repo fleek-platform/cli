@@ -1,16 +1,16 @@
-import type { Domain } from "@fleek-platform/sdk";
+import type { Domain } from '@fleek-platform/sdk'
 
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
-import { getDomainOrPrompt } from "./prompts/getDomainOrPrompt";
-import { waitForDomainVerificationResult } from "./wait/waitForDomainVerificationResult";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
+import { getDomainOrPrompt } from './prompts/getDomainOrPrompt'
+import { waitForDomainVerificationResult } from './wait/waitForDomainVerificationResult'
 
 export type VerifyDomainActionArgs = {
-  id?: string;
-  hostname?: string;
-};
+  id?: string
+  hostname?: string
+}
 
 export const verifyDomainAction: SdkGuardedFunction<
   VerifyDomainActionArgs
@@ -20,60 +20,60 @@ export const verifyDomainAction: SdkGuardedFunction<
     hostname: args.hostname,
     sdk,
     choicesFilter: (domain: Domain) => domain.isVerified,
-  });
+  })
 
   if (!domain) {
-    output.error(t("noEnsRecordFoundUnexpectedly"));
-    return;
+    output.error(t('noEnsRecordFoundUnexpectedly'))
+    return
   }
 
-  if (domain.status === "ACTIVE") {
-    output.success(t("domainAlreadyVerified", { hostname: domain.hostname }));
-    output.printNewLine();
+  if (domain.status === 'ACTIVE') {
+    output.success(t('domainAlreadyVerified', { hostname: domain.hostname }))
+    output.printNewLine()
 
-    return;
+    return
   }
 
-  output.spinner(t("verifyingDomain"));
+  output.spinner(t('verifyingDomain'))
 
-  await sdk.domains().verifyDomain({ domainId: domain.id });
+  await sdk.domains().verifyDomain({ domainId: domain.id })
 
   const verificationResultStatus = await waitForDomainVerificationResult({
     domain,
     sdk,
-  });
+  })
 
   if (!verificationResultStatus) {
     output.warn(
-      t("warnSubjectProcessIsLong", {
-        subject: t("processOfDomainVerification"),
+      t('warnSubjectProcessIsLong', {
+        subject: t('processOfDomainVerification'),
       }),
-    );
-    output.printNewLine();
+    )
+    output.printNewLine()
 
     output.log(
-      `${t("commonWaitAndCheckStatusViaCmd", { subject: t("deploymentStatus") })}`,
-    );
+      `${t('commonWaitAndCheckStatusViaCmd', { subject: t('deploymentStatus') })}`,
+    )
     output.log(
-      output.textColor(`fleek domains detail ${domain.hostname}`, "cyan"),
-    );
+      output.textColor(`fleek domains detail ${domain.hostname}`, 'cyan'),
+    )
 
-    return;
+    return
   }
 
-  if (verificationResultStatus === "VERIFYING_FAILED") {
-    output.printNewLine();
+  if (verificationResultStatus === 'VERIFYING_FAILED') {
+    output.printNewLine()
     output.error(
-      t("domainVerificationFailureCheckDns", { hostname: domain.hostname }),
-    );
-    output.printNewLine();
+      t('domainVerificationFailureCheckDns', { hostname: domain.hostname }),
+    )
+    output.printNewLine()
 
-    return;
+    return
   }
 
-  output.success(t("domainVerified", { hostname: domain.hostname }));
-  output.printNewLine();
-};
+  output.success(t('domainVerified', { hostname: domain.hostname }))
+  output.printNewLine()
+}
 
 export const verifyDomainActionHandler = withGuards(verifyDomainAction, {
   scopes: {
@@ -81,4 +81,4 @@ export const verifyDomainActionHandler = withGuards(verifyDomainAction, {
     project: true,
     site: false,
   },
-});
+})

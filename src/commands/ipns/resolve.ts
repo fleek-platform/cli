@@ -1,22 +1,22 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
 
 type ResolveActionArgs = {
-  name: string;
-};
+  name: string
+}
 
 const resolveAction: SdkGuardedFunction<ResolveActionArgs> = async ({
   sdk,
   args,
 }) => {
-  const res = await sdk.ipns().resolveName({ name: args.name });
-  const hash = res.replace("/ipfs/", "");
+  const res = await sdk.ipns().resolveName({ name: args.name })
+  const hash = res.replace('/ipfs/', '')
 
-  output.success(t("ipnsResultHashIs", { hash }));
-  output.printNewLine();
-};
+  output.success(t('ipnsResultHashIs', { hash }))
+  output.printNewLine()
+}
 
 export const resolveActionHandler = withGuards(resolveAction, {
   scopes: {
@@ -24,4 +24,4 @@ export const resolveActionHandler = withGuards(resolveAction, {
     project: true,
     site: false,
   },
-});
+})

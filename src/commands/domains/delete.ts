@@ -1,14 +1,14 @@
-import { output } from "../../cli";
-import type { SdkGuardedFunction } from "../../guards/types";
-import { withGuards } from "../../guards/withGuards";
-import { t } from "../../utils/translation";
-import { getDomainOrPrompt } from "./prompts/getDomainOrPrompt";
-import { waitUntilDomainDeleted } from "./wait/waitUntilDomainDeleted";
+import { output } from '../../cli'
+import type { SdkGuardedFunction } from '../../guards/types'
+import { withGuards } from '../../guards/withGuards'
+import { t } from '../../utils/translation'
+import { getDomainOrPrompt } from './prompts/getDomainOrPrompt'
+import { waitUntilDomainDeleted } from './wait/waitUntilDomainDeleted'
 
 export type DeleteDomainActionArgs = {
-  id?: string;
-  hostname?: string;
-};
+  id?: string
+  hostname?: string
+}
 
 export const deleteDomainAction: SdkGuardedFunction<
   DeleteDomainActionArgs
@@ -17,36 +17,36 @@ export const deleteDomainAction: SdkGuardedFunction<
     id: args.id,
     hostname: args.hostname,
     sdk,
-  });
+  })
 
   if (!domain) {
-    output.error(t("expectedNotFoundGeneric", { name: "domain" }));
+    output.error(t('expectedNotFoundGeneric', { name: 'domain' }))
 
-    return;
+    return
   }
 
-  output.spinner(t("deletingDomain"));
+  output.spinner(t('deletingDomain'))
 
-  await sdk.domains().deleteDomain({ domainId: domain.id });
+  await sdk.domains().deleteDomain({ domainId: domain.id })
 
-  const isDeleted = await waitUntilDomainDeleted({ sdk, domain });
+  const isDeleted = await waitUntilDomainDeleted({ sdk, domain })
 
   if (!isDeleted) {
-    output.error(t("cannotDeleteDomain", { hostname: domain.hostname }));
-    output.printNewLine();
+    output.error(t('cannotDeleteDomain', { hostname: domain.hostname }))
+    output.printNewLine()
 
-    return;
+    return
   }
 
-  output.printNewLine();
+  output.printNewLine()
   output.success(
-    t("commonItemActionSuccess", {
-      subject: `${t("domain")} "${domain.hostname}"`,
-      action: "deleted",
+    t('commonItemActionSuccess', {
+      subject: `${t('domain')} "${domain.hostname}"`,
+      action: 'deleted',
     }),
-  );
-  output.printNewLine();
-};
+  )
+  output.printNewLine()
+}
 
 export const deleteDomainActionHandler = withGuards(deleteDomainAction, {
   scopes: {
@@ -54,4 +54,4 @@ export const deleteDomainActionHandler = withGuards(deleteDomainAction, {
     project: true,
     site: false,
   },
-});
+})

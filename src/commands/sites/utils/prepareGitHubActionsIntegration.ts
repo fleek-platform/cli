@@ -1,30 +1,30 @@
-import { join as joinPath } from "node:path";
-import { generateDeploymentWorkflowYaml } from "@fleek-platform/utils-github";
+import { join as joinPath } from 'node:path'
+import { generateDeploymentWorkflowYaml } from '@fleek-platform/utils-github'
 
-import type { Output } from "../../../output/Output";
-import { confirmFileOverridePrompt } from "../prompts/confirmFileOverridePrompt";
-import { fileExists } from "./fileExists";
-import { getDeploymentWorkflowYamlLocation } from "./getDeploymentWorkflowYamlLocation";
-import { initializeDeploymentWorkflowDirectory } from "./initializeDeploymentWorkflowDirectory";
-import { requestDeploymentWorkflowInstallCommand } from "./requestDeploymentWorkflowInstallCommand";
-import { saveDeploymentWorkflowYaml } from "./saveDeploymentWorkflowYaml";
+import type { Output } from '../../../output/Output'
+import { confirmFileOverridePrompt } from '../prompts/confirmFileOverridePrompt'
+import { fileExists } from './fileExists'
+import { getDeploymentWorkflowYamlLocation } from './getDeploymentWorkflowYamlLocation'
+import { initializeDeploymentWorkflowDirectory } from './initializeDeploymentWorkflowDirectory'
+import { requestDeploymentWorkflowInstallCommand } from './requestDeploymentWorkflowInstallCommand'
+import { saveDeploymentWorkflowYaml } from './saveDeploymentWorkflowYaml'
 
-export const ghWorkflowFilename = "fleek-deploy.yaml";
+export const ghWorkflowFilename = 'fleek-deploy.yaml'
 export const ghActionsWorflowsDirectory = joinPath(
   process.cwd(),
-  ".github/workflows",
-);
+  '.github/workflows',
+)
 export const ghActionsDeploySitesYamlPath = joinPath(
   ghActionsWorflowsDirectory,
   ghWorkflowFilename,
-);
+)
 
 type PrepareGitHubActionsIntegrationArgs = {
-  personalAccessToken: string;
-  projectId: string;
-  fleekConfigPath?: string;
-  output: Output;
-};
+  personalAccessToken: string
+  projectId: string
+  fleekConfigPath?: string
+  output: Output
+}
 
 export const prepareGitHubActionsIntegration = async ({
   personalAccessToken,
@@ -32,23 +32,23 @@ export const prepareGitHubActionsIntegration = async ({
   fleekConfigPath,
   output,
 }: PrepareGitHubActionsIntegrationArgs) => {
-  const installCommand = await requestDeploymentWorkflowInstallCommand();
+  const installCommand = await requestDeploymentWorkflowInstallCommand()
   const yamlContent = generateDeploymentWorkflowYaml({
     fleekConfigPath,
     installCommand,
-  });
-  const yamlPath = await getDeploymentWorkflowYamlLocation();
-  const pathExists = await fileExists(yamlPath);
+  })
+  const yamlPath = await getDeploymentWorkflowYamlLocation()
+  const pathExists = await fileExists(yamlPath)
 
   if (pathExists && !(await confirmFileOverridePrompt({ path: yamlPath }))) {
-    return;
+    return
   }
 
   if (yamlPath === ghActionsDeploySitesYamlPath) {
     await initializeDeploymentWorkflowDirectory({
       output,
       ghActionsWorflowsDirectory,
-    });
+    })
   }
 
   await saveDeploymentWorkflowYaml({
@@ -57,5 +57,5 @@ export const prepareGitHubActionsIntegration = async ({
     personalAccessToken,
     projectId,
     output,
-  });
-};
+  })
+}

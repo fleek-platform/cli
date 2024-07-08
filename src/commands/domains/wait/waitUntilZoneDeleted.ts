@@ -1,11 +1,11 @@
-import type { FleekSdk, Zone } from "@fleek-platform/sdk";
+import type { FleekSdk, Zone } from '@fleek-platform/sdk'
 
-import { checkPeriodicallyUntil } from "../../../utils/checkPeriodicallyUntil";
+import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil'
 
 type WaitUntilZoneDeletedArgs = {
-  sdk: FleekSdk;
-  zone: Pick<Zone, "id">;
-};
+  sdk: FleekSdk
+  zone: Pick<Zone, 'id'>
+}
 
 export const waitUntilZoneDeleted = async ({
   zone,
@@ -20,5 +20,5 @@ export const waitUntilZoneDeleted = async ({
         .catch(() => true),
     period: 6_000,
     tries: 10,
-  });
-};
+  })
+}
