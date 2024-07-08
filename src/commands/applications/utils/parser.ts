@@ -1,33 +1,33 @@
 import type {
-	ApplicationWhiteLabelDomain,
-	ApplicationWhitelistDomain,
+  ApplicationWhiteLabelDomain,
+  ApplicationWhitelistDomain,
 } from "@fleek-platform/sdk";
 
 type WhitelistDomain = Omit<
-	ApplicationWhitelistDomain,
-	"createdAt" | "updatedAt" | "__typename"
+  ApplicationWhitelistDomain,
+  "createdAt" | "updatedAt" | "__typename"
 >;
 type WhiteLabelDomain = Omit<
-	ApplicationWhiteLabelDomain,
-	"createdAt" | "updatedAt" | "__typename"
+  ApplicationWhiteLabelDomain,
+  "createdAt" | "updatedAt" | "__typename"
 >;
 
 export const parseWhitelistDomains = ({
-	whitelistDomains,
-	whiteLabelDomains,
+  whitelistDomains,
+  whiteLabelDomains,
 }: {
-	whitelistDomains: WhitelistDomain[];
-	whiteLabelDomains: WhiteLabelDomain[];
+  whitelistDomains: WhitelistDomain[];
+  whiteLabelDomains: WhiteLabelDomain[];
 }) => {
-	const combinedWhitelistDomains = [
-		...whitelistDomains.map((whitelistDomain) => whitelistDomain.hostname),
-		...whiteLabelDomains.map((whiteLabelDomain) => whiteLabelDomain.hostname),
-	];
-	const uniqueWhitelistDomains = Array.from(
-		new Set(combinedWhitelistDomains),
-	).map((uniqueWhitelistDomain) => ({
-		hostname: uniqueWhitelistDomain,
-	}));
+  const combinedWhitelistDomains = [
+    ...whitelistDomains.map((whitelistDomain) => whitelistDomain.hostname),
+    ...whiteLabelDomains.map((whiteLabelDomain) => whiteLabelDomain.hostname),
+  ];
+  const uniqueWhitelistDomains = Array.from(
+    new Set(combinedWhitelistDomains),
+  ).map((uniqueWhitelistDomain) => ({
+    hostname: uniqueWhitelistDomain,
+  }));
 
-	return uniqueWhitelistDomains;
+  return uniqueWhitelistDomains;
 };

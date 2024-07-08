@@ -6,50 +6,50 @@ import { getEnsRecordOrPrompt } from "./prompts/getEnsRecordOrPrompt";
 import { waitUntilEnsRecordDeleted } from "./wait/waitUntilEnsRecordDeleted";
 
 export type DeleteEnsRecordActionArgs = {
-	id?: string;
-	name?: string;
+  id?: string;
+  name?: string;
 };
 
 export const deleteEnsAction: SdkGuardedFunction<
-	DeleteEnsRecordActionArgs
+  DeleteEnsRecordActionArgs
 > = async ({ sdk, args }) => {
-	const ensRecord = await getEnsRecordOrPrompt({
-		id: args.id,
-		name: args.name,
-		sdk,
-	});
+  const ensRecord = await getEnsRecordOrPrompt({
+    id: args.id,
+    name: args.name,
+    sdk,
+  });
 
-	if (!ensRecord) {
-		output.error(t("expectedNotFoundGeneric", { name: "ENS record" }));
+  if (!ensRecord) {
+    output.error(t("expectedNotFoundGeneric", { name: "ENS record" }));
 
-		return;
-	}
+    return;
+  }
 
-	output.spinner(t("ensDeleting"));
+  output.spinner(t("ensDeleting"));
 
-	await sdk.ens().delete({ id: ensRecord.id });
+  await sdk.ens().delete({ id: ensRecord.id });
 
-	const isDeleted = await waitUntilEnsRecordDeleted({ sdk, ensRecord });
+  const isDeleted = await waitUntilEnsRecordDeleted({ sdk, ensRecord });
 
-	if (!isDeleted) {
-		output.error(t("ensCannotDelete", { ensRecordName: ensRecord.name }));
+  if (!isDeleted) {
+    output.error(t("ensCannotDelete", { ensRecordName: ensRecord.name }));
 
-		return;
-	}
+    return;
+  }
 
-	output.printNewLine();
-	output.success(
-		t("commonItemActionSuccess", {
-			subject: `${t("ens")} "${ensRecord.name}"`,
-			action: t("deleted"),
-		}),
-	);
+  output.printNewLine();
+  output.success(
+    t("commonItemActionSuccess", {
+      subject: `${t("ens")} "${ensRecord.name}"`,
+      action: t("deleted"),
+    }),
+  );
 };
 
 export const deleteEnsActionHandler = withGuards(deleteEnsAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

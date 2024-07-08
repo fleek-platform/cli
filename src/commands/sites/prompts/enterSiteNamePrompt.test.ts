@@ -4,13 +4,13 @@ import { textPrompt } from "../../../prompts/textPrompt";
 import { enterSiteNamePrompt } from "./enterSiteNamePrompt";
 
 vi.mock("../../../prompts/textPrompt", () => ({
-	textPrompt: vi.fn().mockResolvedValue("testSite"),
+  textPrompt: vi.fn().mockResolvedValue("testSite"),
 }));
 
 describe("Enter build command prompt", () => {
-	it("returns the correct build command", async () => {
-		await expect(enterSiteNamePrompt()).resolves.toEqual("testSite");
+  it("returns the correct build command", async () => {
+    await expect(enterSiteNamePrompt()).resolves.toEqual("testSite");
 
-		expect(textPrompt).toHaveBeenCalledOnce();
-	});
+    expect(textPrompt).toHaveBeenCalledOnce();
+  });
 });

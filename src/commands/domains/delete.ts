@@ -6,52 +6,52 @@ import { getDomainOrPrompt } from "./prompts/getDomainOrPrompt";
 import { waitUntilDomainDeleted } from "./wait/waitUntilDomainDeleted";
 
 export type DeleteDomainActionArgs = {
-	id?: string;
-	hostname?: string;
+  id?: string;
+  hostname?: string;
 };
 
 export const deleteDomainAction: SdkGuardedFunction<
-	DeleteDomainActionArgs
+  DeleteDomainActionArgs
 > = async ({ sdk, args }) => {
-	const domain = await getDomainOrPrompt({
-		id: args.id,
-		hostname: args.hostname,
-		sdk,
-	});
+  const domain = await getDomainOrPrompt({
+    id: args.id,
+    hostname: args.hostname,
+    sdk,
+  });
 
-	if (!domain) {
-		output.error(t("expectedNotFoundGeneric", { name: "domain" }));
+  if (!domain) {
+    output.error(t("expectedNotFoundGeneric", { name: "domain" }));
 
-		return;
-	}
+    return;
+  }
 
-	output.spinner(t("deletingDomain"));
+  output.spinner(t("deletingDomain"));
 
-	await sdk.domains().deleteDomain({ domainId: domain.id });
+  await sdk.domains().deleteDomain({ domainId: domain.id });
 
-	const isDeleted = await waitUntilDomainDeleted({ sdk, domain });
+  const isDeleted = await waitUntilDomainDeleted({ sdk, domain });
 
-	if (!isDeleted) {
-		output.error(t("cannotDeleteDomain", { hostname: domain.hostname }));
-		output.printNewLine();
+  if (!isDeleted) {
+    output.error(t("cannotDeleteDomain", { hostname: domain.hostname }));
+    output.printNewLine();
 
-		return;
-	}
+    return;
+  }
 
-	output.printNewLine();
-	output.success(
-		t("commonItemActionSuccess", {
-			subject: `${t("domain")} "${domain.hostname}"`,
-			action: "deleted",
-		}),
-	);
-	output.printNewLine();
+  output.printNewLine();
+  output.success(
+    t("commonItemActionSuccess", {
+      subject: `${t("domain")} "${domain.hostname}"`,
+      action: "deleted",
+    }),
+  );
+  output.printNewLine();
 };
 
 export const deleteDomainActionHandler = withGuards(deleteDomainAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

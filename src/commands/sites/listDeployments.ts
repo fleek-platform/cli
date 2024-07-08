@@ -6,28 +6,28 @@ import { getSiteOrPrompt } from "./prompts/getSiteOrPrompt";
 import { printDeploymentsTable } from "./utils/printDeploymentsTable";
 
 type ListDeploymentsActionArgs = {
-	id?: string;
-	slug?: string;
+  id?: string;
+  slug?: string;
 };
 
 const listDeploymentsAction: SdkGuardedFunction<
-	ListDeploymentsActionArgs
+  ListDeploymentsActionArgs
 > = async ({ sdk, args }) => {
-	const site = await getSiteOrPrompt({ id: args.id, slug: args.slug, sdk });
+  const site = await getSiteOrPrompt({ id: args.id, slug: args.slug, sdk });
 
-	if (!site) {
-		output.error(t("expectedNotFoundGeneric", { name: "site" }));
+  if (!site) {
+    output.error(t("expectedNotFoundGeneric", { name: "site" }));
 
-		return;
-	}
+    return;
+  }
 
-	printDeploymentsTable({ output, deployments: site.deployments });
+  printDeploymentsTable({ output, deployments: site.deployments });
 };
 
 export const listDeploymentsActionHandler = withGuards(listDeploymentsAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

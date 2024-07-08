@@ -6,33 +6,33 @@ import { enterInstallCommandPrompt } from "../prompts/enterInstallCommandPrompt"
 import { deriveInstallCommandFromLockfile } from "./deriveInstallCommandFromLockfile";
 
 export const requestDeploymentWorkflowInstallCommand = async () => {
-	const config = await loadConfiguration({}).catch(() => null);
+  const config = await loadConfiguration({}).catch(() => null);
 
-	if (config === null || !config.sites[0]?.buildCommand) {
-		return;
-	}
+  if (config === null || !config.sites[0]?.buildCommand) {
+    return;
+  }
 
-	const wantsInstallCommand = await confirmUserWantsInstallCommandPrompt();
+  const wantsInstallCommand = await confirmUserWantsInstallCommandPrompt();
 
-	if (!wantsInstallCommand) {
-		return;
-	}
+  if (!wantsInstallCommand) {
+    return;
+  }
 
-	const wantsToSpecifyCommand =
-		await confirmUserWantsToSpecifyInstallCommandPrompt();
+  const wantsToSpecifyCommand =
+    await confirmUserWantsToSpecifyInstallCommandPrompt();
 
-	if (wantsToSpecifyCommand) {
-		return enterInstallCommandPrompt();
-	}
+  if (wantsToSpecifyCommand) {
+    return enterInstallCommandPrompt();
+  }
 
-	const installCommand = await deriveInstallCommandFromLockfile();
+  const installCommand = await deriveInstallCommandFromLockfile();
 
-	if (
-		!installCommand ||
-		!(await confirmInstallCommandPrompt({ installCommand }))
-	) {
-		return enterInstallCommandPrompt();
-	}
+  if (
+    !installCommand ||
+    !(await confirmInstallCommandPrompt({ installCommand }))
+  ) {
+    return enterInstallCommandPrompt();
+  }
 
-	return installCommand;
+  return installCommand;
 };

@@ -8,38 +8,38 @@ import { waitForPersonalAccessTokenFromVerificationSession } from "../../utils/t
 import { t } from "../../utils/translation";
 
 type CreatePersonalAccessTokenActionHandlerArgs = {
-	name?: string;
-	uiAppUrl: string;
-	authApiUrl: string;
+  name?: string;
+  uiAppUrl: string;
+  authApiUrl: string;
 };
 
 export const createPersonalAccessTokenActionHandler = async ({
-	uiAppUrl,
-	authApiUrl,
-	...args
+  uiAppUrl,
+  authApiUrl,
+  ...args
 }: CreatePersonalAccessTokenActionHandlerArgs) => {
-	const verificationSessionId = generateVerificationSessionId();
+  const verificationSessionId = generateVerificationSessionId();
 
-	const name = await getPersonalAccessTokenNameOrPrompt({
-		name: args?.name,
-	});
-	output.printNewLine();
-	showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
+  const name = await getPersonalAccessTokenNameOrPrompt({
+    name: args?.name,
+  });
+  output.printNewLine();
+  showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
 
-	const personalAccessToken =
-		await waitForPersonalAccessTokenFromVerificationSession({
-			verificationSessionId,
-			client: createClient({ url: authApiUrl }),
-			name,
-		});
+  const personalAccessToken =
+    await waitForPersonalAccessTokenFromVerificationSession({
+      verificationSessionId,
+      client: createClient({ url: authApiUrl }),
+      name,
+    });
 
-	if (!personalAccessToken) {
-		output.error(t("patFetchTimeout"));
+  if (!personalAccessToken) {
+    output.error(t("patFetchTimeout"));
 
-		return;
-	}
+    return;
+  }
 
-	output.success(
-		t("newPatIs", { pat: output.textColor(personalAccessToken, "redBright") }),
-	);
+  output.success(
+    t("newPatIs", { pat: output.textColor(personalAccessToken, "redBright") }),
+  );
 };

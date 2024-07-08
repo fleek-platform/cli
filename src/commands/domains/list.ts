@@ -5,35 +5,35 @@ import { t } from "../../utils/translation";
 import { getSiteDomains } from "./utils/getSiteDomains";
 
 export type ListDomainsActionArgs = {
-	siteId?: string;
+  siteId?: string;
 };
 
 export const listDomainsAction: SdkGuardedFunction<
-	ListDomainsActionArgs
+  ListDomainsActionArgs
 > = async ({ sdk, args }) => {
-	const domains = args.siteId
-		? await getSiteDomains({ siteId: args.siteId, sdk })
-		: await sdk.domains().list();
+  const domains = args.siteId
+    ? await getSiteDomains({ siteId: args.siteId, sdk })
+    : await sdk.domains().list();
 
-	if (domains.length === 0) {
-		output.mistake(t("noDomainsAssocFound"));
+  if (domains.length === 0) {
+    output.mistake(t("noDomainsAssocFound"));
 
-		return;
-	}
+    return;
+  }
 
-	output.table(
-		domains.map(({ hostname, createdAt, status }) => ({
-			Hostname: hostname,
-			"Created At": createdAt,
-			Status: status,
-		})),
-	);
+  output.table(
+    domains.map(({ hostname, createdAt, status }) => ({
+      Hostname: hostname,
+      "Created At": createdAt,
+      Status: status,
+    })),
+  );
 };
 
 export const listDomainsActionHandler = withGuards(listDomainsAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

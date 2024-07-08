@@ -5,50 +5,50 @@ import { t } from "../../utils/translation";
 import { getEnsRecordOrPrompt } from "./prompts/getEnsRecordOrPrompt";
 
 export type DetailEnsRecordsActionArgs = {
-	id?: string;
-	name?: string;
+  id?: string;
+  name?: string;
 };
 
 export const detailEnsRecordsAction: SdkGuardedFunction<
-	DetailEnsRecordsActionArgs
+  DetailEnsRecordsActionArgs
 > = async ({ sdk, args }) => {
-	const ensRecord = await getEnsRecordOrPrompt({
-		id: args.id,
-		name: args.name,
-		sdk,
-	});
+  const ensRecord = await getEnsRecordOrPrompt({
+    id: args.id,
+    name: args.name,
+    sdk,
+  });
 
-	if (!ensRecord) {
-		output.error(t("expectedNotFoundGeneric", { name: "ENS Record" }));
+  if (!ensRecord) {
+    output.error(t("expectedNotFoundGeneric", { name: "ENS Record" }));
 
-		return;
-	}
+    return;
+  }
 
-	output.table([
-		{
-			ENS: ensRecord.name,
-			Status: ensRecord.status,
-			"Created At": ensRecord.createdAt,
-		},
-	]);
+  output.table([
+    {
+      ENS: ensRecord.name,
+      Status: ensRecord.status,
+      "Created At": ensRecord.createdAt,
+    },
+  ]);
 
-	output.log(`${t("ensConfigAsTable")}:`);
+  output.log(`${t("ensConfigAsTable")}:`);
 
-	output.table([
-		{
-			Name: "Content Hash",
-			Value: `ipns://${ensRecord.ipnsRecord.name}`,
-		},
-	]);
+  output.table([
+    {
+      Name: "Content Hash",
+      Value: `ipns://${ensRecord.ipnsRecord.name}`,
+    },
+  ]);
 };
 
 export const detailEnsRecordsActionHandler = withGuards(
-	detailEnsRecordsAction,
-	{
-		scopes: {
-			authenticated: true,
-			project: true,
-			site: false,
-		},
-	},
+  detailEnsRecordsAction,
+  {
+    scopes: {
+      authenticated: true,
+      project: true,
+      site: false,
+    },
+  },
 );

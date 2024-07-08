@@ -1,8 +1,8 @@
 import { promises as fs, existsSync } from "node:fs";
 import { basename } from "node:path";
 import {
-	getCfIpfsGatewayUrl,
-	getPrivateIpfsGatewayUrl,
+  getCfIpfsGatewayUrl,
+  getPrivateIpfsGatewayUrl,
 } from "@fleek-platform/utils-ipfs";
 import cliProgress from "cli-progress";
 import { filesFromPaths } from "files-from-path";
@@ -15,86 +15,86 @@ import { t } from "../../utils/translation";
 import { getAllActivePrivateGatewayDomains } from "../gateways/utils/getAllPrivateGatewayDomains";
 
 type AddStorageActionArgs = {
-	path: string;
+  path: string;
 };
 
 export const addStorageAction: SdkGuardedFunction<
-	AddStorageActionArgs
+  AddStorageActionArgs
 > = async ({ sdk, args }) => {
-	if (!existsSync(args.path)) {
-		output.error(t("filePathNotFound", { path: args.path }));
+  if (!existsSync(args.path)) {
+    output.error(t("filePathNotFound", { path: args.path }));
 
-		return;
-	}
+    return;
+  }
 
-	const progressBar = new cliProgress.SingleBar(
-		{
-			format:
-				"Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}",
-		},
-		cliProgress.Presets.shades_grey,
-	);
-	const stat = await fs.stat(args.path);
+  const progressBar = new cliProgress.SingleBar(
+    {
+      format:
+        "Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}",
+    },
+    cliProgress.Presets.shades_grey,
+  );
+  const stat = await fs.stat(args.path);
 
-	const directoryName = basename(args.path);
-	const files = await filesFromPaths([args.path]);
-	const storage = stat.isDirectory()
-		? await sdk.storage().uploadVirtualDirectory({
-				files,
-				directoryName,
-				onUploadProgress: uploadOnProgress(progressBar),
-			})
-		: await sdk.storage().uploadFile({
-				file: files[0],
-				onUploadProgress: uploadOnProgress(progressBar),
-			});
+  const directoryName = basename(args.path);
+  const files = await filesFromPaths([args.path]);
+  const storage = stat.isDirectory()
+    ? await sdk.storage().uploadVirtualDirectory({
+        files,
+        directoryName,
+        onUploadProgress: uploadOnProgress(progressBar),
+      })
+    : await sdk.storage().uploadFile({
+        file: files[0],
+        onUploadProgress: uploadOnProgress(progressBar),
+      });
 
-	if (!storage) {
-		output.error(t("somethingWrongDurUpload"));
+  if (!storage) {
+    output.error(t("somethingWrongDurUpload"));
 
-		return;
-	}
+    return;
+  }
 
-	const hash = storage?.pin.cid.toString();
+  const hash = storage?.pin.cid.toString();
 
-	if (storage.duplicate) {
-		output.warn(t("fileAlreadyExistWarn", { path: args.path }));
+  if (storage.duplicate) {
+    output.warn(t("fileAlreadyExistWarn", { path: args.path }));
 
-		output.printNewLine();
-	} else {
-		output.success(t("storageUploadSuccessCid", { cid: hash }));
-		output.printNewLine();
-	}
+    output.printNewLine();
+  } else {
+    output.success(t("storageUploadSuccessCid", { cid: hash }));
+    output.printNewLine();
+  }
 
-	const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
-		sdk,
-	});
+  const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
+    sdk,
+  });
 
-	if (privateGatewayDomains.length === 0) {
-		output.log(t("visitViaGateway"));
-		output.link(getCfIpfsGatewayUrl(hash));
+  if (privateGatewayDomains.length === 0) {
+    output.log(t("visitViaGateway"));
+    output.link(getCfIpfsGatewayUrl(hash));
 
-		return;
-	}
+    return;
+  }
 
-	output.log(t("visitViaPvtGw"));
+  output.log(t("visitViaPvtGw"));
 
-	for (const privateGatewayDomain of privateGatewayDomains) {
-		output.link(
-			getPrivateIpfsGatewayUrl({
-				hostname: privateGatewayDomain.hostname,
-				hash,
-			}),
-		);
-	}
+  for (const privateGatewayDomain of privateGatewayDomains) {
+    output.link(
+      getPrivateIpfsGatewayUrl({
+        hostname: privateGatewayDomain.hostname,
+        hash,
+      }),
+    );
+  }
 
-	output.printNewLine();
+  output.printNewLine();
 };
 
 export const addStorageActionHandler = withGuards(addStorageAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

@@ -7,25 +7,25 @@ import { loginActionHandler } from "./login";
 import { logoutActionHandler } from "./logout";
 
 export default (program: Command) => {
-	program
-		.command("login")
-		.description(t("loginToFlkPlt", { status: t("loginTo") }))
-		.action(() => {
-			const uiAppUrl = getDefined("UI__APP_URL");
-			const authApiUrl = getDefined("SDK__GRAPHQL_API_URL");
+  program
+    .command("login")
+    .description(t("loginToFlkPlt", { status: t("loginTo") }))
+    .action(() => {
+      const uiAppUrl = getDefined("UI__APP_URL");
+      const authApiUrl = getDefined("SDK__GRAPHQL_API_URL");
 
-			if (!uiAppUrl || !authApiUrl) {
-				throw new MissingExpectedDataError();
-			}
+      if (!uiAppUrl || !authApiUrl) {
+        throw new MissingExpectedDataError();
+      }
 
-			return loginActionHandler({
-				uiAppUrl,
-				authApiUrl,
-			});
-		});
+      return loginActionHandler({
+        uiAppUrl,
+        authApiUrl,
+      });
+    });
 
-	program
-		.command("logout")
-		.description(t("loginToFlkPlt", { status: t("logoutOf") }))
-		.action(logoutActionHandler);
+  program
+    .command("logout")
+    .description(t("loginToFlkPlt", { status: t("logoutOf") }))
+    .action(logoutActionHandler);
 };

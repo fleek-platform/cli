@@ -19,13 +19,13 @@ export type { FleekConfig } from "./utils/configuration/types";
 
 const isDebugging = process.argv.includes("--debug");
 export const output = new Output({
-	stream: process.stdout,
-	debug: isDebugging,
+  stream: process.stdout,
+  debug: isDebugging,
 });
 
 type InitArgs = {
-	version: string;
-	parser: (program: Command) => void;
+  version: string;
+  parser: (program: Command) => void;
 };
 
 const logo = `
@@ -43,64 +43,64 @@ const logo = `
 `;
 
 export const init = ({ version, parser }: InitArgs) => {
-	const program: Command = new Command()
-		.name("fleek")
-		.option("--debug", t("enableDebugMode"))
-		.option("-v, --version", t("printVersionDetails"))
-		.option("-h, --help", t("printHelp"))
-		.action(() => program.outputHelp())
-		.version(version);
+  const program: Command = new Command()
+    .name("fleek")
+    .option("--debug", t("enableDebugMode"))
+    .option("-v, --version", t("printVersionDetails"))
+    .option("-h, --help", t("printHelp"))
+    .action(() => program.outputHelp())
+    .version(version);
 
-	program.addHelpText("beforeAll", logo).showHelpAfterError();
+  program.addHelpText("beforeAll", logo).showHelpAfterError();
 
-	type CmdVersionArgs = typeof program;
+  type CmdVersionArgs = typeof program;
 
-	const cmdVersion = (program: CmdVersionArgs) =>
-		program.command("version").action(() => {
-			output.raw(version);
-			output.printNewLine();
-		});
+  const cmdVersion = (program: CmdVersionArgs) =>
+    program.command("version").action(() => {
+      output.raw(version);
+      output.printNewLine();
+    });
 
-	// Initialise commands
-	const commands = [
-		cmdAuth,
-		cmdApplications,
-		cmdDomains,
-		cmdEns,
-		cmdGateways,
-		cmdIPFS,
-		cmdIPNS,
-		cmdPAT,
-		cmdProjects,
-		cmdSites,
-		cmdStorage,
-		cmdFunctions,
-		cmdVersion,
-	];
+  // Initialise commands
+  const commands = [
+    cmdAuth,
+    cmdApplications,
+    cmdDomains,
+    cmdEns,
+    cmdGateways,
+    cmdIPFS,
+    cmdIPNS,
+    cmdPAT,
+    cmdProjects,
+    cmdSites,
+    cmdStorage,
+    cmdFunctions,
+    cmdVersion,
+  ];
 
-	for (const cmd of commands) {
-		cmd(program);
-	}
+  for (const cmd of commands) {
+    cmd(program);
+  }
 
-	// Init parser (unawaited)
-	parser(program);
+  // Init parser (unawaited)
+  parser(program);
 
-	return program;
+  return program;
 };
 
 // eslint-disable-next-line fleek-custom/valid-argument-types
 export const asyncParser = async (program: Command) => {
-	try {
-		await program.parseAsync(process.argv);
+  try {
+    await program.parseAsync(process.argv);
 
-		process.exit(0);
-	} catch (err) {
-		console.error((err as Error).message || err);
+    process.exit(0);
+  } catch (err) {
+    console.error((err as Error).message || err);
 
-		if ((err as Error).stack) {
-			console.error((err as Error).stack);
-		}
+    if ((err as Error).stack) {
+      console.error((err as Error).stack);
+    }
 
-		process.exit(1);
-	}
+    process.exit(1);
+  }
 };

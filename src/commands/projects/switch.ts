@@ -7,34 +7,34 @@ import { createProjectActionHandler } from "./create";
 import { getProjectOrPrompt } from "./prompts/getProjectOrPrompt";
 
 type SwitchProjectActionArgs = {
-	id?: string;
+  id?: string;
 };
 
 export const switchProjectAction: SdkGuardedFunction<
-	SwitchProjectActionArgs
+  SwitchProjectActionArgs
 > = async ({ sdk, args }) => {
-	const project = await getProjectOrPrompt({ sdk, id: args.id }).catch(
-		() => null,
-	);
+  const project = await getProjectOrPrompt({ sdk, id: args.id }).catch(
+    () => null,
+  );
 
-	if (project === null) {
-		output.log(t("projectsSwitchNeedCreateFirst"));
-		await createProjectActionHandler();
+  if (project === null) {
+    output.log(t("projectsSwitchNeedCreateFirst"));
+    await createProjectActionHandler();
 
-		return;
-	}
+    return;
+  }
 
-	if (!project) {
-		output.log(t("noProjectIdFoundUnexpectedly"));
+  if (!project) {
+    output.log(t("noProjectIdFoundUnexpectedly"));
 
-		return;
-	}
+    return;
+  }
 
-	config.projectId.set(project.id);
+  config.projectId.set(project.id);
 
-	output.printNewLine();
-	output.success(t("projectsSwitchSuccess", { name: project.name }));
-	output.printNewLine();
+  output.printNewLine();
+  output.success(t("projectsSwitchSuccess", { name: project.name }));
+  output.printNewLine();
 };
 
 export const switchProjectActionHandler = sdkGuard(switchProjectAction);

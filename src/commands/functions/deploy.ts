@@ -15,121 +15,121 @@ import { waitUntilFileAvailable } from "./wait/waitUntilFileAvailable";
 import type { UploadPinResponse } from "@fleek-platform/sdk";
 
 type DeployActionArgs = {
-	filePath?: string;
-	name?: string;
-	noBundle: boolean;
-	private: boolean;
-	env: string[];
-	envFile?: string;
+  filePath?: string;
+  name?: string;
+  noBundle: boolean;
+  private: boolean;
+  env: string[];
+  envFile?: string;
 };
 
 const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
-	sdk,
-	args,
+  sdk,
+  args,
 }) => {
-	const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
-	const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
-	const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
-	const bundledFilePath = await getCodeFromPath({
-		filePath,
-		bundle: args.noBundle,
-		env,
-	});
+  const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
+  const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
+  const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
+  const bundledFilePath = await getCodeFromPath({
+    filePath,
+    bundle: args.noBundle,
+    env,
+  });
 
-	if (!functionToDeploy) {
-		output.error(t("expectedNotFoundGeneric", { name: "function" }));
-		return;
-	}
+  if (!functionToDeploy) {
+    output.error(t("expectedNotFoundGeneric", { name: "function" }));
+    return;
+  }
 
-	output.printNewLine();
+  output.printNewLine();
 
-	const progressBar = new cliProgress.SingleBar(
-		{
-			format: t("uploadProgress", { action: t("uploadCodeToIpfs") }),
-		},
-		cliProgress.Presets.shades_grey,
-	);
+  const progressBar = new cliProgress.SingleBar(
+    {
+      format: t("uploadProgress", { action: t("uploadCodeToIpfs") }),
+    },
+    cliProgress.Presets.shades_grey,
+  );
 
-	let uploadResult: UploadPinResponse;
+  let uploadResult: UploadPinResponse;
 
-	if (args.private) {
-		uploadResult = await sdk.storage().uploadPrivateFile({
-			filePath: bundledFilePath,
-			onUploadProgress: uploadOnProgress(progressBar),
-		});
-	} else {
-		const fileLikeObject = await getFileLikeObject(bundledFilePath);
-		uploadResult = await sdk.storage().uploadFile({
-			file: fileLikeObject,
-			options: { functionName: functionToDeploy.name },
-			onUploadProgress: uploadOnProgress(progressBar),
-		});
-	}
+  if (args.private) {
+    uploadResult = await sdk.storage().uploadPrivateFile({
+      filePath: bundledFilePath,
+      onUploadProgress: uploadOnProgress(progressBar),
+    });
+  } else {
+    const fileLikeObject = await getFileLikeObject(bundledFilePath);
+    uploadResult = await sdk.storage().uploadFile({
+      file: fileLikeObject,
+      options: { functionName: functionToDeploy.name },
+      onUploadProgress: uploadOnProgress(progressBar),
+    });
+  }
 
-	if (!output.debugEnabled) {
-		fs.rmSync(bundledFilePath);
-	}
+  if (!output.debugEnabled) {
+    fs.rmSync(bundledFilePath);
+  }
 
-	if (!uploadResult.pin.cid) {
-		output.error(
-			t("commonFunctionActionFailure", {
-				action: "deploy",
-				tryAgain: t("tryAgain"),
-				message: t("uploadToIpfsFailed"),
-			}),
-		);
+  if (!uploadResult.pin.cid) {
+    output.error(
+      t("commonFunctionActionFailure", {
+        action: "deploy",
+        tryAgain: t("tryAgain"),
+        message: t("uploadToIpfsFailed"),
+      }),
+    );
 
-		return;
-	}
+    return;
+  }
 
-	if (
-		uploadResult.duplicate &&
-		functionToDeploy.currentDeployment &&
-		uploadResult.pin &&
-		functionToDeploy.currentDeployment.cid === uploadResult.pin.cid
-	) {
-		output.chore(t("noChangesDetected"));
+  if (
+    uploadResult.duplicate &&
+    functionToDeploy.currentDeployment &&
+    uploadResult.pin &&
+    functionToDeploy.currentDeployment.cid === uploadResult.pin.cid
+  ) {
+    output.chore(t("noChangesDetected"));
 
-		return;
-	}
+    return;
+  }
 
-	if (!args.private) {
-		output.printNewLine();
-		output.spinner(t("runningAvailabilityCheck"));
+  if (!args.private) {
+    output.printNewLine();
+    output.spinner(t("runningAvailabilityCheck"));
 
-		const isAvailable = await waitUntilFileAvailable({
-			cid: uploadResult.pin.cid,
-		});
+    const isAvailable = await waitUntilFileAvailable({
+      cid: uploadResult.pin.cid,
+    });
 
-		if (!isAvailable) {
-			output.error(t("availabilityCheckFailed"));
+    if (!isAvailable) {
+      output.error(t("availabilityCheckFailed"));
 
-			return;
-		}
-	}
+      return;
+    }
+  }
 
-	await sdk
-		.functions()
-		.deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid });
+  await sdk
+    .functions()
+    .deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid });
 
-	output.success(t("commonNameCreateSuccess", { name: "deployment" }));
-	output.printNewLine();
-	output.log(t("callFleekFunctionByUrlReq"));
-	output.link(functionToDeploy.invokeUrl);
+  output.success(t("commonNameCreateSuccess", { name: "deployment" }));
+  output.printNewLine();
+  output.log(t("callFleekFunctionByUrlReq"));
+  output.link(functionToDeploy.invokeUrl);
 
-	if (!args.private) {
-		output.log(t("callFleekFunctionByNetworkUrlReq"));
-		// TODO: Add a secret
-		output.link(
-			`https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
-		);
-	}
+  if (!args.private) {
+    output.log(t("callFleekFunctionByNetworkUrlReq"));
+    // TODO: Add a secret
+    output.link(
+      `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+    );
+  }
 };
 
 export const deployActionHandler = withGuards(deployAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

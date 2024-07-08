@@ -4,56 +4,56 @@ import type { SdkGuardedFunction } from "../../guards/types";
 import { withGuards } from "../../guards/withGuards";
 import { t } from "../../utils/translation";
 import {
-	type CIProvider,
-	getCIProviderOrPrompt,
+  type CIProvider,
+  getCIProviderOrPrompt,
 } from "./prompts/getCIProviderOrPrompt";
 import { prepareGitHubActionsIntegration } from "./utils/prepareGitHubActionsIntegration";
 
 type CiActionArgs = {
-	predefinedConfigPath?: string;
-	provider?: string;
+  predefinedConfigPath?: string;
+  provider?: string;
 };
 
 const ciAction: SdkGuardedFunction<CiActionArgs> = async ({ args }) => {
-	const provider = await getCIProviderOrPrompt({
-		provider: args?.provider as CIProvider,
-	});
+  const provider = await getCIProviderOrPrompt({
+    provider: args?.provider as CIProvider,
+  });
 
-	const personalAccessToken = config.personalAccessToken.get();
-	const projectId = config.projectId.get();
+  const personalAccessToken = config.personalAccessToken.get();
+  const projectId = config.projectId.get();
 
-	if (!personalAccessToken) {
-		output.error(t("noPatFoundUnexpectedly"));
+  if (!personalAccessToken) {
+    output.error(t("noPatFoundUnexpectedly"));
 
-		return;
-	}
+    return;
+  }
 
-	if (!projectId) {
-		output.error(t("noProjectIdFoundUnexpectedly"));
+  if (!projectId) {
+    output.error(t("noProjectIdFoundUnexpectedly"));
 
-		return;
-	}
+    return;
+  }
 
-	switch (provider) {
-		case "github":
-			await prepareGitHubActionsIntegration({
-				projectId,
-				personalAccessToken,
-				fleekConfigPath: args.predefinedConfigPath,
-				output,
-			});
-			break;
-		default:
-			output.error(t("providerNotSupported"));
+  switch (provider) {
+    case "github":
+      await prepareGitHubActionsIntegration({
+        projectId,
+        personalAccessToken,
+        fleekConfigPath: args.predefinedConfigPath,
+        output,
+      });
+      break;
+    default:
+      output.error(t("providerNotSupported"));
 
-			return;
-	}
+      return;
+  }
 };
 
 export const ciActionHandler = withGuards(ciAction, {
-	scopes: {
-		project: true,
-		site: true,
-		authenticated: true,
-	},
+  scopes: {
+    project: true,
+    site: true,
+    authenticated: true,
+  },
 });

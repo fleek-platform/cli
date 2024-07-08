@@ -7,24 +7,24 @@ import { getDefined } from "../defined";
 import { t } from "../utils/translation";
 
 export const loginGuard = async () => {
-	const uiAppUrl = getDefined("UI__APP_URL");
-	const authApiUrl = getDefined("SDK__GRAPHQL_API_URL");
+  const uiAppUrl = getDefined("UI__APP_URL");
+  const authApiUrl = getDefined("SDK__GRAPHQL_API_URL");
 
-	if (!uiAppUrl || !authApiUrl) {
-		throw new MissingExpectedDataError();
-	}
+  if (!uiAppUrl || !authApiUrl) {
+    throw new MissingExpectedDataError();
+  }
 
-	const accessToken = config.personalAccessToken.get();
+  const accessToken = config.personalAccessToken.get();
 
-	if (accessToken) {
-		return;
-	}
+  if (accessToken) {
+    return;
+  }
 
-	output.warn(t("authReqStartLogginFlow"));
-	output.printNewLine();
+  output.warn(t("authReqStartLogginFlow"));
+  output.printNewLine();
 
-	await loginActionHandler({
-		uiAppUrl,
-		authApiUrl,
-	});
+  await loginActionHandler({
+    uiAppUrl,
+    authApiUrl,
+  });
 };

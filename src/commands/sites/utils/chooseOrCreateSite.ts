@@ -9,29 +9,29 @@ import { createSite } from "./createSite";
 type ChooseOrCreateSiteArgs = { sdk: FleekSdk };
 
 export const chooseOrCreateSite = async ({
-	sdk,
+  sdk,
 }: ChooseOrCreateSiteArgs): Promise<Site | undefined> => {
-	const sites = await sdk.sites().list();
+  const sites = await sdk.sites().list();
 
-	if (!sites.length) {
-		output.warn(t("noSitesFound"));
+  if (!sites.length) {
+    output.warn(t("noSitesFound"));
 
-		return createSite({ sdk });
-	}
+    return createSite({ sdk });
+  }
 
-	const useExistingSite = await confirmUseExistingSitePrompt();
+  const useExistingSite = await confirmUseExistingSitePrompt();
 
-	if (useExistingSite) {
-		const site = getSiteOrPrompt({ sdk });
+  if (useExistingSite) {
+    const site = getSiteOrPrompt({ sdk });
 
-		if (!site) {
-			output.error(t("expectedNotFoundGeneric", { name: "site" }));
+    if (!site) {
+      output.error(t("expectedNotFoundGeneric", { name: "site" }));
 
-			return;
-		}
+      return;
+    }
 
-		return site;
-	}
+    return site;
+  }
 
-	return createSite({ sdk });
+  return createSite({ sdk });
 };

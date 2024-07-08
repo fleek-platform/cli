@@ -5,14 +5,14 @@ import { t } from "../utils/translation";
 import { sdkGuard } from "./sdkGuard";
 
 export const projectGuard = async () => {
-	const projectId = config.projectId.get();
+  const projectId = config.projectId.get();
 
-	if (projectId) {
-		return;
-	}
+  if (projectId) {
+    return;
+  }
 
-	output.warn(t("projectSelectRequiredStarPrjFlow"));
-	output.printNewLine();
+  output.warn(t("projectSelectRequiredStarPrjFlow"));
+  output.printNewLine();
 
-	await sdkGuard(switchProjectAction)();
+  await sdkGuard(switchProjectAction)();
 };

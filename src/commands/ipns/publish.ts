@@ -8,37 +8,37 @@ import { getHashOrPrompt } from "./prompts/getHashOrPrompt";
 import { getRecordOrPrompt } from "./prompts/getRecordOrPrompt";
 
 type PublishActionArgs = {
-	name?: string;
-	hash: string;
+  name?: string;
+  hash: string;
 };
 
 const publishAction: SdkGuardedFunction<PublishActionArgs> = async ({
-	sdk,
-	args,
+  sdk,
+  args,
 }) => {
-	const record = await getRecordOrPrompt({ sdk, name: args.name });
+  const record = await getRecordOrPrompt({ sdk, name: args.name });
 
-	if (!record) {
-		output.error(t("recordsNotFoundUnexpectedly"));
+  if (!record) {
+    output.error(t("recordsNotFoundUnexpectedly"));
 
-		return;
-	}
+    return;
+  }
 
-	const hash = await getHashOrPrompt({ hash: args.hash });
+  const hash = await getHashOrPrompt({ hash: args.hash });
 
-	await sdk.ipns().publishRecord({ id: record.id, hash });
+  await sdk.ipns().publishRecord({ id: record.id, hash });
 
-	output.printNewLine();
-	output.log(`${t("ipnsVisitPublishedIPNSGw")}:`);
-	output.link(getIpnsGatewayUrl(record.name));
-	output.printNewLine();
-	output.hint(t("ipnsPropagationTimeWarn"));
+  output.printNewLine();
+  output.log(`${t("ipnsVisitPublishedIPNSGw")}:`);
+  output.link(getIpnsGatewayUrl(record.name));
+  output.printNewLine();
+  output.hint(t("ipnsPropagationTimeWarn"));
 };
 
 export const publishActionHandler = withGuards(publishAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

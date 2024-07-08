@@ -8,24 +8,24 @@ import { directoryExists } from "../utils/directoryExists";
 type EnterDirectoryPathPromptArgs = { message: string };
 
 export const enterDirectoryPathPrompt = async ({
-	message,
+  message,
 }: EnterDirectoryPathPromptArgs): Promise<string> => {
-	const path = await textPrompt({
-		message,
-		validate: async (path) => {
-			if (!path) {
-				return t("specifyValidDir");
-			}
+  const path = await textPrompt({
+    message,
+    validate: async (path) => {
+      if (!path) {
+        return t("specifyValidDir");
+      }
 
-			const isDirectory = await directoryExists(joinPath(process.cwd(), path));
+      const isDirectory = await directoryExists(joinPath(process.cwd(), path));
 
-			return isDirectory ? true : t("specifyValidDir");
-		},
-		onCancel: () => {
-			output.warn(t("specifyValidDir"));
-			output.error(t("exiting"));
-		},
-	});
+      return isDirectory ? true : t("specifyValidDir");
+    },
+    onCancel: () => {
+      output.warn(t("specifyValidDir"));
+      output.error(t("exiting"));
+    },
+  });
 
-	return path;
+  return path;
 };

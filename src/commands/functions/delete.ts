@@ -5,32 +5,32 @@ import { t } from "../../utils/translation";
 import { getFunctionOrPrompt } from "./prompts/getFunctionOrPrompt";
 
 type DeleteActionArgs = {
-	name?: string;
+  name?: string;
 };
 
 const deleteAction: SdkGuardedFunction<DeleteActionArgs> = async ({
-	sdk,
-	args,
+  sdk,
+  args,
 }) => {
-	const functionToDelete = await getFunctionOrPrompt({ name: args.name, sdk });
+  const functionToDelete = await getFunctionOrPrompt({ name: args.name, sdk });
 
-	if (!functionToDelete) {
-		output.error(t("expectedNotFoundGeneric", { name: "function" }));
+  if (!functionToDelete) {
+    output.error(t("expectedNotFoundGeneric", { name: "function" }));
 
-		return;
-	}
+    return;
+  }
 
-	await sdk.functions().delete({ id: functionToDelete.id });
+  await sdk.functions().delete({ id: functionToDelete.id });
 
-	output.printNewLine();
-	output.success(t("commonNameDeleteSuccess", { name: "function" }));
-	output.printNewLine();
+  output.printNewLine();
+  output.success(t("commonNameDeleteSuccess", { name: "function" }));
+  output.printNewLine();
 };
 
 export const deleteActionHandler = withGuards(deleteAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });

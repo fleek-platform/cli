@@ -1,14 +1,14 @@
 import { type PromptArgs, prompt } from "./prompt";
 
 type TextPromptArgs = Omit<PromptArgs, "type"> & {
-	initial?: string;
+  initial?: string;
 };
 
 export const textPrompt = async ({
-	message,
-	initial,
-	validate,
-	onCancel,
+  message,
+  initial,
+  validate,
+  onCancel,
 }: TextPromptArgs): Promise<string> => {
-	return prompt<string>({ type: "text", message, initial, validate, onCancel });
+  return prompt<string>({ type: "text", message, initial, validate, onCancel });
 };

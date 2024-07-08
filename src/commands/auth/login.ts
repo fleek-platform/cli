@@ -8,34 +8,34 @@ import { waitForPersonalAccessTokenFromVerificationSession } from "../../utils/t
 import { t } from "../../utils/translation";
 
 type LoginActionHandlerArgs = {
-	uiAppUrl: string;
-	authApiUrl: string;
+  uiAppUrl: string;
+  authApiUrl: string;
 };
 
 export const loginActionHandler = async ({
-	uiAppUrl,
-	authApiUrl,
+  uiAppUrl,
+  authApiUrl,
 }: LoginActionHandlerArgs) => {
-	const verificationSessionId = generateVerificationSessionId();
+  const verificationSessionId = generateVerificationSessionId();
 
-	showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
+  showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
 
-	const client = createClient({ url: authApiUrl });
-	const personalAccessToken =
-		await waitForPersonalAccessTokenFromVerificationSession({
-			verificationSessionId,
-			client,
-		});
+  const client = createClient({ url: authApiUrl });
+  const personalAccessToken =
+    await waitForPersonalAccessTokenFromVerificationSession({
+      verificationSessionId,
+      client,
+    });
 
-	if (!personalAccessToken) {
-		output.error(t("timeoutPATfetch"));
-		output.printNewLine();
+  if (!personalAccessToken) {
+    output.error(t("timeoutPATfetch"));
+    output.printNewLine();
 
-		return;
-	}
+    return;
+  }
 
-	config.personalAccessToken.set(personalAccessToken);
-	config.projectId.clear();
-	output.success(t("logged", { status: t("loggedInTo") }));
-	output.printNewLine();
+  config.personalAccessToken.set(personalAccessToken);
+  config.projectId.clear();
+  output.success(t("logged", { status: t("loggedInTo") }));
+  output.printNewLine();
 };

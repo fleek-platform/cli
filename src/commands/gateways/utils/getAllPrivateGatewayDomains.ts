@@ -1,53 +1,53 @@
 import type { Domain, DomainStatus, FleekSdk } from "@fleek-platform/sdk";
 
 type DomainFilter = {
-	status?: DomainStatus;
-	isVerified?: boolean;
+  status?: DomainStatus;
+  isVerified?: boolean;
 };
 type GetAllPrivateGatewayDomainsArgs = {
-	sdk: FleekSdk;
-	filter?: DomainFilter;
+  sdk: FleekSdk;
+  filter?: DomainFilter;
 };
 
 type GetAllActivePrivateGatewayDomainsArgs = Pick<
-	GetAllPrivateGatewayDomainsArgs,
-	"sdk"
+  GetAllPrivateGatewayDomainsArgs,
+  "sdk"
 >;
 
 export const getAllPrivateGatewayDomains = async ({
-	sdk,
-	filter,
+  sdk,
+  filter,
 }: GetAllPrivateGatewayDomainsArgs): Promise<Domain[]> => {
-	const privateGateways = await sdk.privateGateways().list();
+  const privateGateways = await sdk.privateGateways().list();
 
-	if (privateGateways.length === 0) {
-		return [];
-	}
+  if (privateGateways.length === 0) {
+    return [];
+  }
 
-	const domainPromises = privateGateways.map(async (privateGateway) => {
-		const zoneId = privateGateway.zone?.id;
+  const domainPromises = privateGateways.map(async (privateGateway) => {
+    const zoneId = privateGateway.zone?.id;
 
-		if (!zoneId) return [];
+    if (!zoneId) return [];
 
-		return sdk.domains().listByZoneId({ zoneId });
-	});
+    return sdk.domains().listByZoneId({ zoneId });
+  });
 
-	const domains = (await Promise.all(domainPromises)).flat();
+  const domains = (await Promise.all(domainPromises)).flat();
 
-	return filter && Object.keys(filter).length > 0
-		? domains.filter((domain: Domain) =>
-				Object.entries(filter).every(([key, value]) => {
-					return domain[key as keyof Domain] === value;
-				}),
-			)
-		: domains;
+  return filter && Object.keys(filter).length > 0
+    ? domains.filter((domain: Domain) =>
+        Object.entries(filter).every(([key, value]) => {
+          return domain[key as keyof Domain] === value;
+        }),
+      )
+    : domains;
 };
 
 export const getAllActivePrivateGatewayDomains = async ({
-	sdk,
+  sdk,
 }: GetAllActivePrivateGatewayDomainsArgs): Promise<Domain[]> => {
-	return await getAllPrivateGatewayDomains({
-		sdk,
-		filter: { status: "ACTIVE" },
-	});
+  return await getAllPrivateGatewayDomains({
+    sdk,
+    filter: { status: "ACTIVE" },
+  });
 };

@@ -4,18 +4,18 @@ import { textPrompt } from "../../../prompts/textPrompt";
 import { enterDirectoryPathPrompt } from "./enterDirectoryPathPrompt";
 
 vi.mock("../../../prompts/textPrompt", () => ({
-	textPrompt: vi.fn().mockResolvedValue("testSite"),
+  textPrompt: vi.fn().mockResolvedValue("testSite"),
 }));
 vi.mock("../utils/directoryExists", () => ({
-	directoryExists: vi.fn().mockResolvedValue(true),
+  directoryExists: vi.fn().mockResolvedValue(true),
 }));
 
 describe("Enter directory path prompt", () => {
-	it("returns the directory if entered by user", async () => {
-		await expect(
-			enterDirectoryPathPrompt({ message: "Enter a directory" }),
-		).resolves.toEqual("testSite");
+  it("returns the directory if entered by user", async () => {
+    await expect(
+      enterDirectoryPathPrompt({ message: "Enter a directory" }),
+    ).resolves.toEqual("testSite");
 
-		expect(textPrompt).toHaveBeenCalledOnce();
-	});
+    expect(textPrompt).toHaveBeenCalledOnce();
+  });
 });

@@ -4,15 +4,15 @@ import { confirmPrompt } from "../../../prompts/confirmPrompt";
 import { confirmUserWantsToSpecifyInstallCommandPrompt } from "./confirmUserWantsToSpecifyInstallCommandPrompt";
 
 vi.mock("../../../prompts/confirmPrompt", () => ({
-	confirmPrompt: vi.fn().mockResolvedValue(true),
+  confirmPrompt: vi.fn().mockResolvedValue(true),
 }));
 
 describe("Confirm build command prompt", () => {
-	it("returns the selected value", async () => {
-		await expect(
-			confirmUserWantsToSpecifyInstallCommandPrompt(),
-		).resolves.toEqual(true);
+  it("returns the selected value", async () => {
+    await expect(
+      confirmUserWantsToSpecifyInstallCommandPrompt(),
+    ).resolves.toEqual(true);
 
-		expect(confirmPrompt).toHaveBeenCalledOnce();
-	});
+    expect(confirmPrompt).toHaveBeenCalledOnce();
+  });
 });

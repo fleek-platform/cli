@@ -8,97 +8,97 @@ import { waitForPersonalAccessTokenFromVerificationSession } from "../../utils/t
 import { loginActionHandler } from "./login";
 
 vi.mock("crypto", () => ({
-	randomBytes: vi.fn().mockReturnValue({
-		toString: vi.fn().mockReturnValue("mockVerificationSession"),
-	}),
+  randomBytes: vi.fn().mockReturnValue({
+    toString: vi.fn().mockReturnValue("mockVerificationSession"),
+  }),
 }));
 
 vi.mock("../../cli", () => {
-	const output = {
-		chore: vi.fn(),
-		log: vi.fn(),
-		link: vi.fn(),
-		success: vi.fn(),
-		spinner: vi.fn(),
-		printNewLine: vi.fn(),
-	};
+  const output = {
+    chore: vi.fn(),
+    log: vi.fn(),
+    link: vi.fn(),
+    success: vi.fn(),
+    spinner: vi.fn(),
+    printNewLine: vi.fn(),
+  };
 
-	return { output };
+  return { output };
 });
 
 vi.mock("../../config", () => ({
-	config: {
-		personalAccessToken: {
-			set: vi.fn(),
-			clear: vi.fn(),
-		},
-		projectId: {
-			clear: vi.fn(),
-		},
-	},
+  config: {
+    personalAccessToken: {
+      set: vi.fn(),
+      clear: vi.fn(),
+    },
+    projectId: {
+      clear: vi.fn(),
+    },
+  },
 }));
 
 // Assumes user goes ahead with the flow and logs in
 vi.mock("@fleek-platform/sdk", () => {
-	const MockClient = vi.fn();
-	MockClient.prototype.mutation = vi.fn().mockResolvedValue({
-		createPersonalAccessTokenFromVerificationSession: "mockPat",
-	});
+  const MockClient = vi.fn();
+  MockClient.prototype.mutation = vi.fn().mockResolvedValue({
+    createPersonalAccessTokenFromVerificationSession: "mockPat",
+  });
 
-	const createClientMock = vi.fn().mockReturnValue(new MockClient());
+  const createClientMock = vi.fn().mockReturnValue(new MockClient());
 
-	return { createClient: createClientMock };
+  return { createClient: createClientMock };
 });
 
 describe("Login", async () => {
-	it("should request token from verification session", async () => {
-		const mockClient = createClient({ url: "" });
-		const result = await waitForPersonalAccessTokenFromVerificationSession({
-			verificationSessionId: "mockVerificationSession",
-			client: mockClient,
-		});
+  it("should request token from verification session", async () => {
+    const mockClient = createClient({ url: "" });
+    const result = await waitForPersonalAccessTokenFromVerificationSession({
+      verificationSessionId: "mockVerificationSession",
+      client: mockClient,
+    });
 
-		expect(result).toBe("mockPat");
-		expect(mockClient.mutation).toHaveBeenCalledWith({
-			createPersonalAccessTokenFromVerificationSession: [
-				{
-					data: { name: undefined },
-					where: {
-						id: "mockVerificationSession",
-					},
-				},
-			],
-		});
-	});
+    expect(result).toBe("mockPat");
+    expect(mockClient.mutation).toHaveBeenCalledWith({
+      createPersonalAccessTokenFromVerificationSession: [
+        {
+          data: { name: undefined },
+          where: {
+            id: "mockVerificationSession",
+          },
+        },
+      ],
+    });
+  });
 
-	it("should log the messages correctly", async () => {
-		await loginActionHandler({
-			uiAppUrl: "",
-			authApiUrl: "",
-		});
+  it("should log the messages correctly", async () => {
+    await loginActionHandler({
+      uiAppUrl: "",
+      authApiUrl: "",
+    });
 
-		expect(output.chore).toHaveBeenCalledWith(
-			"Please follow the link to log in to Fleek Platform.",
-		);
+    expect(output.chore).toHaveBeenCalledWith(
+      "Please follow the link to log in to Fleek Platform.",
+    );
 
-		expect(output.spinner).toHaveBeenCalledWith(
-			getVerificationSessionLink({
-				uiAppUrl: "",
-				verificationSessionId: "mockVerificationSession",
-			}),
-		);
-		expect(output.success).toHaveBeenCalledWith(
-			"You are now logged in to the Fleek Platform.",
-		);
-	});
+    expect(output.spinner).toHaveBeenCalledWith(
+      getVerificationSessionLink({
+        uiAppUrl: "",
+        verificationSessionId: "mockVerificationSession",
+      }),
+    );
+    expect(output.success).toHaveBeenCalledWith(
+      "You are now logged in to the Fleek Platform.",
+    );
+  });
 
-	it("should update config correctly", async () => {
-		await loginActionHandler({
-			uiAppUrl: "",
-			authApiUrl: "",
-		});
+  it("should update config correctly", async () => {
+    await loginActionHandler({
+      uiAppUrl: "",
+      authApiUrl: "",
+    });
 
-		expect(config.personalAccessToken.set).toHaveBeenCalledWith("mockPat");
-		expect(config.projectId.clear).toHaveBeenCalled();
-	});
+    expect(config.personalAccessToken.set).toHaveBeenCalledWith("mockPat");
+    expect(config.projectId.clear).toHaveBeenCalled();
+  });
 });

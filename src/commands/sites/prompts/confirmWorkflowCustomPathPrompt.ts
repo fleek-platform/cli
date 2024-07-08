@@ -4,9 +4,9 @@ import { t } from "../../../utils/translation";
 type ConfirmWorkflowCustomPathPromptArgs = { path: string };
 
 export const confirmWorkflowCustomPathPrompt = async ({
-	path,
+  path,
 }: ConfirmWorkflowCustomPathPromptArgs): Promise<boolean> =>
-	confirmPrompt({
-		message: t("workflowToBeSavePathOrOther", { path }),
-		initial: false,
-	});
+  confirmPrompt({
+    message: t("workflowToBeSavePathOrOther", { path }),
+    initial: false,
+  });

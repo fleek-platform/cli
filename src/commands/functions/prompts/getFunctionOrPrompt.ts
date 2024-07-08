@@ -5,32 +5,32 @@ import { selectPrompt } from "../../../prompts/selectPrompt";
 import { t } from "../../../utils/translation";
 
 type GetFunctionOrPromptArgs = {
-	name?: string;
-	sdk: FleekSdk;
+  name?: string;
+  sdk: FleekSdk;
 };
 
 export const getFunctionOrPrompt = async ({
-	name,
-	sdk,
+  name,
+  sdk,
 }: GetFunctionOrPromptArgs): Promise<FleekFunction | undefined> => {
-	if (name) {
-		return sdk.functions().get({ name });
-	}
+  if (name) {
+    return sdk.functions().get({ name });
+  }
 
-	const functions = await sdk.functions().list();
+  const functions = await sdk.functions().list();
 
-	if (!functions.length) {
-		throw new FleekFunctionsNotFoundError({});
-	}
+  if (!functions.length) {
+    throw new FleekFunctionsNotFoundError({});
+  }
 
-	const selectedFunctionId = await selectPrompt({
-		message: t("commonSelectXFromList", { subject: t("function") }),
-		choices: functions.map((f) => ({ title: f.name, value: f.id })),
-	});
+  const selectedFunctionId = await selectPrompt({
+    message: t("commonSelectXFromList", { subject: t("function") }),
+    choices: functions.map((f) => ({ title: f.name, value: f.id })),
+  });
 
-	const fnMatch = functions.find((f) => f.id === selectedFunctionId);
+  const fnMatch = functions.find((f) => f.id === selectedFunctionId);
 
-	if (!fnMatch) return;
+  if (!fnMatch) return;
 
-	return fnMatch;
+  return fnMatch;
 };

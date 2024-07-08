@@ -10,32 +10,32 @@ import { chooseOrCreateSite } from "./chooseOrCreateSite";
 import { selectBuildCommandOrSkip } from "./selectBuildCommandOrSkip";
 
 type InitConfigurationArgs = {
-	sdk: FleekSdk;
+  sdk: FleekSdk;
 };
 
 export const initConfiguration = async ({ sdk }: InitConfigurationArgs) => {
-	const site = await chooseOrCreateSite({ sdk });
+  const site = await chooseOrCreateSite({ sdk });
 
-	if (!site) {
-		// TODO: Revise the initConfiguration
-		console.error("Unexpected error");
+  if (!site) {
+    // TODO: Revise the initConfiguration
+    console.error("Unexpected error");
 
-		return;
-	}
+    return;
+  }
 
-	const distDir = await enterDirectoryPathPrompt({
-		message: t("specifyDistDirToSiteUpl"),
-	});
+  const distDir = await enterDirectoryPathPrompt({
+    message: t("specifyDistDirToSiteUpl"),
+  });
 
-	const buildCommand = await selectBuildCommandOrSkip();
+  const buildCommand = await selectBuildCommandOrSkip();
 
-	const config = {
-		sites: [{ slug: site.slug, distDir, buildCommand }],
-	} satisfies FleekRootConfig;
+  const config = {
+    sites: [{ slug: site.slug, distDir, buildCommand }],
+  } satisfies FleekRootConfig;
 
-	const format = await selectConfigurationFormatPrompt();
+  const format = await selectConfigurationFormatPrompt();
 
-	await saveConfiguration({ config, format });
+  await saveConfiguration({ config, format });
 
-	return config;
+  return config;
 };

@@ -4,9 +4,9 @@ import { t } from "../../../utils/translation";
 type ConfirmFileOverridePromptArgs = { path: string };
 
 export const confirmFileOverridePrompt = async ({
-	path,
+  path,
 }: ConfirmFileOverridePromptArgs): Promise<boolean> =>
-	confirmPrompt({
-		message: t("fileExistAskIfOverwrite", { path }),
-		initial: true,
-	});
+  confirmPrompt({
+    message: t("fileExistAskIfOverwrite", { path }),
+    initial: true,
+  });

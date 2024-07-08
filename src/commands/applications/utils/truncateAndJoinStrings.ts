@@ -1,16 +1,16 @@
 type TruncateAndJoinStringsArgs = {
-	input: string[];
-	truncateOnPosition?: number;
+  input: string[];
+  truncateOnPosition?: number;
 };
 
 export const truncateAndJoinStrings = (args: TruncateAndJoinStringsArgs) => {
-	const truncatedArray = args.truncateOnPosition
-		? args.input.slice(0, args.truncateOnPosition)
-		: args.input;
+  const truncatedArray = args.truncateOnPosition
+    ? args.input.slice(0, args.truncateOnPosition)
+    : args.input;
 
-	const stringifiedArray = truncatedArray.join(",");
+  const stringifiedArray = truncatedArray.join(",");
 
-	return args.input.length > truncatedArray.length
-		? `${stringifiedArray},...`
-		: stringifiedArray;
+  return args.input.length > truncatedArray.length
+    ? `${stringifiedArray},...`
+    : stringifiedArray;
 };

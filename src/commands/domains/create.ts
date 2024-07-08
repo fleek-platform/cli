@@ -6,156 +6,156 @@ import { t } from "../../utils/translation";
 import { getHostnameOrPrompt } from "./prompts/getHostnameOrPrompt";
 import { getSiteOrPrivateGateway } from "./prompts/getSiteOrPrivateGateway";
 import {
-	type GetZoneForSiteOrPrivateGatewayArgs,
-	getZoneForSiteOrPrivateGateway,
+  type GetZoneForSiteOrPrivateGatewayArgs,
+  getZoneForSiteOrPrivateGateway,
 } from "./utils/getZoneForSiteOrPrivateGateway";
 import { waitForDomainCreationResult } from "./wait/waitForDomainCreationResult";
 import { waitForDomainVerificationResult } from "./wait/waitForDomainVerificationResult";
 
 export type CreateDomainActionArgs = {
-	privateGatewayId?: string;
-	privateGatewaySlug?: string;
-	siteId?: string;
-	siteSlug?: string;
-	hostname?: string;
+  privateGatewayId?: string;
+  privateGatewaySlug?: string;
+  siteId?: string;
+  siteSlug?: string;
+  hostname?: string;
 };
 
 export const createDomainAction: SdkGuardedFunction<
-	CreateDomainActionArgs
+  CreateDomainActionArgs
 > = async ({ sdk, args }) => {
-	const { site, privateGateway } = await getSiteOrPrivateGateway({
-		sdk,
-		privateGatewayId: args.privateGatewayId,
-		privateGatewaySlug: args.privateGatewaySlug,
-		siteId: args.siteId,
-		siteSlug: args.siteSlug,
-	});
+  const { site, privateGateway } = await getSiteOrPrivateGateway({
+    sdk,
+    privateGatewayId: args.privateGatewayId,
+    privateGatewaySlug: args.privateGatewaySlug,
+    siteId: args.siteId,
+    siteSlug: args.siteSlug,
+  });
 
-	const hostname = await getHostnameOrPrompt({ hostname: args.hostname });
+  const hostname = await getHostnameOrPrompt({ hostname: args.hostname });
 
-	if (site) {
-		output.spinner(t("creatingNewDomainSite"));
-	} else {
-		output.spinner(t("creatingNewDomainGw"));
-	}
+  if (site) {
+    output.spinner(t("creatingNewDomainSite"));
+  } else {
+    output.spinner(t("creatingNewDomainGw"));
+  }
 
-	// TODO: Investigate the diff with org repo
-	// const zone = await getZoneForSiteOrPrivateGateway(
-	//   site ? ({ site, sdk } as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as GetZoneForSiteOrPrivateGatewayArgs)
-	// );
+  // TODO: Investigate the diff with org repo
+  // const zone = await getZoneForSiteOrPrivateGateway(
+  //   site ? ({ site, sdk } as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as GetZoneForSiteOrPrivateGatewayArgs)
+  // );
 
-	// TODO: Check commented out above
-	const zone = await getZoneForSiteOrPrivateGateway(
-		site
-			? ({ site, sdk } as unknown as GetZoneForSiteOrPrivateGatewayArgs)
-			: ({
-					privateGateway,
-					sdk,
-				} as unknown as GetZoneForSiteOrPrivateGatewayArgs),
-	);
+  // TODO: Check commented out above
+  const zone = await getZoneForSiteOrPrivateGateway(
+    site
+      ? ({ site, sdk } as unknown as GetZoneForSiteOrPrivateGatewayArgs)
+      : ({
+          privateGateway,
+          sdk,
+        } as unknown as GetZoneForSiteOrPrivateGatewayArgs),
+  );
 
-	if (zone === null) {
-		output.error(t("createDomainFailure"));
-		output.printNewLine();
+  if (zone === null) {
+    output.error(t("createDomainFailure"));
+    output.printNewLine();
 
-		return;
-	}
+    return;
+  }
 
-	await sdk.domains().createDomain({ zoneId: zone.id, hostname });
+  await sdk.domains().createDomain({ zoneId: zone.id, hostname });
 
-	const domainCreationStatus = await waitForDomainCreationResult({
-		sdk,
-		hostname: hostname,
-	});
+  const domainCreationStatus = await waitForDomainCreationResult({
+    sdk,
+    hostname: hostname,
+  });
 
-	if (domainCreationStatus === null) {
-		output.warn(
-			t("warnSubjectProcessIsLong", { subject: t("dnsConfiguration") }),
-		);
-		output.printNewLine();
+  if (domainCreationStatus === null) {
+    output.warn(
+      t("warnSubjectProcessIsLong", { subject: t("dnsConfiguration") }),
+    );
+    output.printNewLine();
 
-		output.log(
-			`${t("commonWaitAndCheckStatusViaCmd", { subject: t("dnsConfiguration") })}:`,
-		);
-		output.log(output.textColor(`fleek domains detail ${hostname}`, "cyan"));
+    output.log(
+      `${t("commonWaitAndCheckStatusViaCmd", { subject: t("dnsConfiguration") })}:`,
+    );
+    output.log(output.textColor(`fleek domains detail ${hostname}`, "cyan"));
 
-		return;
-	}
+    return;
+  }
 
-	if (domainCreationStatus === "CREATING_FAILED") {
-		output.error(t("createDomainFailure"));
-		output.printNewLine();
+  if (domainCreationStatus === "CREATING_FAILED") {
+    output.error(t("createDomainFailure"));
+    output.printNewLine();
 
-		return;
-	}
+    return;
+  }
 
-	output.printNewLine();
-	output.success(
-		t("commonItemActionSuccess", {
-			subject: `${t("domain")} ${output.quoted(hostname)}`,
-			action: t("created"),
-		}),
-	);
-	output.printNewLine();
+  output.printNewLine();
+  output.success(
+    t("commonItemActionSuccess", {
+      subject: `${t("domain")} ${output.quoted(hostname)}`,
+      action: t("created"),
+    }),
+  );
+  output.printNewLine();
 
-	const domain = await sdk.domains().getByHostname({ hostname: hostname });
+  const domain = await sdk.domains().getByHostname({ hostname: hostname });
 
-	output.log(`${t("updateDNSRecords", { hostname })}:`);
-	for (const { type, value } of domain.dnsConfigs) {
-		if (type === "CNAME") {
-			output.log(`CNAME @ ${value.toLowerCase().replace("https://", "")}`);
-		}
-	}
+  output.log(`${t("updateDNSRecords", { hostname })}:`);
+  for (const { type, value } of domain.dnsConfigs) {
+    if (type === "CNAME") {
+      output.log(`CNAME @ ${value.toLowerCase().replace("https://", "")}`);
+    }
+  }
 
-	output.printNewLine();
+  output.printNewLine();
 
-	const { waitForAnyKey } = usePressAnyKey();
+  const { waitForAnyKey } = usePressAnyKey();
 
-	while (true) {
-		output.hint(
-			t("commonPressAnyKeyOnceConfig", { subject: t("dnsSettings") }),
-		);
-		await waitForAnyKey();
-		output.spinner(t("commonVerifyingSubject", { subject: t("dnsSettings") }));
+  while (true) {
+    output.hint(
+      t("commonPressAnyKeyOnceConfig", { subject: t("dnsSettings") }),
+    );
+    await waitForAnyKey();
+    output.spinner(t("commonVerifyingSubject", { subject: t("dnsSettings") }));
 
-		await sdk.domains().verifyDomain({ domainId: domain.id });
+    await sdk.domains().verifyDomain({ domainId: domain.id });
 
-		const verificationResultStatus = await waitForDomainVerificationResult({
-			domain,
-			sdk,
-		});
+    const verificationResultStatus = await waitForDomainVerificationResult({
+      domain,
+      sdk,
+    });
 
-		if (!verificationResultStatus) {
-			output.warn(
-				t("warnSubjectProcessIsLong", { subject: t("dnsConfiguration") }),
-			);
-			output.printNewLine();
+    if (!verificationResultStatus) {
+      output.warn(
+        t("warnSubjectProcessIsLong", { subject: t("dnsConfiguration") }),
+      );
+      output.printNewLine();
 
-			output.log(
-				`${t("commonWaitAndCheckStatusViaCmd", { subject: t("dnsConfiguration") })}:`,
-			);
-			output.log(output.textColor(`fleek domains detail ${hostname}`, "cyan"));
+      output.log(
+        `${t("commonWaitAndCheckStatusViaCmd", { subject: t("dnsConfiguration") })}:`,
+      );
+      output.log(output.textColor(`fleek domains detail ${hostname}`, "cyan"));
 
-			return;
-		}
+      return;
+    }
 
-		if (verificationResultStatus === "ACTIVE") {
-			output.printNewLine();
-			output.success(`Domain ${output.quoted(hostname)} was verified.`);
-			output.printNewLine();
+    if (verificationResultStatus === "ACTIVE") {
+      output.printNewLine();
+      output.success(`Domain ${output.quoted(hostname)} was verified.`);
+      output.printNewLine();
 
-			return;
-		}
+      return;
+    }
 
-		output.error(t("domainVerificationFailureCheckDns", { hostname }));
-		output.printNewLine();
-	}
+    output.error(t("domainVerificationFailureCheckDns", { hostname }));
+    output.printNewLine();
+  }
 };
 
 export const createDomainActionHandler = withGuards(createDomainAction, {
-	scopes: {
-		authenticated: true,
-		project: true,
-		site: false,
-	},
+  scopes: {
+    authenticated: true,
+    project: true,
+    site: false,
+  },
 });
