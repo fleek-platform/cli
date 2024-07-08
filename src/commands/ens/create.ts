@@ -32,6 +32,12 @@ export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
 		siteId: site.id,
 	});
 
+	if (!ipnsRecord) {
+		output.error(t('recordsNotFound'));
+		
+		return;
+	}
+
 	const ensName = await getEnsNameOrPrompt({ name: args.name });
 
 	output.spinner(t("ensCreatingForSelectSite"));
