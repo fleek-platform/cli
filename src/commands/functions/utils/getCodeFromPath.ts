@@ -37,7 +37,7 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
 		for (const packageName of unsupportedModulesUsed) {
 			output.mistake(t("unsupportedPackage", { packageName }));
 		}
-		
+
 		output.log(t("showUnsupportedModulesDocLink"));
 		output.link("https://fleek.xyz/docs");
 		output.printNewLine();
@@ -67,7 +67,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
 		cliProgress.Presets.shades_grey,
 	);
 
-	let tempDir;
+	let tempDir: string;
 
 	if (!output.debugEnabled) {
 		tempDir = os.tmpdir();
