@@ -44,9 +44,8 @@ const _t = (key: string, values?: Values) => {
 			}
 
 			const val = values?.options?.bold ? _b(txt) : txt;
-			acc = acc.replace(curr[0], val);
 
-			return acc;
+			return acc.replace(curr[0], val);
 		}, txt);
 	}
 
