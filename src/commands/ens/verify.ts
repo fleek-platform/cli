@@ -23,7 +23,7 @@ export const verifyEnsRecordAction: SdkGuardedFunction<
 	});
 
 	if (!ensRecord) {
-		output.error(t('noEnsRecordFoundUnexpectedly'));
+		output.error(t("noEnsRecordFoundUnexpectedly"));
 
 		return;
 	}

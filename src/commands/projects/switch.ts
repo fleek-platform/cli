@@ -25,7 +25,7 @@ export const switchProjectAction: SdkGuardedFunction<
 	}
 
 	if (!project) {
-		output.log(t('noProjectIdFoundUnexpectedly'));
+		output.log(t("noProjectIdFoundUnexpectedly"));
 
 		return;
 	}

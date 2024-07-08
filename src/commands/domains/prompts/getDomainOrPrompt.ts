@@ -44,6 +44,6 @@ export const getDomainOrPrompt = async ({
 	const domain = domains.find((domain) => domain.id === selectedDomainId);
 
 	if (!domain) return;
-	
+
 	return domain;
 };

@@ -19,7 +19,7 @@ const publishAction: SdkGuardedFunction<PublishActionArgs> = async ({
 	const record = await getRecordOrPrompt({ sdk, name: args.name });
 
 	if (!record) {
-		output.error(t('recordsNotFoundUnexpectedly'));
+		output.error(t("recordsNotFoundUnexpectedly"));
 
 		return;
 	}

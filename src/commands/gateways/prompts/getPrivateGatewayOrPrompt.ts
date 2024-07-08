@@ -42,6 +42,6 @@ export const getPrivateGatewayOrPrompt = async ({
 	);
 
 	if (!matchPrivateGw) return;
-	
+
 	return matchPrivateGw;
 };

@@ -36,6 +36,6 @@ export const getApplicationOrPrompt = async ({
 	);
 
 	if (!appMatch) return;
-	
+
 	return appMatch;
 };

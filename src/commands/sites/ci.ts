@@ -23,13 +23,13 @@ const ciAction: SdkGuardedFunction<CiActionArgs> = async ({ args }) => {
 	const projectId = config.projectId.get();
 
 	if (!personalAccessToken) {
-		output.error(t('noPatFoundUnexpectedly'));
+		output.error(t("noPatFoundUnexpectedly"));
 
 		return;
 	}
 
 	if (!projectId) {
-		output.error(t('noProjectIdFoundUnexpectedly'));
+		output.error(t("noProjectIdFoundUnexpectedly"));
 
 		return;
 	}

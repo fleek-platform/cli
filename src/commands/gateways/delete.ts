@@ -19,7 +19,7 @@ export const deletePrivateGatewayAction: SdkGuardedFunction<
 	});
 
 	if (!privateGateway) {
-		output.error(t('noPrivateGatewaysFoundUnexpectedly'));
+		output.error(t("noPrivateGatewaysFoundUnexpectedly"));
 
 		return;
 	}

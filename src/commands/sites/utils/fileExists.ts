@@ -1,7 +1,7 @@
 import { promises as fsPromises } from "node:fs";
 
 interface FsError extends Error {
-  code?: string;
+	code?: string;
 }
 
 export const fileExists = async (path: string) => {

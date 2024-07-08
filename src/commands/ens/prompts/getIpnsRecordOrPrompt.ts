@@ -37,7 +37,9 @@ export const getIpnsRecordOrPrompt = async ({
 		})),
 	});
 
-	const record = ipnsRecords.find((record) => record.id === selectedIpnsRecordId);
+	const record = ipnsRecords.find(
+		(record) => record.id === selectedIpnsRecordId,
+	);
 
 	if (!record) return;
 

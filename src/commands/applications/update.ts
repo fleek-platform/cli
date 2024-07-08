@@ -18,8 +18,8 @@ const updateApplicationAction: SdkGuardedFunction<
 	const application = await getApplicationOrPrompt({ id: args.id, sdk });
 
 	if (!application) {
-		output.error(t('noAppFoundUnexpectedly'));
-		
+		output.error(t("noAppFoundUnexpectedly"));
+
 		return;
 	}
 

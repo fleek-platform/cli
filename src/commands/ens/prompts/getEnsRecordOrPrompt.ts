@@ -39,8 +39,8 @@ export const getEnsRecordOrPrompt = async ({
 		message: `${t("commonSelectXFromList", { subject: t("ensRecord") })}`,
 		choices: ensRecords.map((ens) => ({ title: ens.name, value: ens.id })),
 	});
-	
+
 	const record = ensRecords.find((ens) => ens.id === selectedEnsRecordId);
-	
+
 	return record;
 };

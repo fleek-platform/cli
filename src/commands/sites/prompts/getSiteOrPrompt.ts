@@ -14,7 +14,7 @@ export const getSiteOrPrompt = async ({
 	id,
 	slug,
 	sdk,
-}: GetSiteOrPromptArgs): Promise<Site> => {
+}: GetSiteOrPromptArgs): Promise<Site | undefined> => {
 	if (id) {
 		return sdk.sites().get({ id });
 	}
@@ -34,5 +34,9 @@ export const getSiteOrPrompt = async ({
 		choices: sites.map((site) => ({ title: site.name, value: site.id })),
 	});
 
-	return sites.find((site) => site.id === selectedSiteId)!;
+	const matchSite = sites.find((site) => site.id === selectedSiteId);
+
+	if (!matchSite) return;
+
+	return matchSite;
 };

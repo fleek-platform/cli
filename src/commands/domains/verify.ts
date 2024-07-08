@@ -23,7 +23,7 @@ export const verifyDomainAction: SdkGuardedFunction<
 	});
 
 	if (!domain) {
-		output.error(t('noEnsRecordFoundUnexpectedly'));
+		output.error(t("noEnsRecordFoundUnexpectedly"));
 		return;
 	}
 
