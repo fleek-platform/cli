@@ -34,9 +34,10 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
 
 	if (unsupportedModulesUsed.length) {
 		output.printNewLine();
-		unsupportedModulesUsed.forEach((val) => {
-			output.mistake(t("unsupportedPackage", { packageName: val }));
-		});
+		for (const packageName of unsupportedModulesUsed) {
+			output.mistake(t("unsupportedPackage", { packageName }));
+		}
+		
 		output.log(t("showUnsupportedModulesDocLink"));
 		output.link("https://fleek.xyz/docs");
 		output.printNewLine();
