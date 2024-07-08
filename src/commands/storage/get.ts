@@ -7,6 +7,8 @@ import { withGuards } from "../../guards/withGuards";
 import { t } from "../../utils/translation";
 import { createOutputTable } from "./utils/CreateOutputTable";
 
+import type { StoragePin } from '@fleek-platform/sdk';
+
 type GetActionArgs = {
 	cid?: string;
 	name?: string;
@@ -17,7 +19,7 @@ export const getStorageAction: SdkGuardedFunction<GetActionArgs> = async ({
 	args,
 }) => {
 	const { cid, name } = args;
-	let storage;
+	let storage: StoragePin[] | undefined;
 
 	if (typeof name === "string") {
 		const splitFilename = name.split(".");
