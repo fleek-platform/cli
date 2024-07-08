@@ -24,9 +24,13 @@ export const getAllPrivateGatewayDomains = async ({
 		return [];
 	}
 
-	const domainPromises = privateGateways.map(async (privateGateway) =>
-		sdk.domains().listByZoneId({ zoneId: privateGateway.zone?.id }),
-	);
+	const domainPromises = privateGateways.map(async (privateGateway) => {
+		const zoneId = privateGateway.zone?.id;
+		
+		if (!zoneId) return [];
+		
+		return sdk.domains().listByZoneId({ zoneId });
+	});
 
 	const domains = (await Promise.all(domainPromises)).flat();
 
