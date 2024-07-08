@@ -43,9 +43,13 @@ export const sdkGuard = <T>(func: SdkGuardArgs<T>): Action<T> => {
 
 		try {
 			await func({ sdk, args });
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (error: any) {
-			output.error(error?.toString());
+		} catch (error) {
+			if (error instanceof Error) {
+				output.error(error?.toString());
+				return;
+			}
+
+    	output.error(`Unknown Error: ${JSON.stringify(error)}`);
 		}
 	};
 };
