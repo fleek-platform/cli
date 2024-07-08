@@ -12,7 +12,7 @@ type GetProjectOrPromptArgs = {
 export const getProjectOrPrompt = async ({
 	sdk,
 	id,
-}: GetProjectOrPromptArgs): Promise<Project> => {
+}: GetProjectOrPromptArgs): Promise<Project | undefined> => {
 	if (id) {
 		return await sdk.projects().get({ id });
 	}
@@ -31,5 +31,9 @@ export const getProjectOrPrompt = async ({
 		})),
 	});
 
-	return projects.find((project) => project.id === projectId)!;
+	const matchProject = projects.find((project) => project.id === projectId);
+
+	if (!matchProject) return;
+
+	return matchProject;
 };

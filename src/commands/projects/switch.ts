@@ -24,6 +24,12 @@ export const switchProjectAction: SdkGuardedFunction<
 		return;
 	}
 
+	if (!project) {
+		output.log(t('noProjectIdFoundUnexpectedly'));
+
+		return;
+	}
+
 	config.projectId.set(project.id);
 
 	output.printNewLine();
