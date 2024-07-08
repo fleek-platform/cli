@@ -12,6 +12,8 @@ import { getCodeFromPath, getFileLikeObject } from "./utils/getCodeFromPath";
 import { getEnvironmentVariables } from "./utils/parseEnvironmentVariables";
 import { waitUntilFileAvailable } from "./wait/waitUntilFileAvailable";
 
+import type { UploadPinResponse } from "@fleek-platform/sdk";
+
 type DeployActionArgs = {
 	filePath?: string;
 	name?: string;
@@ -35,7 +37,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 	});
 
 	if (!functionToDeploy) {
-		output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+		output.error(t("expectedNotFoundGeneric", { name: "function" }));
 		return;
 	}
 
@@ -48,7 +50,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 		cliProgress.Presets.shades_grey,
 	);
 
-	let uploadResult;
+	let uploadResult: UploadPinResponse;
 
 	if (args.private) {
 		uploadResult = await sdk.storage().uploadPrivateFile({
