@@ -11,7 +11,7 @@ type WithGuardsArgs = { scopes: Guards };
 export const withGuards = <
 	T extends {
 		predefinedConfigPath?: string;
-		[name: string]: string | undefined;
+		[name: string]: string | string[] | boolean | undefined;
 	},
 >(
 	handler: SdkGuardedFunction<T>,
