@@ -30,9 +30,14 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 	const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
 	const bundledFilePath = await getCodeFromPath({
 		filePath,
-		bundle: !args.noBundle,
+		bundle: args.noBundle,
 		env,
 	});
+
+	if (!functionToDeploy) {
+		output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+		return;
+	}
 
 	output.printNewLine();
 
