@@ -24,7 +24,9 @@ export const deleteStorageAction: SdkGuardedFunction<
 		const extension = (splitFilename.length > 1 && splitFilename.pop()) || "";
 		const filename = splitFilename.join(".");
 		const storage = await sdk.storage().getByFilename({ filename, extension });
-		storage.forEach((s) => cidsToDelete.push(s.cid));
+		for (const s of storage) {
+			cidsToDelete.push(s.cid);
+		}
 	} else if (cid) {
 		try {
 			CID.parse(cid);
