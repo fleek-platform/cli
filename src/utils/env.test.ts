@@ -83,9 +83,8 @@ describe("Parse environment variables", () => {
 				UI__APP_URL: null,
 			};
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			expect(() =>
-				parseEnvVarsAsKeyVal({ defined: overrideDefinedMock as any }),
+				parseEnvVarsAsKeyVal({ defined: overrideDefinedMock }),
 			).toThrowError();
 		});
 

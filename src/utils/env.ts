@@ -3,7 +3,7 @@ import { EnvNotSetError } from "@fleek-platform/errors";
 // Replace global variables with specific values during build
 const DEFAULT_ESBUILD_DEFINED_PROCESS_ENV_PREFIX = "process.env.";
 
-type Optional<T = void> = Partial<Record<keyof T, string>>;
+type Optional<T = void> = Partial<Record<keyof T, string | undefined | null>>;
 
 export const parseEnvVarsAsKeyVal = <T extends Record<string, string>>({
 	defined,

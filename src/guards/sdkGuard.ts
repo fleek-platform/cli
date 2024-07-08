@@ -49,7 +49,7 @@ export const sdkGuard = <T>(func: SdkGuardArgs<T>): Action<T> => {
 				return;
 			}
 
-    	output.error(`Unknown Error: ${JSON.stringify(error)}`);
+			output.error(`Unknown Error: ${JSON.stringify(error)}`);
 		}
 	};
 };
