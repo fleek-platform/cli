@@ -16,7 +16,7 @@ export const getDomainOrPrompt = async ({
 	hostname,
 	sdk,
 	choicesFilter,
-}: GetDomainOrPromptArgs): Promise<Domain> => {
+}: GetDomainOrPromptArgs): Promise<Domain | undefined> => {
 	if (id) {
 		return sdk.domains().get({ domainId: id });
 	}
@@ -41,5 +41,9 @@ export const getDomainOrPrompt = async ({
 		})),
 	});
 
-	return domains.find((domain) => domain.id === selectedDomainId)!;
+	const domain = domains.find((domain) => domain.id === selectedDomainId);
+
+	if (!domain) return;
+	
+	return domain;
 };

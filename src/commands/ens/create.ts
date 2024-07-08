@@ -33,7 +33,7 @@ export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
 	});
 
 	if (!ipnsRecord) {
-		output.error(t('recordsNotFound'));
+		output.error(t('noDomainsFoundUnexpectedly'));
 		
 		return;
 	}
