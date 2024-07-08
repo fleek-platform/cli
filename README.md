@@ -93,39 +93,37 @@ Learn the Fleek-platform CLI basic commands [here](#basic-commands). For extende
 
 ### Code Format
 
-Format, linting is provide by [biomejs](https://biomejs.dev). The configuration is available as:
+Formatting and linting are facilitated by [BiomeJS](https://biomejs.dev). Configuration details can be found in:
 
 ```
 biome.json
 ```
 
-The available commands are the following.
-
-Format the source-code and modify/write changes in-file:
+To format source code and apply changes directly in the file:
 
 ```sh
 pnpm format
 ```
 
-Check for the source-code format only:
+For checking source code formatting only:
 
 ```sh
 pnpm format:check
 ```
 
-Lint and modify/write changes in-file:
+To lint and apply changes directly in the file:
 
 ```sh
 pnpm lint
 ```
 
-Lint checks only:
+For lint checks only:
 
 ```sh
 pnpm lint:check
 ```
 
-Format and lint the source-code (write):
+To both format and lint source code (with writes):
 
 ```sh
 pnpm format:unsafe
