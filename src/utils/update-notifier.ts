@@ -22,8 +22,8 @@ export const checkForPackageUpdates = async (
 
 	const { current, latest, name } = notifier.update;
 
-	const installCmd = chalk["yellow"](`npm i -g ${name}`);
-	const verifyCmd = chalk["yellow"]("fleek version");
+	const installCmd = chalk.yellow(`npm i -g ${name}`);
+	const verifyCmd = chalk.yellow("fleek version");
 
 	const message = t("updateAvailable", {
 		updateRequired: t("updateRequired"),
@@ -33,8 +33,8 @@ export const checkForPackageUpdates = async (
 		verifyCmd,
 		// The following are overrides: packageName, currentVersion and LatestVersion. Since the update-notifier uses the same placeholder convention {placeholder}, it'd fallback to the update-notifier computed text. Thus, we have an opportunity to customise the values provides from the registry
 		packageName: name,
-		currentVersion: chalk["red"](current),
-		latestVersion: chalk["green"](latest),
+		currentVersion: chalk.red(current),
+		latestVersion: chalk.green(latest),
 		options: {
 			bold: true,
 		},

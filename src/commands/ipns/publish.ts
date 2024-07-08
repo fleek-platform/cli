@@ -23,7 +23,7 @@ const publishAction: SdkGuardedFunction<PublishActionArgs> = async ({
 	await sdk.ipns().publishRecord({ id: record.id, hash });
 
 	output.printNewLine();
-	output.log(t("ipnsVisitPublishedIPNSGw") + ":");
+	output.log(`${t("ipnsVisitPublishedIPNSGw")}:`);
 	output.link(getIpnsGatewayUrl(record.name));
 	output.printNewLine();
 	output.hint(t("ipnsPropagationTimeWarn"));

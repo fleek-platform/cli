@@ -1,4 +1,4 @@
-import { join as joinPath } from "path";
+import { join as joinPath } from "node:path";
 
 import { t } from "../../../utils/translation";
 import { confirmWorkflowCustomPathPrompt } from "../prompts/confirmWorkflowCustomPathPrompt";

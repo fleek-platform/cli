@@ -1,5 +1,5 @@
-import { constants, promises as fs } from "fs";
-import { join as joinPath } from "path";
+import { constants, promises as fs } from "node:fs";
+import { join as joinPath } from "node:path";
 import { FleekConfigMissingFileError } from "@fleek-platform/errors";
 
 type GetConfigurationPathArgs = {

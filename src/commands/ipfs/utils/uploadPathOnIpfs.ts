@@ -1,5 +1,5 @@
-import { promises as fs } from "fs";
-import { basename } from "path";
+import { promises as fs } from "node:fs";
+import { basename } from "node:path";
 import type { FleekSdk } from "@fleek-platform/sdk";
 
 type UploadPathOnIpfsArgs = {

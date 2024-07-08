@@ -14,20 +14,16 @@ vi.mock("@fleek-platform/sdk", () => {
 	const FleekSdkMock = vi.fn();
 
 	const privateGateways = {
-		get: vi
-			.fn()
-			.mockResolvedValue({
-				id: "thirdPrivateGatewayId",
-				slug: "three-white-apple",
-				name: "third gateway",
-			}),
-		getBySlug: vi
-			.fn()
-			.mockResolvedValue({
-				id: "firstPrivateGatewayId",
-				slug: "one-green-fish",
-				name: "first gateway",
-			}),
+		get: vi.fn().mockResolvedValue({
+			id: "thirdPrivateGatewayId",
+			slug: "three-white-apple",
+			name: "third gateway",
+		}),
+		getBySlug: vi.fn().mockResolvedValue({
+			id: "firstPrivateGatewayId",
+			slug: "one-green-fish",
+			name: "first gateway",
+		}),
 		list: vi.fn().mockResolvedValue([
 			{
 				id: "firstPrivateGatewayId",

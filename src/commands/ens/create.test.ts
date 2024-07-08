@@ -200,7 +200,7 @@ describe("Create ENS record for site", () => {
 
 		expect(fakeOutput.success).not.toHaveBeenCalled();
 		expect(fakeOutput.warn).toHaveBeenCalledWith(
-			`The process of obtaining the content hash for your ENS is taking longer than anticipated.`,
+			"The process of obtaining the content hash for your ENS is taking longer than anticipated.",
 		);
 		expect(fakeOutput.error).not.toHaveBeenCalled();
 	});
@@ -220,7 +220,7 @@ describe("Create ENS record for site", () => {
 
 		expect(fakeOutput.success).toHaveBeenCalledOnce();
 		expect(fakeOutput.warn).toHaveBeenCalledWith(
-			`The process of verifying your ENS is taking longer than anticipated.`,
+			"The process of verifying your ENS is taking longer than anticipated.",
 		);
 		expect(fakeOutput.error).not.toHaveBeenCalled();
 	});

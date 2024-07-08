@@ -52,12 +52,10 @@ vi.mock("@fleek-platform/sdk", () => {
 	FleekSdkMock.prototype.ens = () => ens;
 
 	const sites = {
-		get: vi
-			.fn()
-			.mockResolvedValue({
-				id: "testSiteId",
-				ipnsRecords: [{ id: "testIpnsRecordId" }],
-			}),
+		get: vi.fn().mockResolvedValue({
+			id: "testSiteId",
+			ipnsRecords: [{ id: "testIpnsRecordId" }],
+		}),
 	};
 
 	FleekSdkMock.prototype.sites = () => sites;

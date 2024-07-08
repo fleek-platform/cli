@@ -17,7 +17,7 @@ type Values = Record<string, string | AnsiOptions> & {
 // Ansi escape code handlers
 // these are ansi level, so do not confuse with the
 // cli `Output.ts`
-const _b = (text: string) => chalk["bold"](text);
+const _b = (text: string) => chalk.bold(text);
 
 const _t = (key: string, values?: Values) => {
 	const txt = (en as Record<string, string>)[key];

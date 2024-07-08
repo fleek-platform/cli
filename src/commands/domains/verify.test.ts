@@ -157,7 +157,7 @@ describe("Verify domain", () => {
 		});
 		expect(output.success).not.toHaveBeenCalled();
 		expect(output.warn).toHaveBeenCalledWith(
-			`The process of verifying your domain is taking longer than anticipated.`,
+			"The process of verifying your domain is taking longer than anticipated.",
 		);
 	});
 });

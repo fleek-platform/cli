@@ -1,7 +1,7 @@
 // Warning this file may be included from outside `/src`
 // For example, see `/bin/index.js`
-import { readFileSync } from "fs";
-import path from "path";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 // The build distribution target directory
 const BUILD_DIST_PATHNAME = "/dist";
@@ -9,7 +9,7 @@ const BUILD_DIST_PATHNAME = "/dist";
 // Fallback path is the `src` used in tests
 const TEST_SRC_PATHNAME = "/src";
 
-const leadingSlash = (str: string) => (str.startsWith("/") ? str : "/" + str);
+const leadingSlash = (str: string) => (str.startsWith("/") ? str : `/${str}`);
 
 const resolvePath = (filename: string) => {
 	/* eslint-disable no-process-env */

@@ -31,7 +31,7 @@ export const detailPrivateGatewayAction: SdkGuardedFunction<
 
 	const domains = await sdk
 		.domains()
-		.listByZoneId({ zoneId: privateGateway.zone!.id });
+		.listByZoneId({ zoneId: privateGateway.zone?.id });
 
 	if (domains.length === 0) {
 		output.log(t("gatewayNoDomainsAss"));

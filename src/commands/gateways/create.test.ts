@@ -107,7 +107,7 @@ describe("Create private gateway", () => {
 
 		expect(output.success).not.toHaveBeenCalled();
 		expect(output.error).toHaveBeenCalledWith(
-			`Failed to create the private gateway. Please try again.`,
+			"Failed to create the private gateway. Please try again.",
 		);
 	});
 });

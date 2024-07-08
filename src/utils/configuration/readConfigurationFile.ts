@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 
-import { promises as fs } from "fs";
-import { extname as getExtension } from "path";
+import { promises as fs } from "node:fs";
+import { extname as getExtension } from "node:path";
 import {
 	FleekConfigInvalidContentError,
 	FleekConfigMissingFileError,

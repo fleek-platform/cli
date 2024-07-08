@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { promises as fs } from "node:fs";
 
 import type { Output } from "../../../output/Output";
 import { t } from "../../../utils/translation";

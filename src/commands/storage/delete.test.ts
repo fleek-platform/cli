@@ -24,7 +24,8 @@ vi.mock("@fleek-platform/sdk", () => {
 				"bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle"
 			) {
 				return Promise.resolve({ body: {}, status: 500 });
-			} else if (options.cid.startsWith("bafyunauth")) {
+			}
+			if (options.cid.startsWith("bafyunauth")) {
 				return Promise.resolve({ body: {}, status: 401 });
 			}
 
@@ -101,7 +102,7 @@ describe("Delete storage files/folder for the given cid or name", () => {
 			cid: "bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru",
 		});
 		expect(output.log).toHaveBeenCalledWith(
-			`Processing cid: bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru`,
+			"Processing cid: bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru",
 		);
 		expect(output.success).toHaveBeenCalled();
 	});
@@ -128,10 +129,10 @@ describe("Delete storage files/folder for the given cid or name", () => {
 			cid: "bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4",
 		});
 		expect(output.log).toHaveBeenCalledWith(
-			`Processing cid: bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru name: basic.car`,
+			"Processing cid: bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru name: basic.car",
 		);
 		expect(output.log).toHaveBeenCalledWith(
-			`Processing cid: bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4 name: basic.car`,
+			"Processing cid: bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4 name: basic.car",
 		);
 		expect(output.success).toHaveBeenCalledTimes(2);
 	});
@@ -158,10 +159,10 @@ describe("Delete storage files/folder for the given cid or name", () => {
 			cid: "bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle",
 		});
 		expect(output.log).toHaveBeenCalledWith(
-			`Processing cid: bafkreidlixt2jjjsdxxdzgv3spe46mcwtpsmlxgumpsyaru6n6fn3jz2zy name: basic1Fail.car`,
+			"Processing cid: bafkreidlixt2jjjsdxxdzgv3spe46mcwtpsmlxgumpsyaru6n6fn3jz2zy name: basic1Fail.car",
 		);
 		expect(output.log).toHaveBeenCalledWith(
-			`Processing cid: bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle name: basic1Fail.car`,
+			"Processing cid: bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle name: basic1Fail.car",
 		);
 		expect(output.success).toHaveBeenCalledTimes(1);
 		expect(output.error).toHaveBeenCalledTimes(1);

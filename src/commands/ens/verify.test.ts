@@ -154,7 +154,7 @@ describe("Verify ENS record", () => {
 		});
 		expect(output.success).not.toHaveBeenCalled();
 		expect(output.warn).toHaveBeenCalledWith(
-			`The process of verifying your ENS is taking longer than anticipated.`,
+			"The process of verifying your ENS is taking longer than anticipated.",
 		);
 	});
 });

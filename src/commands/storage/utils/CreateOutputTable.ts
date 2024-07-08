@@ -14,8 +14,8 @@ type CreateOutputTableArgs = {
 type TableCoulmns = {
 	filename: string;
 	cid: string;
-	[`filecoin id`]?: string;
-	[`arweave id`]?: string;
+	"filecoin id"?: string;
+	"arweave id"?: string;
 	link: string;
 };
 
@@ -42,8 +42,8 @@ export const createOutputTable = async ({
 		return gatewayUrls.map((link) => ({
 			filename,
 			cid: s.cid,
-			[`filecoin id`]: s.filecoinDealIds,
-			[`arweave id`]: s.arweaveId,
+			"filecoin id": s.filecoinDealIds,
+			"arweave id": s.arweaveId,
 			link,
 		}));
 	});

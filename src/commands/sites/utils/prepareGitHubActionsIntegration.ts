@@ -1,4 +1,4 @@
-import { join as joinPath } from "path";
+import { join as joinPath } from "node:path";
 import { generateDeploymentWorkflowYaml } from "@fleek-platform/utils-github";
 
 import type { Output } from "../../../output/Output";

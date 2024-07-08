@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as os from "os";
+import * as fs from "node:fs";
+import * as os from "node:os";
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
 import {
@@ -78,7 +78,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
 		}
 	}
 
-	const outFile = tempDir + "/function.js";
+	const outFile = `${tempDir}/function.js`;
 	const unsupportedModulesUsed = new Set<string>();
 
 	const plugins: Plugin[] = [

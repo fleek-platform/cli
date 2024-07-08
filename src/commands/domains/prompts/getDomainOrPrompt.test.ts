@@ -20,13 +20,11 @@ vi.mock("@fleek-platform/sdk", () => {
 		get: vi
 			.fn()
 			.mockResolvedValue({ id: "firstDomainId", hostname: "first.xyz" }),
-		getByHostname: vi
-			.fn()
-			.mockResolvedValue({
-				id: "secondDomainId",
-				hostname: "second.xyz",
-				isVerified: false,
-			}),
+		getByHostname: vi.fn().mockResolvedValue({
+			id: "secondDomainId",
+			hostname: "second.xyz",
+			isVerified: false,
+		}),
 		list: vi.fn().mockResolvedValue([
 			{ id: "firstDomainId", hostname: "first.xyz", isVerified: false },
 			{ id: "secondDomainId", hostname: "second.xyz", isVerified: false },

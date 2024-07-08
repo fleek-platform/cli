@@ -274,7 +274,7 @@ describe("Create domain for site", () => {
 
 		expect(fakeOutput.success).not.toHaveBeenCalled();
 		expect(fakeOutput.warn).toHaveBeenCalledWith(
-			`The DNS configuration is taking longer than anticipated.`,
+			"The DNS configuration is taking longer than anticipated.",
 		);
 		expect(fakeOutput.error).not.toHaveBeenCalled();
 	});
@@ -308,7 +308,7 @@ describe("Create domain for site", () => {
 
 		expect(fakeOutput.success).toHaveBeenCalledOnce();
 		expect(fakeOutput.warn).toHaveBeenCalledWith(
-			`The DNS configuration is taking longer than anticipated.`,
+			"The DNS configuration is taking longer than anticipated.",
 		);
 		expect(fakeOutput.error).not.toHaveBeenCalled();
 	});

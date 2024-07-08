@@ -1,5 +1,5 @@
-import { promises as fs, existsSync } from "fs";
-import { basename } from "path";
+import { promises as fs, existsSync } from "node:fs";
+import { basename } from "node:path";
 import {
 	getCfIpfsGatewayUrl,
 	getPrivateIpfsGatewayUrl,
@@ -39,19 +39,15 @@ export const addStorageAction: SdkGuardedFunction<
 	const directoryName = basename(args.path);
 	const files = await filesFromPaths([args.path]);
 	const storage = stat.isDirectory()
-		? await sdk
-				.storage()
-				.uploadVirtualDirectory({
-					files,
-					directoryName,
-					onUploadProgress: uploadOnProgress(progressBar),
-				})
-		: await sdk
-				.storage()
-				.uploadFile({
-					file: files[0],
-					onUploadProgress: uploadOnProgress(progressBar),
-				});
+		? await sdk.storage().uploadVirtualDirectory({
+				files,
+				directoryName,
+				onUploadProgress: uploadOnProgress(progressBar),
+			})
+		: await sdk.storage().uploadFile({
+				file: files[0],
+				onUploadProgress: uploadOnProgress(progressBar),
+			});
 
 	if (!storage) {
 		output.error(t("somethingWrongDurUpload"));

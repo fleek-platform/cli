@@ -35,7 +35,11 @@ export const getSiteOrPrivateGateway = async ({
 				})
 			: null;
 
-	if (privateGatewayId || privateGatewaySlug || zoneType == "PRIVATE_GATEWAY") {
+	if (
+		privateGatewayId ||
+		privateGatewaySlug ||
+		zoneType === "PRIVATE_GATEWAY"
+	) {
 		const privateGateway = await getPrivateGatewayOrPrompt({
 			id: privateGatewayId,
 			slug: privateGatewaySlug,

@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import cliProgress from "cli-progress";
 
 import { output } from "../../cli";
@@ -30,7 +30,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 	const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
 	const bundledFilePath = await getCodeFromPath({
 		filePath,
-		bundle: !!!args.noBundle,
+		bundle: !args.noBundle,
 		env,
 	});
 
@@ -46,12 +46,10 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 	let uploadResult;
 
 	if (args.private) {
-		uploadResult = await sdk
-			.storage()
-			.uploadPrivateFile({
-				filePath: bundledFilePath,
-				onUploadProgress: uploadOnProgress(progressBar),
-			});
+		uploadResult = await sdk.storage().uploadPrivateFile({
+			filePath: bundledFilePath,
+			onUploadProgress: uploadOnProgress(progressBar),
+		});
 	} else {
 		const fileLikeObject = await getFileLikeObject(bundledFilePath);
 		uploadResult = await sdk.storage().uploadFile({

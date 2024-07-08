@@ -67,7 +67,7 @@ export class Output {
 	};
 
 	public printNewLine = (count = 1) => {
-		this.print(`\n`.repeat(count));
+		this.print("\n".repeat(count));
 	};
 
 	public log = (message: string) => {

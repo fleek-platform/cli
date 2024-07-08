@@ -13,20 +13,16 @@ vi.mock("@fleek-platform/sdk", () => {
 	const FleekSdkMock = vi.fn();
 
 	const functions = {
-		get: vi
-			.fn()
-			.mockResolvedValue({
-				name: "firstFunctionName",
-				slug: "first-first-first",
-				id: "firstFunctionId",
-			}),
-		getBySlug: vi
-			.fn()
-			.mockResolvedValue({
-				name: "secondFunctionName",
-				slug: "second-second-second",
-				id: "secondFunctionId",
-			}),
+		get: vi.fn().mockResolvedValue({
+			name: "firstFunctionName",
+			slug: "first-first-first",
+			id: "firstFunctionId",
+		}),
+		getBySlug: vi.fn().mockResolvedValue({
+			name: "secondFunctionName",
+			slug: "second-second-second",
+			id: "secondFunctionId",
+		}),
 		list: vi.fn().mockResolvedValue([
 			{
 				name: "firstFunctionName",
