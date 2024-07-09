@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs';
 
-import { getConfigFileByTypeName } from '../config';
+import { getConfigFileByTypeName } from '../configuration';
 
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 

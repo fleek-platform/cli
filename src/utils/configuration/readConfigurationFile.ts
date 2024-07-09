@@ -9,7 +9,7 @@ import {
 import { register as registerTSNodeCompiler } from 'ts-node';
 
 import { t } from '../../utils/translation';
-import { getConfigurationPath } from './getConfigurationPath';
+import { getConfigurationPath } from './getConfiguration';
 
 type ReadConfigurationFileArgs = {
   predefinedConfigPath?: string;

@@ -1,6 +1,10 @@
 import { constants, promises as fs } from 'node:fs';
 import { join as joinPath } from 'node:path';
 import { FleekConfigMissingFileError } from '@fleek-platform/errors';
+import {
+  type FleekSiteConfigFormatValue,
+  FleekSiteConfigFormats
+} from './types';
 
 type GetConfigurationPathArgs = {
   predefinedConfigPath?: string;
@@ -44,3 +48,9 @@ export const getConfigurationPath = async ({
 
   throw new FleekConfigMissingFileError({});
 };
+
+const FLEEK_CONFIG_BASENAME = 'fleek.config';
+
+export const getConfigFileByTypeName = (name: keyof typeof FleekSiteConfigFormats ) => `${FLEEK_CONFIG_BASENAME}.${FleekSiteConfigFormats[name]}`;
+
+export const getConfigFileByTypeValue = (val: FleekSiteConfigFormatValue) => `${FLEEK_CONFIG_BASENAME}.${val}`;
