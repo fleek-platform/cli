@@ -1,3 +1,4 @@
+// TODO: Seems that utils/configuraiton exists, move to utils/configuration
 import { FleekSiteConfigFormats, FleekSiteConfigFormatValue } from './configuration/types';
 
 const FLEEK_CONFIG_BASENAME = 'fleek.config';

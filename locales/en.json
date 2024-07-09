@@ -216,6 +216,7 @@
   "foundSiteLinkToExisting": "We've found existing sites. Would you like to link to one of them?",
   "workflowToBeSavePathOrOther": "The workflow configuration will be saved in: {path}. Would you like to choose a different path?",
   "selectFormatForSiteConf": "Select a format for saving the site's configuration",
+  "fsFailedToWriteConfig": "Oops! It looks like we had trouble saving your file. Could you please check if you have the right permissions for the directory? If persists, contact our support team, please!",
   "includeOptBuildCmd": "Would you like to include the optional \"{build}\" command?",
   "runInstallCmdBeforeBuild": "Do you want to execute an install command prior to the build process?",
   "specifyinstallCmdOpt": "Would you like to provide a specific install command? If not, one will be generated based on your lockfile.",
