@@ -6,7 +6,7 @@ import { t } from '../../../utils/translation';
 import { enterDirectoryPathPrompt } from '../prompts/enterDirectoryPathPrompt';
 import { selectConfigurationFormatPrompt } from '../prompts/selectConfigurationFormatPrompt';
 import { selectBuildCommandOrSkip } from './selectBuildCommandOrSkip';
-import { FleekSiteConfigFormats } from '../../../utils/configuration/types';
+import { isValidFleekConfigFormat } from '../../../utils/formats';
 import { fileExists } from '../../../utils/fs';
 
 type InitConfigurationArgs = {
@@ -32,7 +32,7 @@ export const initConfiguration = async ({
 
   const format = await selectConfigurationFormatPrompt();
 
-  if (!Object.keys(FleekSiteConfigFormats).includes(format)) {
+  if (!isValidFleekConfigFormat(format)) {
     onUnexpectedFormatError(format);
   }
 
