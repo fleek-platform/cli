@@ -6,16 +6,16 @@ import { FleekSiteConfigFormats } from './configuration';
 describe('In the Formats utils', () => {
   describe('isValidFleekConfigFormat', () => {
     it('should be true for JSON', () => {
-      expect(isValidFleekConfigFormat("JSON")).toBe(true);
+      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.JSON)).toBe(true);
     });
     it('should be true for Typescript', () => {
-      expect(isValidFleekConfigFormat("Typescript")).toBe(true);
+      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.Typescript)).toBe(true);
     });
     it('should be true for Javascript', () => {
-      expect(isValidFleekConfigFormat("Javascript")).toBe(true);
+      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.Javascript)).toBe(true);
     });
     it('should be false for unknown formats', () => {
-      expect(isValidFleekConfigFormat("foobar" as unknown as keyof typeof FleekSiteConfigFormats)).toBe(false);
+      expect(isValidFleekConfigFormat("foobar" as unknown as FleekSiteConfigFormats)).toBe(false);
     });
   });
 });
