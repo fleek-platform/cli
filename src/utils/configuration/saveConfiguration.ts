@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs';
+import path from 'path';
 
-import { getConfigFileByTypeName } from '../configuration';
+import { getConfigFileByTypeName, getConfigTemplateByTypeName, FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER } from '../configuration';
 
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 
@@ -13,9 +14,8 @@ export type SaveConfigurationArgs = {
 
 type ConfigFilePath = string;
 
-// TODO: Move to separate template files
-const contentForTypescriptConfig = "import { FleekConfig } from '@fleek-platform/cli';\n\nexport default $content satisfies FleekConfig;";
-const contentForJavascriptConfig = "/** @type {import('@fleek-platform/cli').FleekConfig} */\nmodule.exports = $content;";
+const contentForTypescriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Typescript"));
+const contentForJavascriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Javascript"));
 
 export const saveConfiguration = async ({
   config,
@@ -34,11 +34,11 @@ export const saveConfiguration = async ({
 
   switch (format) {
     case FleekSiteConfigFormats.Typescript:
-      content = contentForTypescriptConfig.replace('$content', formattedOutput);
+      content = contentForTypescriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
       configFile = getConfigFileByTypeName("Typescript");
       break;
     case FleekSiteConfigFormats.Javascript:
-      content = contentForJavascriptConfig.replace('$content', formattedOutput);
+      content = contentForJavascriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
       configFile = getConfigFileByTypeName("Javascript");
       break;
     case FleekSiteConfigFormats.JSON:
