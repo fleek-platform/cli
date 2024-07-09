@@ -1,3 +1,3 @@
 import { FleekSiteConfigFormats } from './configuration';
 
-export const isValidFleekConfigFormat = (format: keyof typeof FleekSiteConfigFormats) => Object.values(FleekSiteConfigFormats).includes(FleekSiteConfigFormats[format])
+export const isValidFleekConfigFormat = (format: FleekSiteConfigFormats & string) => Object.values(FleekSiteConfigFormats).includes(format);
