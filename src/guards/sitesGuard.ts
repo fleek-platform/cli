@@ -36,6 +36,16 @@ export const sitesGuard = async ({
       return false;
     }
 
-    await initConfiguration({ site });
+    await initConfiguration({
+      site,
+      onUnexpectedFormat: (format) => {
+        output.warn(t('unexpectedFileFormat', { format }));
+        process.exit(1);
+      },
+      onSaveConfiguration: () => {
+        output.warn(t('fsFailedToWriteConfig'));
+        process.exit(1);
+      },
+    });
   }
 };

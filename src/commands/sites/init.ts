@@ -64,7 +64,17 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
     return;
   }
 
-  await initConfiguration({ site });
+  await initConfiguration({
+    site,
+    onUnexpectedFormat: (format: string) => {
+      output.warn(t('unexpectedFileFormat', { format }));
+      process.exit(1);
+    },
+    onSaveConfiguration: () => {
+      output.warn(t('fsFailedToWriteConfig'));
+      process.exit(1);
+    },
+  });
 
   output.printNewLine();
   output.success(t('fleekConfigSaved'));
