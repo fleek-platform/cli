@@ -10,7 +10,7 @@ import { withGuards } from '../../guards/withGuards';
 import { loadConfiguration } from '../../utils/configuration/loadConfiguration';
 import { t } from '../../utils/translation';
 import { confirmFileOverridePrompt } from './prompts/confirmFileOverridePrompt';
-import { initConfiguration } from './utils/initCongifuration';
+import { initConfiguration } from './utils/initConfiguration';
 
 const initAction: SdkGuardedFunction = async ({ sdk }) => {
   const configLoadingResult = await loadConfiguration({})
