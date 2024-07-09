@@ -18,9 +18,9 @@ export const initConfiguration = async ({ site }: InitConfigurationArgs) => {
 
   const buildCommand = await selectBuildCommandOrSkip();
 
-  const config = {
+  const config: FleekRootConfig = {
     sites: [{ slug: site.slug, distDir, buildCommand }],
-  } satisfies FleekRootConfig;
+  };
 
   const format = await selectConfigurationFormatPrompt();
 

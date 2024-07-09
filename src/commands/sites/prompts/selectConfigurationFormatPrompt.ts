@@ -1,15 +1,22 @@
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
 
-export const selectConfigurationFormatPrompt = async () => {
-  const choices = [
-    { title: 'Typescript (fleek.config.ts)', value: 'ts' } as const,
-    { title: 'Javascript (fleek.config.js)', value: 'js' } as const,
-    { title: 'JSON (fleek.config.json)', value: 'json' } as const,
-  ];
+enum AvailableFormats {
+  JSON = 'json',
+  Typescript = 'ts',
+  Javascript = 'js',
+};
 
-  return selectPrompt<(typeof choices)[number]['value']>({
+const choices = Object.keys(AvailableFormats).map((name) => {
+  const value = AvailableFormats[name as keyof typeof AvailableFormats];
+
+  return {
+    title: `${name} (fleek.config.${value})`,
+    value,
+  };
+});
+
+export const selectConfigurationFormatPrompt = async () => selectPrompt<(typeof choices)[number]['value']>({
     message: `${t('selectFormatForSiteConf')}:`,
     choices,
   });
-};
