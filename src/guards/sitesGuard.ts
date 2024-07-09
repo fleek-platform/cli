@@ -10,13 +10,13 @@ import { chooseOrCreateSite } from '../commands/sites/utils/chooseOrCreateSite';
 export const sitesGuard = async ({
   predefinedConfigPath,
 }: { predefinedConfigPath?: string }) => {
-  const isConfigValid = await loadConfiguration({ predefinedConfigPath })
-    .then(() => true)
-    .catch((e: FleekError<unknown>) => {
-      output.error(e.toString());
-
+  const isConfigValid = await (async () => {
+    try {
+      return !!await loadConfiguration({ predefinedConfigPath });
+    } catch(_err) {
       return false;
-    });
+    }
+  })();
 
   if (!isConfigValid) {
     output.hint(t('createValidConfAsInstruct'));
