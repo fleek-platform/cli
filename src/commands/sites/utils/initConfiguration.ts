@@ -11,14 +11,14 @@ import { fileExists } from '../../../utils/fs';
 
 type InitConfigurationArgs = {
   site: Site;
-  onUnexpectedFormat: (format: string) => void;
-  onSaveConfiguration: () => void;
+  onUnexpectedFormatError: (format: string) => void;
+  onSaveConfigurationError: () => void;
 };
 
 export const initConfiguration = async ({
   site,
-  onUnexpectedFormat,
-  onSaveConfiguration,
+  onUnexpectedFormatError,
+  onSaveConfigurationError,
 }: InitConfigurationArgs) => {
   const distDir = await enterDirectoryPathPrompt({
     message: t('specifyDistDirToSiteUpl'),
@@ -33,13 +33,13 @@ export const initConfiguration = async ({
   const format = await selectConfigurationFormatPrompt();
 
   if (!Object.keys(FleekSiteConfigFormats).includes(format)) {
-    onUnexpectedFormat(format);
+    onUnexpectedFormatError(format);
   }
 
   const configFile = await saveConfiguration({ config, format });
 
   if (!configFile) {
-    onSaveConfiguration();
+    onSaveConfigurationError();
 
     return;
   }
@@ -47,7 +47,7 @@ export const initConfiguration = async ({
   const isFile = await fileExists(configFile);
 
   if (!isFile) {
-    onSaveConfiguration();
+    onSaveConfigurationError();
 
     return;
   }

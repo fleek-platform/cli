@@ -66,11 +66,11 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
 
   await initConfiguration({
     site,
-    onUnexpectedFormat: (format: string) => {
+    onUnexpectedFormatError: (format: string) => {
       output.warn(t('unexpectedFileFormat', { format }));
       process.exit(1);
     },
-    onSaveConfiguration: () => {
+    onSaveConfigurationError: () => {
       output.warn(t('fsFailedToWriteConfig'));
       process.exit(1);
     },
