@@ -1,14 +1,10 @@
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
 
-enum AvailableFormats {
-  JSON = 'json',
-  Typescript = 'ts',
-  Javascript = 'js',
-};
+import { FleekSiteConfigFormats } from '../../../utils/configuration/types';
 
-const choices = Object.keys(AvailableFormats).map((name) => {
-  const value = AvailableFormats[name as keyof typeof AvailableFormats];
+const choices = Object.keys(FleekSiteConfigFormats).map((name) => {
+  const value = FleekSiteConfigFormats[name as keyof typeof FleekSiteConfigFormats];
 
   return {
     title: `${name} (fleek.config.${value})`,

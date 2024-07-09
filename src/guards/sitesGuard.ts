@@ -1,5 +1,3 @@
-import type { FleekError } from '@fleek-platform/errors';
-
 import { output } from '../cli';
 import { initConfiguration } from '../commands/sites/utils/initConfiguration';
 import { loadConfiguration } from '../utils/configuration/loadConfiguration';
