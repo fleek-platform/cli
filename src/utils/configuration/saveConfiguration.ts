@@ -13,39 +13,43 @@ export type SaveConfigurationArgs = {
 
 type ConfigFilePath = string;
 
+// TODO: Move to separate template files
+const contentForTypescriptConfig = "import { FleekConfig } from '@fleek-platform/cli';\n\nexport default $content satisfies FleekConfig;";
+const contentForJavascriptConfig = "/** @type {import('@fleek-platform/cli').FleekConfig} */\nmodule.exports = $content;";
+
 export const saveConfiguration = async ({
   config,
   format,
-}: SaveConfigurationArgs): Promise<ConfigFilePath | undefined> => {
-  try {
-    const formattedOutput = JSON.stringify(config, undefined, 2);
+}: SaveConfigurationArgs): Promise<ConfigFilePath | undefined> => {const formattedOutput = JSON.stringify(config, undefined, 2);
 
-    if (format === 'ts') {
-      // TODO: The syntax `satisfies` is only available >= 4.9
-      const content = `import { FleekConfig } from '@fleek-platform/cli';\n\nexport default ${formattedOutput} satisfies FleekConfig;`;
-      const configFile = getConfigFileByTypeName("Typescript");
-
-      await fs.writeFile(configFile, content);
-
-      return configFile;
-    } else if (format === 'js') {
-      const content = `/** @type {import('@fleek-platform/cli').FleekConfig} */\nmodule.exports = ${formattedOutput};`;
-      const configFile = getConfigFileByTypeName("Javascript");
-
-      await fs.writeFile(configFile, content);
-
-      return configFile;
-    } else if (format === 'json') {
-      const configFile = getConfigFileByTypeName("JSON");
-      await fs.writeFile(configFile, formattedOutput);
-
-      return configFile;
-    }
-
+  if (!Object.values(FleekSiteConfigFormats).includes(format)) {
     throw new ExpectedOneOfValuesError({
-      expectedValues: Object.keys(FleekSiteConfigFormats),
+      expectedValues: Object.values(FleekSiteConfigFormats),
       receivedValue: format,
     });
+  }
+
+  let content: string;
+  let configFile: ConfigFilePath;
+
+  switch (format) {
+    case FleekSiteConfigFormats.Typescript:
+      content = contentForTypescriptConfig.replace('$content', formattedOutput);
+      configFile = getConfigFileByTypeName("Typescript");
+      break;
+    case FleekSiteConfigFormats.Javascript:
+      content = contentForJavascriptConfig.replace('$content', formattedOutput);
+      configFile = getConfigFileByTypeName("Javascript");
+      break;
+    case FleekSiteConfigFormats.JSON:
+      content = formattedOutput;
+      configFile = getConfigFileByTypeName("JSON");
+      break;
+  }
+
+  try {
+    await fs.writeFile(configFile, content);
+    return configFile;
   } catch (_err) {
     // TODO: write to system log file, see PLAT-1097
   }
