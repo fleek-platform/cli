@@ -11,6 +11,7 @@ import { loadConfiguration } from '../../utils/configuration/loadConfiguration';
 import { t } from '../../utils/translation';
 import { confirmFileOverridePrompt } from './prompts/confirmFileOverridePrompt';
 import { initConfiguration } from './utils/initConfiguration';
+import { chooseOrCreateSite } from './utils/chooseOrCreateSite';
 
 const initAction: SdkGuardedFunction = async ({ sdk }) => {
   const configLoadingResult = await loadConfiguration({})
@@ -54,7 +55,13 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
     }
   }
 
-  await initConfiguration({ sdk });
+  const site = await chooseOrCreateSite({ sdk });
+
+  if (!site) {
+    output.error(t('unexpectedError'));
+
+    return;
+  }
 
   output.printNewLine();
   output.success(t('fleekConfigSaved'));

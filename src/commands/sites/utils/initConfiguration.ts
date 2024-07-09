@@ -1,28 +1,17 @@
-// TODO: rename this filename, fix typoe congifuration -> configuration
-import type { FleekSdk } from '@fleek-platform/sdk';
+import type { Site } from '@fleek-platform/sdk';
 
 import { saveConfiguration } from '../../../utils/configuration/saveConfiguration';
 import type { FleekRootConfig } from '../../../utils/configuration/types';
 import { t } from '../../../utils/translation';
 import { enterDirectoryPathPrompt } from '../prompts/enterDirectoryPathPrompt';
 import { selectConfigurationFormatPrompt } from '../prompts/selectConfigurationFormatPrompt';
-import { chooseOrCreateSite } from './chooseOrCreateSite';
 import { selectBuildCommandOrSkip } from './selectBuildCommandOrSkip';
 
 type InitConfigurationArgs = {
-  sdk: FleekSdk;
+  site: Site;
 };
 
-export const initConfiguration = async ({ sdk }: InitConfigurationArgs) => {
-  const site = await chooseOrCreateSite({ sdk });
-
-  if (!site) {
-    // TODO: Revise the initConfiguration
-    console.error('Unexpected error');
-
-    return;
-  }
-
+export const initConfiguration = async ({ site }: InitConfigurationArgs) => {
   const distDir = await enterDirectoryPathPrompt({
     message: t('specifyDistDirToSiteUpl'),
   });
@@ -36,6 +25,8 @@ export const initConfiguration = async ({ sdk }: InitConfigurationArgs) => {
   const format = await selectConfigurationFormatPrompt();
 
   await saveConfiguration({ config, format });
+
+  // TODO: assert configuration file's save
 
   return config;
 };

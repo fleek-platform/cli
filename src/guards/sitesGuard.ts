@@ -5,6 +5,7 @@ import { initConfiguration } from '../commands/sites/utils/initConfiguration';
 import { loadConfiguration } from '../utils/configuration/loadConfiguration';
 import { t } from '../utils/translation';
 import { getSdkClient } from './sdkGuard';
+import { chooseOrCreateSite } from '../commands/sites/utils/chooseOrCreateSite';
 
 export const sitesGuard = async ({
   predefinedConfigPath,
@@ -29,6 +30,14 @@ export const sitesGuard = async ({
       return false;
     }
 
-    await initConfiguration({ sdk });
+    const site = await chooseOrCreateSite({ sdk });
+
+    if (!site) {
+      output.error(t('unexpectedError'));
+
+      return false;
+    }
+
+    await initConfiguration({ site });
   }
 };
