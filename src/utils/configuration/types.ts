@@ -23,3 +23,5 @@ export enum FleekSiteConfigFormats {
   Typescript = 'ts',
   Javascript = 'js',
 };
+
+export type FleekSiteConfigFormatValue = FleekSiteConfigFormats[keyof FleekSiteConfigFormats];

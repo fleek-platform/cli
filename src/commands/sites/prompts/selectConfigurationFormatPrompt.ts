@@ -1,13 +1,16 @@
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
+import { getConfigFileByTypeValue } from '../../../utils/config';
 
 import { FleekSiteConfigFormats } from '../../../utils/configuration/types';
 
 const choices = Object.keys(FleekSiteConfigFormats).map((name) => {
   const value = FleekSiteConfigFormats[name as keyof typeof FleekSiteConfigFormats];
 
+  const configFile = getConfigFileByTypeValue(value);
+
   return {
-    title: `${name} (fleek.config.${value})`,
+    title: `${name} (${configFile})`,
     value,
   };
 });
