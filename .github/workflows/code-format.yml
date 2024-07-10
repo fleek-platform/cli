@@ -14,6 +14,12 @@ jobs:
       run:
         shell: bash
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: fleek-platform-bot-token
+        with:
+          app-id: ${{ secrets.FLEEK_PLATFORM_BOT_APP_ID }}
+          private-key: ${{ secrets.FLEEK_PLATFORM_BOT_PRIVATE_KEY }}
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
