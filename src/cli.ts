@@ -4,10 +4,10 @@ import cmdAuth from './commands/auth/index';
 import cmdDomains from './commands/domains/index';
 import cmdEns from './commands/ens/index';
 import cmdFunctions from './commands/functions/index';
-import cmdGateways from './commands/gateways/index';
-import cmdIPFS from './commands/ipfs/index';
-import cmdIPNS from './commands/ipns/index';
-import cmdPAT from './commands/pat/index';
+        import cmdGateways from './commands/gateways/index';
+        import cmdIPFS from './commands/ipfs/index';
+        import cmdIPNS from './commands/ipns/index';
+        import cmdPAT from './commands/pat/index';
 import cmdProjects from './commands/projects/index';
 import cmdSites from './commands/sites/index';
 import cmdStorage from './commands/storage/index';
@@ -16,6 +16,20 @@ import { Output } from './output/Output';
 import { t } from './utils/translation';
 
 export type { FleekConfig } from './utils/configuration/types';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const isDebugging = process.argv.includes('--debug');
 export const output = new Output({
