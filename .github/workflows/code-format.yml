@@ -23,7 +23,7 @@ jobs:
         name: Install pnpm
         with:
           version: 7
-          run_install: true
+          run_install: false
           
       - name: Setup Nodejs
         uses: actions/setup-node@v4
