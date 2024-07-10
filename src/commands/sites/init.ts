@@ -10,7 +10,8 @@ import { withGuards } from '../../guards/withGuards';
 import { loadConfiguration } from '../../utils/configuration/loadConfiguration';
 import { t } from '../../utils/translation';
 import { confirmFileOverridePrompt } from './prompts/confirmFileOverridePrompt';
-import { initConfiguration } from './utils/initCongifuration';
+import { initConfiguration } from './utils/initConfiguration';
+import { chooseOrCreateSite } from './utils/chooseOrCreateSite';
 
 const initAction: SdkGuardedFunction = async ({ sdk }) => {
   const configLoadingResult = await loadConfiguration({})
@@ -35,7 +36,8 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
 
   if (configLoadingResult.isContentValid && configLoadingResult.isFilePresent) {
     output.error(t('configFileExists'));
-    output.printNewLine();
+    output
+    .printNewLine();
     output.log(t('siteAlreadyExists'));
 
     return;
@@ -54,7 +56,25 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
     }
   }
 
-  await initConfiguration({ sdk });
+  const site = await chooseOrCreateSite({ sdk });
+
+  if (!site) {
+    output.error(t('unexpectedError'));
+
+    return;
+  }
+
+  await initConfiguration({
+    site,
+    onUnexpectedFormatError: (format: string) => {
+      output.warn(t('unexpectedFileFormat', { format }));
+      process.exit(1);
+    },
+    onSaveConfigurationError: () => {
+      output.warn(t('fsFailedToWriteConfig'));
+      process.exit(1);
+    },
+  });
 
   output.printNewLine();
   output.success(t('fleekConfigSaved'));

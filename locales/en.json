@@ -216,6 +216,7 @@
   "foundSiteLinkToExisting": "We've found existing sites. Would you like to link to one of them?",
   "workflowToBeSavePathOrOther": "The workflow configuration will be saved in: {path}. Would you like to choose a different path?",
   "selectFormatForSiteConf": "Select a format for saving the site's configuration",
+  "fsFailedToWriteConfig": "Oops! It looks like we had trouble saving your file. Could you please check if you have the right permissions for the directory? If persists, contact our support team, please!",
   "includeOptBuildCmd": "Would you like to include the optional \"{build}\" command?",
   "runInstallCmdBeforeBuild": "Do you want to execute an install command prior to the build process?",
   "specifyinstallCmdOpt": "Would you like to provide a specific install command? If not, one will be generated based on your lockfile.",
@@ -337,5 +338,6 @@
   "unknownTransformError": "We had trouble transforming your function code. Try again? If the issue persists, let us know to help us improve!",
   "failedToApplyNodeImportProtocol": "The process attempted to automatically apply the \"node:\" protocol for importing native modules but encountered an issue. When importing Node.js native modules, always use the \"node:\" prefix. For instance, use \"node:buffer\" instead of \"buffer\". This provides clarity when built-in Node.js modules must be imported.",
   "requireDeprecatedUseES6Syntax": "The use of 'require' is deprecated in this context. Please switch to using ES6 'import' syntax for module imports. For example, change 'require' to 'import <ModuleName> from '<ModulePath>';'. This adjustment is necessary to comply with modern JavaScript standards and improve compatibility with Fleek Functions runtime and environment.",
-  "expectedNotFoundGeneric": "We had trouble locating the {name}. Please try again, and contact us if the issue persists."
+  "expectedNotFoundGeneric": "We had trouble locating the {name}. Please try again, and contact us if the issue persists.",
+  "unexpectedFileFormat": "We weren't expecting the format {format}. Please report the issue to our team and provide details for a quick fix."
 }

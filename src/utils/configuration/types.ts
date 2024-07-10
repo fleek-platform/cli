@@ -17,3 +17,11 @@ export type FleekConfig =
   | (() => FleekRootConfig)
   | (() => Promise<FleekRootConfig>)
   | Promise<FleekRootConfig>;
+
+export enum FleekSiteConfigFormats {
+  JSON = 'json',
+  Typescript = 'ts',
+  Javascript = 'js',
+};
+
+export type FleekSiteConfigFormatValue = FleekSiteConfigFormats[keyof FleekSiteConfigFormats];

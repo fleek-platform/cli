@@ -1,31 +1,57 @@
 import { promises as fs } from 'node:fs';
+import path from 'path';
 
-import type { FleekRootConfig } from './types';
+import { getConfigFileByTypeName, getConfigTemplateByTypeName, FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER } from '../configuration';
+
+import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
+
+import { ExpectedOneOfValuesError } from '@fleek-platform/errors';
+import { isValidFleekConfigFormat } from '../formats';
 
 export type SaveConfigurationArgs = {
   config: FleekRootConfig;
-  format: 'ts' | 'js' | 'json';
+  format: FleekSiteConfigFormats;
 };
+
+type ConfigFilePath = string;
+
+const contentForTypescriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Typescript"));
+const contentForJavascriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Javascript"));
 
 export const saveConfiguration = async ({
   config,
   format,
-}: SaveConfigurationArgs): Promise<void> => {
-  const prettyStringifiedConfig = JSON.stringify(config, undefined, 2);
+}: SaveConfigurationArgs): Promise<ConfigFilePath | undefined> => {const formattedOutput = JSON.stringify(config, undefined, 2);
 
-  if (format === 'ts') {
-    const content = `import { FleekConfig } from '@fleek-platform/cli';\n\nexport default ${prettyStringifiedConfig} satisfies FleekConfig;`;
-
-    await fs.writeFile('fleek.config.ts', content);
+  if (!isValidFleekConfigFormat(format)) {
+    throw new ExpectedOneOfValuesError({
+      expectedValues: Object.values(FleekSiteConfigFormats),
+      receivedValue: format,
+    });
   }
 
-  if (format === 'js') {
-    const content = `/** @type {import('@fleek-platform/cli').FleekConfig} */\nmodule.exports = ${prettyStringifiedConfig};`;
+  let content: string;
+  let configFile: ConfigFilePath;
 
-    await fs.writeFile('fleek.config.js', content);
+  switch (format) {
+    case FleekSiteConfigFormats.Typescript:
+      content = contentForTypescriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
+      configFile = getConfigFileByTypeName("Typescript");
+      break;
+    case FleekSiteConfigFormats.Javascript:
+      content = contentForJavascriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
+      configFile = getConfigFileByTypeName("Javascript");
+      break;
+    case FleekSiteConfigFormats.JSON:
+      content = formattedOutput;
+      configFile = getConfigFileByTypeName("JSON");
+      break;
   }
 
-  if (format === 'json') {
-    await fs.writeFile('fleek.config.json', prettyStringifiedConfig);
+  try {
+    await fs.writeFile(configFile, content);
+    return configFile;
+  } catch (_err) {
+    // TODO: write to system log file, see PLAT-1097
   }
 };
