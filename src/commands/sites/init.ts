@@ -36,8 +36,7 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
 
   if (configLoadingResult.isContentValid && configLoadingResult.isFilePresent) {
     output.error(t('configFileExists'));
-    output
-    .printNewLine();
+    output.printNewLine();
     output.log(t('siteAlreadyExists'));
 
     return;

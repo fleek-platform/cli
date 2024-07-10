@@ -5,12 +5,15 @@ import fs from 'fs/promises';
 import path from 'path';
 import ts from 'typescript';
 import { fileExists } from '../fs';
-import { ExpectedOneOfValuesError, InvalidJSONFormat } from '@fleek-platform/errors';
+import {
+  ExpectedOneOfValuesError,
+  InvalidJSONFormat,
+} from '@fleek-platform/errors';
 
 const clearConfigFile = async ({
-  configFilePath
+  configFilePath,
 }: {
- configFilePath: string | undefined;
+  configFilePath: string | undefined;
 }) => {
   if (!configFilePath) throw Error('Oops! Config file path not set.');
 
@@ -19,30 +22,34 @@ const clearConfigFile = async ({
 
   const isFile = await fileExists(filePath);
 
-  if (!isFile) throw Error(`Oops! File not found at ${rootPath} for some reason...`);
+  if (!isFile)
+    throw Error(`Oops! File not found at ${rootPath} for some reason...`);
 
   await fs.unlink(filePath);
 
   const isFilePersistent = await fileExists(filePath);
 
-  if (isFilePersistent) throw Error(`Oops! Expected to remove file but persisted at ${rootPath} for some reason...`);
-}
+  if (isFilePersistent)
+    throw Error(
+      `Oops! Expected to remove file but persisted at ${rootPath} for some reason...`,
+    );
+};
 
 describe('The saveConfiguration utils', () => {
   describe('on valid arguments (json)', () => {
     let config: FleekRootConfig;
     let format: FleekSiteConfigFormats;
     let configFilePath: string | undefined = '';
-    
+
     beforeEach(() => {
       config = {
         sites: [
           {
             slug: 'foobar',
             distDir: '.',
-            buildCommand: ''
+            buildCommand: '',
           },
-        ]
+        ],
       };
       format = FleekSiteConfigFormats.JSON;
     });
@@ -55,11 +62,11 @@ describe('The saveConfiguration utils', () => {
           console.log(`Oops! ${configFilePath} does not exist.`);
           return;
         }
-        
+
         throw error;
       }
     });
-    
+
     it('should return the expected filename (fleek.config.json)', async () => {
       configFilePath = await saveConfiguration({ config, format });
       expect(configFilePath).toBe('fleek.config.json');
@@ -90,20 +97,20 @@ describe('The saveConfiguration utils', () => {
     });
   });
 
- describe('on valid arguments (typescript)', () => {
+  describe('on valid arguments (typescript)', () => {
     let config: FleekRootConfig;
     let format: FleekSiteConfigFormats;
     let configFilePath: string | undefined = '';
-    
+
     beforeEach(() => {
       config = {
         sites: [
           {
             slug: 'cool-hipnoise',
             distDir: './dist',
-            buildCommand: 'npm run build'
+            buildCommand: 'npm run build',
           },
-        ]
+        ],
       };
       format = FleekSiteConfigFormats.Typescript;
     });
@@ -116,13 +123,13 @@ describe('The saveConfiguration utils', () => {
           console.log(`Oops! ${configFilePath} does not exist.`);
           return;
         }
-        
+
         throw error;
       }
     });
-    
+
     it('should return the expected filename (fleek.config.ts)', async () => {
-      configFilePath = await saveConfiguration({ config, format });      
+      configFilePath = await saveConfiguration({ config, format });
       expect(configFilePath).toBe('fleek.config.ts');
     });
 
@@ -171,20 +178,20 @@ describe('The saveConfiguration utils', () => {
     });
   });
 
- describe('on valid arguments (javascript)', () => {
+  describe('on valid arguments (javascript)', () => {
     let config: FleekRootConfig;
     let format: FleekSiteConfigFormats;
     let configFilePath: string | undefined = '';
-    
+
     beforeEach(() => {
       config = {
         sites: [
           {
             slug: 'james-brown',
             distDir: './output',
-            buildCommand: 'yarn build'
+            buildCommand: 'yarn build',
           },
-        ]
+        ],
       };
       format = FleekSiteConfigFormats.Javascript;
     });
@@ -197,13 +204,13 @@ describe('The saveConfiguration utils', () => {
           console.log(`Oops! ${configFilePath} does not exist.`);
           return;
         }
-        
+
         throw error;
       }
     });
-    
+
     it('should return the expected filename (fleek.config.js)', async () => {
-      configFilePath = await saveConfiguration({ config, format });      
+      configFilePath = await saveConfiguration({ config, format });
       expect(configFilePath).toBe('fleek.config.js');
     });
 
@@ -255,44 +262,52 @@ describe('The saveConfiguration utils', () => {
   describe('On unsupported format', () => {
     let config: FleekRootConfig;
     let format: FleekSiteConfigFormats;
-  
+
     beforeEach(() => {
       config = {
         sites: [
           {
             slug: 'foobar',
             distDir: '.',
-            buildCommand: ''
+            buildCommand: '',
           },
-        ]
+        ],
       };
-      format = "dodgy" as FleekSiteConfigFormats;
+      format = 'dodgy' as FleekSiteConfigFormats;
     });
 
     it('should throw an error', async () => {
-      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError();
+      await expect(() =>
+        saveConfiguration({ config, format }),
+      ).rejects.toThrowError();
     });
 
     it('should throw a known error', async () => {
-      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError(ExpectedOneOfValuesError);
+      await expect(() =>
+        saveConfiguration({ config, format }),
+      ).rejects.toThrowError(ExpectedOneOfValuesError);
     });
   });
 
   describe('On invalid JSON', () => {
     let config: FleekRootConfig;
     let format: FleekSiteConfigFormats;
-  
+
     beforeEach(() => {
-      config = ": 12345, foo, { bar: 1}" as unknown as FleekRootConfig;
+      config = ': 12345, foo, { bar: 1}' as unknown as FleekRootConfig;
       format = FleekSiteConfigFormats.JSON;
     });
 
     it('should throw an error', async () => {
-      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError();
+      await expect(() =>
+        saveConfiguration({ config, format }),
+      ).rejects.toThrowError();
     });
 
     it('should throw a known error', async () => {
-      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError(InvalidJSONFormat);
+      await expect(() =>
+        saveConfiguration({ config, format }),
+      ).rejects.toThrowError(InvalidJSONFormat);
     });
   });
 });

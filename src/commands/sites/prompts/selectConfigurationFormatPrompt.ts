@@ -5,7 +5,8 @@ import { getConfigFileByTypeValue } from '../../../utils/configuration';
 import { FleekSiteConfigFormats } from '../../../utils/configuration/types';
 
 const choices = Object.keys(FleekSiteConfigFormats).map((name) => {
-  const value = FleekSiteConfigFormats[name as keyof typeof FleekSiteConfigFormats];
+  const value =
+    FleekSiteConfigFormats[name as keyof typeof FleekSiteConfigFormats];
 
   const configFile = getConfigFileByTypeValue(value);
 
@@ -15,7 +16,8 @@ const choices = Object.keys(FleekSiteConfigFormats).map((name) => {
   };
 });
 
-export const selectConfigurationFormatPrompt = async () => selectPrompt<(typeof choices)[number]['value']>({
+export const selectConfigurationFormatPrompt = async () =>
+  selectPrompt<(typeof choices)[number]['value']>({
     message: `${t('selectFormatForSiteConf')}:`,
     choices,
   });

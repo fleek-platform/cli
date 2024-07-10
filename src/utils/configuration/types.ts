@@ -22,6 +22,7 @@ export enum FleekSiteConfigFormats {
   JSON = 'json',
   Typescript = 'ts',
   Javascript = 'js',
-};
+}
 
-export type FleekSiteConfigFormatValue = FleekSiteConfigFormats[keyof FleekSiteConfigFormats];
+export type FleekSiteConfigFormatValue =
+  FleekSiteConfigFormats[keyof FleekSiteConfigFormats];

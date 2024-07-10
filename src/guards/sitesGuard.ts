@@ -10,8 +10,8 @@ export const sitesGuard = async ({
 }: { predefinedConfigPath?: string }) => {
   const isConfigValid = await (async () => {
     try {
-      return !!await loadConfiguration({ predefinedConfigPath });
-    } catch(_err) {
+      return !!(await loadConfiguration({ predefinedConfigPath }));
+    } catch (_err) {
       return false;
     }
   })();

@@ -1,4 +1,10 @@
-export { getConfigurationPath, getConfigFileByTypeName, getConfigFileByTypeValue, getConfigTemplateByTypeName, FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER } from './getConfiguration';
+export {
+  getConfigurationPath,
+  getConfigFileByTypeName,
+  getConfigFileByTypeValue,
+  getConfigTemplateByTypeName,
+  FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
+} from './getConfiguration';
 export { loadConfiguration } from './loadConfiguration';
 export { readConfigurationFile } from './readConfigurationFile';
 export {
@@ -6,5 +12,5 @@ export {
   type FleekConfig,
   type FleekRootConfig,
   type FleekSiteConfig,
-  FleekSiteConfigFormats
+  FleekSiteConfigFormats,
 } from './types';

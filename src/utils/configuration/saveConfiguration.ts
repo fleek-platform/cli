@@ -1,11 +1,18 @@
 import { promises as fs } from 'node:fs';
 import path from 'path';
 
-import { getConfigFileByTypeName, getConfigTemplateByTypeName, FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER } from '../configuration';
+import {
+  getConfigFileByTypeName,
+  getConfigTemplateByTypeName,
+  FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
+} from '../configuration';
 
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 
-import { ExpectedOneOfValuesError, InvalidJSONFormat } from '@fleek-platform/errors';
+import {
+  ExpectedOneOfValuesError,
+  InvalidJSONFormat,
+} from '@fleek-platform/errors';
 import { isValidFleekConfigFormat } from '../formats';
 
 export type SaveConfigurationArgs = {
@@ -15,8 +22,16 @@ export type SaveConfigurationArgs = {
 
 type ConfigFilePath = string;
 
-const filePathForTypescriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Typescript"));
-const filePathForJavascriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Javascript"));
+const filePathForTypescriptConfig = path.join(
+  __dirname,
+  '../../templates/sites/config',
+  getConfigTemplateByTypeName('Typescript'),
+);
+const filePathForJavascriptConfig = path.join(
+  __dirname,
+  '../../templates/sites/config',
+  getConfigTemplateByTypeName('Javascript'),
+);
 
 export const saveConfiguration = async ({
   config,
@@ -43,18 +58,28 @@ export const saveConfiguration = async ({
 
   switch (format) {
     case FleekSiteConfigFormats.Typescript:
-      const contentForTypescriptConfig = (await fs.readFile(filePathForTypescriptConfig)).toString();
-      content = contentForTypescriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
-      configFile = getConfigFileByTypeName("Typescript");
+      const contentForTypescriptConfig = (
+        await fs.readFile(filePathForTypescriptConfig)
+      ).toString();
+      content = contentForTypescriptConfig.replace(
+        FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
+        formattedOutput,
+      );
+      configFile = getConfigFileByTypeName('Typescript');
       break;
     case FleekSiteConfigFormats.Javascript:
-      const contentForJavascriptConfig = (await fs.readFile(filePathForJavascriptConfig)).toString();
-      content = contentForJavascriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
-      configFile = getConfigFileByTypeName("Javascript");
+      const contentForJavascriptConfig = (
+        await fs.readFile(filePathForJavascriptConfig)
+      ).toString();
+      content = contentForJavascriptConfig.replace(
+        FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
+        formattedOutput,
+      );
+      configFile = getConfigFileByTypeName('Javascript');
       break;
     case FleekSiteConfigFormats.JSON:
       content = formattedOutput;
-      configFile = getConfigFileByTypeName("JSON");
+      configFile = getConfigFileByTypeName('JSON');
       break;
   }
 

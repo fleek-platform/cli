@@ -9,13 +9,19 @@ describe('In the Formats utils', () => {
       expect(isValidFleekConfigFormat(FleekSiteConfigFormats.JSON)).toBe(true);
     });
     it('should be true for Typescript', () => {
-      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.Typescript)).toBe(true);
+      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.Typescript)).toBe(
+        true,
+      );
     });
     it('should be true for Javascript', () => {
-      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.Javascript)).toBe(true);
+      expect(isValidFleekConfigFormat(FleekSiteConfigFormats.Javascript)).toBe(
+        true,
+      );
     });
     it('should be false for unknown formats', () => {
-      expect(isValidFleekConfigFormat("foobar" as unknown as FleekSiteConfigFormats)).toBe(false);
+      expect(
+        isValidFleekConfigFormat('foobar' as unknown as FleekSiteConfigFormats),
+      ).toBe(false);
     });
   });
 });
