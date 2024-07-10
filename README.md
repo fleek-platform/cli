@@ -33,6 +33,8 @@ To install and use the CLI as a client or end-user, open your terminal and follo
 npm i -g @fleek-platform/cli
 ```
 
+⚠️ If you're planning to contribute as a developer, you must install [pnpm](https://pnpm.io), otherwise most commands will fail.
+
 For a quick start, learn the [basic commands](#basic-commands), or alternatively visit our [documentation](https://fleek.xyz/docs)
 
 ## Development
