@@ -15,8 +15,8 @@ export type SaveConfigurationArgs = {
 
 type ConfigFilePath = string;
 
-const contentForTypescriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Typescript"));
-const contentForJavascriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Javascript"));
+const filePathForTypescriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Typescript"));
+const filePathForJavascriptConfig = path.join(__dirname, '../../templates/sites/config', getConfigTemplateByTypeName("Javascript"));
 
 export const saveConfiguration = async ({
   config,
@@ -35,10 +35,12 @@ export const saveConfiguration = async ({
 
   switch (format) {
     case FleekSiteConfigFormats.Typescript:
+      const contentForTypescriptConfig = (await fs.readFile(filePathForTypescriptConfig)).toString();
       content = contentForTypescriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
       configFile = getConfigFileByTypeName("Typescript");
       break;
     case FleekSiteConfigFormats.Javascript:
+      const contentForJavascriptConfig = (await fs.readFile(filePathForJavascriptConfig)).toString();
       content = contentForJavascriptConfig.replace(FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER, formattedOutput);
       configFile = getConfigFileByTypeName("Javascript");
       break;
