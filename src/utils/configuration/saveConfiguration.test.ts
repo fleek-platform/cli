@@ -3,7 +3,8 @@ import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 import { saveConfiguration } from './saveConfiguration';
 import fs from 'fs/promises';
 import path from 'path';
-import * as ts from 'typescript';
+import ts from 'typescript';
+import { fileExists } from '../fs';
 
 const clearConfigFile = async ({
   configFilePath
@@ -15,13 +16,13 @@ const clearConfigFile = async ({
   const rootPath = `../../../${configFilePath}`;
   const filePath = path.resolve(__dirname, rootPath);
 
-  const isFile = (await fs.stat(configFilePath)).isFile();
+  const isFile = await fileExists(filePath);
 
   if (!isFile) throw Error(`Oops! File not found at ${rootPath} for some reason...`);
 
   await fs.unlink(filePath);
 
-  const isFilePersistent = (await fs.stat(configFilePath)).isFile();
+  const isFilePersistent = await fileExists(filePath);
 
   if (isFilePersistent) throw Error(`Oops! Expected to remove file but persisted at ${rootPath} for some reason...`);
 }
@@ -45,7 +46,7 @@ describe('The saveConfiguration utils', () => {
       format = FleekSiteConfigFormats.JSON;
     });
 
-    afterEach(async () => {      
+    afterEach(async () => {
       try {
         await clearConfigFile({ configFilePath });
       } catch (error) {
@@ -88,7 +89,7 @@ describe('The saveConfiguration utils', () => {
     });
   });
 
- describe.skip('on valid arguments (typescript)', () => {
+ describe('on valid arguments (typescript)', () => {
     let config: FleekRootConfig;
     let format: FleekSiteConfigFormats;
     let configFilePath: string | undefined = '';
@@ -97,16 +98,16 @@ describe('The saveConfiguration utils', () => {
       config = {
         sites: [
           {
-            slug: 'barfoo',
-            distDir: '.',
-            buildCommand: ''
+            slug: 'cool-hipnoise',
+            distDir: './dist',
+            buildCommand: 'npm run build'
           },
         ]
       };
       format = FleekSiteConfigFormats.Typescript;
     });
 
-    afterEach(async () => {      
+    afterEach(async () => {
       try {
         await clearConfigFile({ configFilePath });
       } catch (error) {
@@ -149,6 +150,23 @@ describe('The saveConfiguration utils', () => {
 
       expect(content).toContain('@fleek-platform/cli');
       expect(content).toContain('export default');
+    });
+
+    it('should be a typescript importable module', async () => {
+      configFilePath = await saveConfiguration({ config, format });
+      const defaultExport = (await import(configFilePath as string)).default;
+
+      expect(defaultExport).toBeDefined();
+    });
+
+    it('should export a default object with specific fields', async () => {
+      configFilePath = await saveConfiguration({ config, format });
+      const defaultExport = (await import(configFilePath as string)).default;
+
+      expect(Array.isArray(defaultExport.sites)).toBe(true);
+      expect(defaultExport.sites[0].slug).toBe('cool-hipnoise');
+      expect(defaultExport.sites[0].distDir).toBe('./dist');
+      expect(defaultExport.sites[0].buildCommand).toBe('npm run build');
     });
   });
 });
