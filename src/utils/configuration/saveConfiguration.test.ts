@@ -169,4 +169,85 @@ describe('The saveConfiguration utils', () => {
       expect(defaultExport.sites[0].buildCommand).toBe('npm run build');
     });
   });
+
+ describe('on valid arguments (javascript)', () => {
+    let config: FleekRootConfig;
+    let format: FleekSiteConfigFormats;
+    let configFilePath: string | undefined = '';
+    
+    beforeEach(() => {
+      config = {
+        sites: [
+          {
+            slug: 'james-brown',
+            distDir: './output',
+            buildCommand: 'yarn build'
+          },
+        ]
+      };
+      format = FleekSiteConfigFormats.Javascript;
+    });
+
+    afterEach(async () => {
+      try {
+        await clearConfigFile({ configFilePath });
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          console.log(`Oops! ${configFilePath} does not exist.`);
+          return;
+        }
+        
+        throw error;
+      }
+    });
+    
+    it('should return the expected filename (fleek.config.js)', async () => {
+      configFilePath = await saveConfiguration({ config, format });      
+      expect(configFilePath).toBe('fleek.config.js');
+    });
+
+    it('should be valid Javascript', async () => {
+      configFilePath = await saveConfiguration({ config, format });
+      const content = await fs.readFile(configFilePath as string);
+
+      try {
+        const parsed = ts.createSourceFile(
+          configFilePath as string,
+          content.toString(),
+          ts.ScriptTarget.Latest,
+        );
+        expect(parsed).toHaveProperty('identifiers');
+        expect(parsed).toHaveProperty('fileName');
+        expect(parsed).toHaveProperty('languageVersion');
+      } catch (err) {
+        throw Error('Oops! Failed to parse file as Javascript');
+      }
+    });
+
+    it('should have certain content properties', async () => {
+      configFilePath = await saveConfiguration({ config, format });
+      const buf = await fs.readFile(configFilePath as string);
+      const content = buf.toString();
+
+      expect(content).toContain("import('@fleek-platform/cli').FleekConfig");
+      expect(content).toContain('module.exports');
+    });
+
+    it('should be a javascript importable module', async () => {
+      configFilePath = await saveConfiguration({ config, format });
+      const defaultExport = (await import(configFilePath as string)).default;
+
+      expect(defaultExport).toBeDefined();
+    });
+
+    it('should export a default object with specific fields', async () => {
+      configFilePath = await saveConfiguration({ config, format });
+      const defaultExport = (await import(configFilePath as string)).default;
+
+      expect(Array.isArray(defaultExport.sites)).toBe(true);
+      expect(defaultExport.sites[0].slug).toBe('james-brown');
+      expect(defaultExport.sites[0].distDir).toBe('./output');
+      expect(defaultExport.sites[0].buildCommand).toBe('yarn build');
+    });
+  });
 });
