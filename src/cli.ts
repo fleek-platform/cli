@@ -17,6 +17,8 @@ import { t } from './utils/translation';
 
 export type { FleekConfig } from './utils/configuration/types';
 
+
+
 const isDebugging = process.argv.includes('--debug');
 export const output = new Output({
   stream: process.stdout,
