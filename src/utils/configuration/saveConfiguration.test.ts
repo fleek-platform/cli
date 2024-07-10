@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import ts from 'typescript';
 import { fileExists } from '../fs';
+import { ExpectedOneOfValuesError, InvalidJSONFormat } from '@fleek-platform/errors';
 
 const clearConfigFile = async ({
   configFilePath
@@ -248,6 +249,50 @@ describe('The saveConfiguration utils', () => {
       expect(defaultExport.sites[0].slug).toBe('james-brown');
       expect(defaultExport.sites[0].distDir).toBe('./output');
       expect(defaultExport.sites[0].buildCommand).toBe('yarn build');
+    });
+  });
+
+  describe('On unsupported format', () => {
+    let config: FleekRootConfig;
+    let format: FleekSiteConfigFormats;
+  
+    beforeEach(() => {
+      config = {
+        sites: [
+          {
+            slug: 'foobar',
+            distDir: '.',
+            buildCommand: ''
+          },
+        ]
+      };
+      format = "dodgy" as FleekSiteConfigFormats;
+    });
+
+    it('should throw an error', async () => {
+      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError();
+    });
+
+    it('should throw a known error', async () => {
+      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError(ExpectedOneOfValuesError);
+    });
+  });
+
+  describe('On invalid JSON', () => {
+    let config: FleekRootConfig;
+    let format: FleekSiteConfigFormats;
+  
+    beforeEach(() => {
+      config = ": 12345, foo, { bar: 1}" as unknown as FleekRootConfig;
+      format = FleekSiteConfigFormats.JSON;
+    });
+
+    it('should throw an error', async () => {
+      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError();
+    });
+
+    it('should throw a known error', async () => {
+      await expect(() => saveConfiguration({ config, format })).rejects.toThrowError(InvalidJSONFormat);
     });
   });
 });

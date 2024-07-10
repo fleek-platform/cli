@@ -5,7 +5,7 @@ import { getConfigFileByTypeName, getConfigTemplateByTypeName, FLEEK_CONFIG_TMPL
 
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 
-import { ExpectedOneOfValuesError } from '@fleek-platform/errors';
+import { ExpectedOneOfValuesError, InvalidJSONFormat } from '@fleek-platform/errors';
 import { isValidFleekConfigFormat } from '../formats';
 
 export type SaveConfigurationArgs = {
@@ -21,7 +21,15 @@ const filePathForJavascriptConfig = path.join(__dirname, '../../templates/sites/
 export const saveConfiguration = async ({
   config,
   format,
-}: SaveConfigurationArgs): Promise<ConfigFilePath | undefined> => {const formattedOutput = JSON.stringify(config, undefined, 2);
+}: SaveConfigurationArgs): Promise<ConfigFilePath | undefined> => {
+  const formattedOutput = (() => {
+    try {
+      if (!Array.isArray(config.sites) || !config.sites[0].slug) throw Error();
+      return JSON.stringify(config, undefined, 2);
+    } catch (err) {
+      throw new InvalidJSONFormat();
+    }
+  })();
 
   if (!isValidFleekConfigFormat(format)) {
     throw new ExpectedOneOfValuesError({
