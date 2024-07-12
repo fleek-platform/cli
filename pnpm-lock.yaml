@@ -36,7 +36,7 @@ specifiers:
   commander: ^9.4.1
   concurrently: ^7.6.0
   conf: ^10.2.0
-  dotenv: ^16.0.3
+  dotenv: ^16.4.5
   esbuild: ^0.21.3
   files-from-path: ^1.0.0
   glob: ^8.1.0
