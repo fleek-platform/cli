@@ -1,0 +1,74 @@
+name: 🎀 Code Format (Verification)
+
+on:
+ push:
+    branches:
+      - main
+      - develop
+ pull_request:
+
+jobs:
+ code-format:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: fleek-platform-bot-token
+        with:
+          app-id: ${{ secrets.FLEEK_PLATFORM_BOT_APP_ID }}
+          private-key: ${{ secrets.FLEEK_PLATFORM_BOT_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          token: ${{ steps.fleek-platform-bot-token.outputs.token }}
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 7
+          run_install: false
+          
+      - name: Setup Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm install \
+            --strict-peer-dependencies
+
+      - name: Code format check
+        id: fmt_check
+        continue-on-error: true
+        run: |
+          if ! pnpm format:check; then
+            echo "exit_code=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Auto-format
+        if: steps.fmt_check.outputs.exit_code != '0' && github.event_name == 'pull_request'
+        run: |
+          pnpm format:unsafe
+
+      - name: Commit formatted
+        if: steps.fmt_check.outputs.exit_code != '0' && github.event_name == 'pull_request'
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+  
+            if git commit -m "chore: 🤖 code format" --no-verify; then
+              git push
+            else
+              echo "🦖 Skipped! No changes to commit..."
+            fi
+          else
+            echo "🦖 Skipped! No changes found."
+          fi
