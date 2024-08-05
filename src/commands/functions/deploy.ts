@@ -66,7 +66,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     });
   }
 
-  if (!output.debugEnabled) {
+  if (!output.debugEnabled && !args.noBundle) {
     fs.rmSync(bundledFilePath);
   }
 
