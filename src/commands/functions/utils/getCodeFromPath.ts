@@ -1,3 +1,4 @@
+import path from 'path';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 // TODO: These error messages should be revised
@@ -104,6 +105,9 @@ const transpileCode = async (args: TranspileCodeArgs) => {
     );
   }
 
+  const filePathWorkDir = path.dirname(filePath);
+  const nodeModulesPath = path.join(filePathWorkDir, 'node_modules');
+
   const buildOptions: BuildOptions = {
     entryPoints: [filePath],
     bundle,
@@ -116,6 +120,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
     outfile: outFile,
     minify: true,
     plugins,
+    nodePaths: [nodeModulesPath],
   };
 
   buildOptions.banner = {
