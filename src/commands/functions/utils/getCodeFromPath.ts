@@ -1,12 +1,9 @@
 import * as fs from 'node:fs';
 import * as os from 'node:os';
+
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
-import {
-  FleekFunctionBundlingFailedError,
-  FleekFunctionPathNotValidError,
-  UnknownError,
-} from '@fleek-platform/errors';
+import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { type BuildOptions, type Plugin, build } from 'esbuild';
 import { filesFromPaths } from 'files-from-path';
@@ -45,7 +42,7 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
 };
 
 const buildEnvVars = (args: { env: EnvironmentVariables }) => {
-  Object.entries(args.env)
+  return Object.entries(args.env)
     .map(([key, value]) => `${key}: "${value}"`)
     .join(',');
 };
@@ -64,7 +61,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
         action: t(bundle ? 'bundlingCode' : 'transformingCode'),
       }),
     },
-    cliProgress.Presets.shades_grey,
+    cliProgress.Presets.shades_grey
   );
 
   let tempDir: string;
@@ -100,7 +97,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
       nodeProtocolImportSpecifier({
         // Handle the error gracefully
         onError: () => output.error(t('failedToApplyNodeImportProtocol')),
-      }),
+      })
     );
   }
 
@@ -132,12 +129,7 @@ globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
     progressBar.stop();
 
     const errorMessage =
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      typeof e.message === 'string'
-        ? e.message
-        : t('unknownTransformError');
+      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownTransformError');
 
     const transpileResponse: TranspileResponse = {
       path: filePath,
@@ -178,11 +170,7 @@ const checkUserSourceCodeSupport = async (filePath: string) => {
   return reRequireSyntax.test(contents);
 };
 
-export const getCodeFromPath = async (args: {
-  filePath: string;
-  bundle: boolean;
-  env: EnvironmentVariables;
-}) => {
+export const getCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables }) => {
   const { filePath, bundle, env } = args;
 
   if (!fs.existsSync(filePath)) {
