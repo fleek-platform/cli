@@ -4,7 +4,7 @@ specifiers:
   '@aws-sdk/client-lambda': ^3.449.0
   '@biomejs/biome': ^1.8.3
   '@changesets/cli': ^2.27.6
-  '@fleek-platform/errors': ^2.1.1
+  '@fleek-platform/errors': ^2.2.3
   '@fleek-platform/sdk': ^2.1.5
   '@fleek-platform/tester': ^2.3.0
   '@fleek-platform/utils-gateways': ^0.1.2
@@ -85,7 +85,7 @@ dependencies:
 devDependencies:
   '@biomejs/biome': 1.8.3
   '@changesets/cli': 2.27.7
-  '@fleek-platform/errors': 2.1.1
+  '@fleek-platform/errors': 2.2.3
   '@fleek-platform/sdk': 2.1.5
   '@fleek-platform/tester': 2.3.0
   '@fleek-platform/utils-gateways': 0.1.2
@@ -1137,6 +1137,12 @@ packages:
 
   /@fleek-platform/errors/2.1.1:
     resolution: {integrity: sha512-e4qG9rSnNC04SW1QayjygCgieGpkwtvUPO/syR8SM+o2dd/G3PQY3bmM/ic0V1PUfprd5EsHXR1aNnWMoszMnQ==}
+    dependencies:
+      nanoid: 3.3.7
+    dev: true
+
+  /@fleek-platform/errors/2.2.3:
+    resolution: {integrity: sha512-kiRE/TmEaG3cdqz/9DobH+8TjvYQaZ5K+L/f+M1gVUp+CPjWe9cs8bwjKeMAL218e2QFvPNMbgD9EMHUnVTzRQ==}
     dependencies:
       nanoid: 3.3.7
     dev: true
