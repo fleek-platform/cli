@@ -57,7 +57,7 @@ export const saveConfiguration = async ({
   let configFile: ConfigFilePath;
 
   switch (format) {
-    case FleekSiteConfigFormats.Typescript:
+    case FleekSiteConfigFormats.Typescript: {
       const contentForTypescriptConfig = (
         await fs.readFile(filePathForTypescriptConfig)
       ).toString();
@@ -66,8 +66,9 @@ export const saveConfiguration = async ({
         formattedOutput,
       );
       configFile = getConfigFileByTypeName('Typescript');
-      break;
-    case FleekSiteConfigFormats.Javascript:
+      break;      
+    }
+    case FleekSiteConfigFormats.Javascript: {
       const contentForJavascriptConfig = (
         await fs.readFile(filePathForJavascriptConfig)
       ).toString();
@@ -77,10 +78,12 @@ export const saveConfiguration = async ({
       );
       configFile = getConfigFileByTypeName('Javascript');
       break;
-    case FleekSiteConfigFormats.JSON:
+    }
+    case FleekSiteConfigFormats.JSON: {
       content = formattedOutput;
       configFile = getConfigFileByTypeName('JSON');
       break;
+    }
   }
 
   try {
