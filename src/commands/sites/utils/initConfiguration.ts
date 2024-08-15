@@ -2,12 +2,12 @@ import type { Site } from '@fleek-platform/sdk';
 
 import { saveConfiguration } from '../../../utils/configuration/saveConfiguration';
 import type { FleekRootConfig } from '../../../utils/configuration/types';
+import { isValidFleekConfigFormat } from '../../../utils/formats';
+import { fileExists } from '../../../utils/fs';
 import { t } from '../../../utils/translation';
 import { enterDirectoryPathPrompt } from '../prompts/enterDirectoryPathPrompt';
 import { selectConfigurationFormatPrompt } from '../prompts/selectConfigurationFormatPrompt';
 import { selectBuildCommandOrSkip } from './selectBuildCommandOrSkip';
-import { isValidFleekConfigFormat } from '../../../utils/formats';
-import { fileExists } from '../../../utils/fs';
 
 type InitConfigurationArgs = {
   site: Site;

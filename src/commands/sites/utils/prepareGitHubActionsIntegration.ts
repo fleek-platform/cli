@@ -2,8 +2,8 @@ import { join as joinPath } from 'node:path';
 import { generateDeploymentWorkflowYaml } from '@fleek-platform/utils-github';
 
 import type { Output } from '../../../output/Output';
-import { confirmFileOverridePrompt } from '../prompts/confirmFileOverridePrompt';
 import { fileExists } from '../../../utils/fs';
+import { confirmFileOverridePrompt } from '../prompts/confirmFileOverridePrompt';
 import { getDeploymentWorkflowYamlLocation } from './getDeploymentWorkflowYamlLocation';
 import { initializeDeploymentWorkflowDirectory } from './initializeDeploymentWorkflowDirectory';
 import { requestDeploymentWorkflowInstallCommand } from './requestDeploymentWorkflowInstallCommand';

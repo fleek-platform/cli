@@ -1,14 +1,14 @@
-import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
-import { saveConfiguration } from './saveConfiguration';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import ts from 'typescript';
-import { fileExists } from '../fs';
 import {
   ExpectedOneOfValuesError,
   InvalidJSONFormat,
 } from '@fleek-platform/errors';
+import ts from 'typescript';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { fileExists } from '../fs';
+import { saveConfiguration } from './saveConfiguration';
+import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 
 const clearConfigFile = async ({
   configFilePath,

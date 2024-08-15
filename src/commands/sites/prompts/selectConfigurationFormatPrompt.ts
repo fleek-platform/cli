@@ -1,6 +1,6 @@
 import { selectPrompt } from '../../../prompts/selectPrompt';
-import { t } from '../../../utils/translation';
 import { getConfigFileByTypeValue } from '../../../utils/configuration';
+import { t } from '../../../utils/translation';
 
 import { FleekSiteConfigFormats } from '../../../utils/configuration/types';
 

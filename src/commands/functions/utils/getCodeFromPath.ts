@@ -1,6 +1,6 @@
-import path from 'node:path';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
+import path from 'node:path';
 
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling

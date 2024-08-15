@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { isValidFleekConfigFormat } from './formats';
 import { FleekSiteConfigFormats } from './configuration';
+import { isValidFleekConfigFormat } from './formats';
 
 describe('In the Formats utils', () => {
   describe('isValidFleekConfigFormat', () => {

@@ -1,9 +1,9 @@
 import { output } from '../cli';
+import { chooseOrCreateSite } from '../commands/sites/utils/chooseOrCreateSite';
 import { initConfiguration } from '../commands/sites/utils/initConfiguration';
 import { loadConfiguration } from '../utils/configuration/loadConfiguration';
 import { t } from '../utils/translation';
 import { getSdkClient } from './sdkGuard';
-import { chooseOrCreateSite } from '../commands/sites/utils/chooseOrCreateSite';
 
 export const sitesGuard = async ({
   predefinedConfigPath,

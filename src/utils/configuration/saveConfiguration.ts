@@ -2,9 +2,9 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import {
+  FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
   getConfigFileByTypeName,
   getConfigTemplateByTypeName,
-  FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
 } from '../configuration';
 
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
@@ -66,7 +66,7 @@ export const saveConfiguration = async ({
         formattedOutput,
       );
       configFile = getConfigFileByTypeName('Typescript');
-      break;      
+      break;
     }
     case FleekSiteConfigFormats.Javascript: {
       const contentForJavascriptConfig = (
