@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.9.0
+
+### Minor Changes
+
+- f726bcc: Bundling parameter amends
+
 ## 2.8.9
 
 ### Patch Changes
