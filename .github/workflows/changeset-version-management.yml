@@ -69,6 +69,9 @@ jobs:
           # Commit hash that triggered workflow
           commitHash="${{ github.sha }}"
 
+          echo "[debug] git diff-tree $commitHash"
+          git diff-tree --no-commit-id --name-only "$commitHash"
+
           # If no changes found, skip
           if git diff-tree --no-commit-id --name-only "$commitHash" | grep -q "$changesetArtifactsPath"; then
             echo "⚠️ Warning: The .changeset directory doesn't have new changesets, should skip!"
