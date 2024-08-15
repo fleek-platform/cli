@@ -1,8 +1,8 @@
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
 import { saveConfiguration } from './saveConfiguration';
-import fs from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import ts from 'typescript';
 import { fileExists } from '../fs';
 import {
