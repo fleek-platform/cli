@@ -68,13 +68,6 @@ jobs:
           changesetArtifactsPath=".changeset"
           # Commit hash that triggered workflow
           commitHash="${{ github.sha }}"
-
-          echo "[debug] git diff-tree $commitHash"
-          git diff-tree --no-commit-id --name-only "$commitHash"
-
-          res=$(git diff-tree --no-commit-id --name-only "$commitHash" | grep -q "$changesetArtifactsPath")
-
-          echo "[debug] res $res"
           
           # If no changes found, skip
           if ! git diff-tree --no-commit-id --name-only "$commitHash" | grep -q "$changesetArtifactsPath"; then
