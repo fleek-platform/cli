@@ -64,18 +64,13 @@ jobs:
         run: |
           # Default skip state
           skip="false"
-          # Default main branch
-          defaultBranchName=$(git remote show origin | grep 'HEAD branch' | cut -d ' ' -f5)
           # Changeset artifacts
           changesetArtifactsPath=".changeset"
-
-          if ! pnpm exec changeset status &>/dev/null; then          
-            echo "⚠️ Warning: No changesets found, should skip!"
-            skip="true"
-          fi
+          # Commit hash that triggered workflow
+          commitHash=${{ github.sha }}
 
           # If there are changes, it exit 1
-          if git diff --quiet HEAD "$defaultBranchName" -- "$changesetArtifactsPath"; then
+          if git diff-tree --no-commit-id --name-only "$commitHash" | grep -q "$changesetArtifactsPath"; then
             echo "⚠️ Warning: The .changeset directory doesn't have new changesets, should skip!"
             skip="true"
           fi
