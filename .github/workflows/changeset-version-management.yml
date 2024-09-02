@@ -65,16 +65,25 @@ jobs:
           # Default skip state
           skip="false"
           # Changeset artifacts
-          changesetArtifactsPath=".changeset"
+          changesetArtifactsRegex="\.changeset/.*\.md$"
           # Commit hash that triggered workflow
           commitHash="${{ github.sha }}"
+
+          diffTree=$(git diff-tree --no-commit-id --name-only -r "$commitHash")
+
+          if [[ -n "$diffTree" ]]; then
+            echo "⚠️ The diff command found:"
+            echo "$diffTree"
+          else
+            echo "⚠️ The diff result is empty!"
+          fi
           
           # If no changes found, skip
-          if ! git diff-tree --no-commit-id --name-only "$commitHash" | grep -q "$changesetArtifactsPath"; then
+          if echo "$diffTree" | grep -qE "$changesetArtifactsRegex"; then
+            echo "✅ Changeset found!"
+          else
             echo "⚠️ Warning: The .changeset directory doesn't have new changesets, should skip!"
             skip="true"
-          else
-            echo "✅ Changset found!"
           fi
 
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
