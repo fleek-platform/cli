@@ -69,17 +69,15 @@ jobs:
           # Commit hash that triggered workflow
           commitHash="${{ github.sha }}"
 
-          diffTree=$(git diff-tree --no-commit-id --name-only -r "$commitHash")
+          pendingChangesetList=$(find .changeset -type f -name "*.md" ! -name "README.md")
 
-          if [[ -n "$diffTree" ]]; then
-            echo "⚠️ The diff command found:"
-            echo "$diffTree"
-          else
-            echo "⚠️ The diff result is empty!"
+          if [[ -n "$pendingChangesetList" ]]; then
+            echo "⚠️ There are pending changeset files:"
+            echo "$pendingChangesetList"
           fi
           
           # If no changes found, skip
-          if echo "$diffTree" | grep -qE "$changesetArtifactsRegex"; then
+          if echo "$pendingChangesetList" | grep -qE "$changesetArtifactsRegex"; then
             echo "✅ Changeset found!"
           else
             echo "⚠️ Warning: The .changeset directory doesn't have new changesets, should skip!"
