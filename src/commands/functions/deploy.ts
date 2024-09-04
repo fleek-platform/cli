@@ -39,6 +39,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     env,
   });
 
+  if (args.private && sgx) {
+    output.error(t('pvtFunctionInSgxNotSupported', { name: 'function' }));
+    return;
+  }
+
   if (!functionToDeploy) {
     output.error(t('expectedNotFoundGeneric', { name: 'function' }));
     return;
@@ -125,8 +130,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   if (!args.private) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     // TODO: Add a secret
+    const serviceId = sgx ? 3 : 1;
     output.link(
-      `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+      `https://fleek-test.network/services/${serviceId}/ipfs/${uploadResult.pin.cid}`,
     );
   }
 };
