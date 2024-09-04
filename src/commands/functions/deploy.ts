@@ -21,6 +21,7 @@ type DeployActionArgs = {
   private: boolean;
   env: string[];
   envFile?: string;
+  sgx?: boolean;
 };
 
 const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
@@ -31,6 +32,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
   const bundle = !args.noBundle;
+  const sgx = args.sgx ?? false;
   const bundledFilePath = await getCodeFromPath({
     filePath,
     bundle,
@@ -111,7 +113,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   await sdk
     .functions()
-    .deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid });
+    .deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid, sgx });
 
   output.success(t('commonNameCreateSuccess', { name: 'deployment' }));
   output.printNewLine();
