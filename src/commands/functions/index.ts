@@ -83,7 +83,7 @@ export default (program: Command) => {
         private: options.private,
         env: options.env ?? [],
         envFile: options.envFile,
-        sgx: options.sgx
+        sgx: options.sgx,
       }),
     );
 

@@ -113,7 +113,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   await sdk
     .functions()
-    .deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid, sgx });
+    .deploy({
+      functionId: functionToDeploy.id,
+      cid: uploadResult.pin.cid,
+      sgx,
+    });
 
   output.success(t('commonNameCreateSuccess', { name: 'deployment' }));
   output.printNewLine();
