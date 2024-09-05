@@ -139,9 +139,9 @@ globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
 
     const errorMessage =
       e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      typeof e.message === 'string'
+        typeof e === 'object' &&
+        'message' in e &&
+        typeof e.message === 'string'
         ? e.message
         : t('unknownTransformError');
 
@@ -184,7 +184,7 @@ const checkUserSourceCodeSupport = async (filePath: string) => {
   return reRequireSyntax.test(contents);
 };
 
-export const getCodeFromPath = async (args: {
+export const getJsCodeFromPath = async (args: {
   filePath: string;
   bundle: boolean;
   env: EnvironmentVariables;

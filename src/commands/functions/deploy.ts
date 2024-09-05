@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import cliProgress from 'cli-progress';
+// import { decrypt } from 'eciesjs'
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
@@ -8,11 +9,15 @@ import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
-import { getCodeFromPath, getFileLikeObject } from './utils/getCodeFromPath';
+import { getJsCodeFromPath, getFileLikeObject } from './utils/getJsCodeFromPath';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 
 import type { UploadPinResponse } from '@fleek-platform/sdk';
+import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
+
+const NETWORK_SERVICE = 1
+const NETWORK_SERVICE_WITH_SGX = 3;
 
 type DeployActionArgs = {
   filePath?: string;
@@ -33,11 +38,6 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
   const bundle = !args.noBundle;
   const sgx = args.sgx ?? false;
-  const bundledFilePath = await getCodeFromPath({
-    filePath,
-    bundle,
-    env,
-  });
 
   if (args.private && sgx) {
     output.error(t('pvtFunctionInSgxNotSupported', { name: 'function' }));
@@ -48,6 +48,13 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.error(t('expectedNotFoundGeneric', { name: 'function' }));
     return;
   }
+
+  const filePathToUpload = sgx ? await getWasmCodeFromPath({ filePath })
+    : await getJsCodeFromPath({
+      filePath,
+      bundle,
+      env,
+    });
 
   output.printNewLine();
 
@@ -62,11 +69,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   if (args.private) {
     uploadResult = await sdk.storage().uploadPrivateFile({
-      filePath: bundledFilePath,
+      filePath: filePathToUpload,
       onUploadProgress: uploadOnProgress(progressBar),
     });
   } else {
-    const fileLikeObject = await getFileLikeObject(bundledFilePath);
+    const fileLikeObject = await getFileLikeObject(filePathToUpload);
     uploadResult = await sdk.storage().uploadFile({
       file: fileLikeObject,
       options: { functionName: functionToDeploy.name },
@@ -75,7 +82,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   }
 
   if (!output.debugEnabled && !args.noBundle) {
-    fs.rmSync(bundledFilePath);
+    fs.rmSync(filePathToUpload);
   }
 
   if (!uploadResult.pin.cid) {
@@ -130,9 +137,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   if (!args.private) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     // TODO: Add a secret
-    const serviceId = sgx ? 3 : 1;
+    const networkServiceId = sgx ? NETWORK_SERVICE_WITH_SGX : NETWORK_SERVICE;
     output.link(
-      `https://fleek-test.network/services/${serviceId}/ipfs/${uploadResult.pin.cid}`,
+      `https://fleek-test.network/services/${networkServiceId}/ipfs/${uploadResult.pin.cid}`,
     );
   }
 };
