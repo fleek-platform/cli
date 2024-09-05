@@ -19,9 +19,9 @@ export const waitForPersonalAccessTokenFromVerificationSession = async ({
     conditionFn: async () => {
       const response = await client
         .mutation({
-          createPersonalAccessTokenFromVerificationSession: {
-            __args: { where: { id: verificationSessionId }, data: { name } },
-          }
+          createPersonalAccessTokenFromVerificationSession: [
+            { where: { id: verificationSessionId }, data: { name } },
+          ],
 
         })
         .catch(() => null);

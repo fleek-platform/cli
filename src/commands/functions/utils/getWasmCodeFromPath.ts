@@ -35,7 +35,6 @@ const enryptCode = async (args: { filePath: string }) => {
     const { filePath } = args;
 
     const buffer = await getWasm(filePath);
-
     if (!buffer) {
         output.error(t('invalidWasmCode', { path: filePath }));
         throw new FleekFunctionInvalidWasmCodeError({})
@@ -61,9 +60,7 @@ const enryptCode = async (args: { filePath: string }) => {
             fs.mkdirSync(tempDir);
         }
     }
-
     const outFile = `${tempDir}/function.wasm`;
-
 
     progressBar.start(100, 10);
     try {
@@ -72,13 +69,12 @@ const enryptCode = async (args: { filePath: string }) => {
 
         await fs.promises.writeFile(outFile, encryptedData);
     } catch (error) {
+        progressBar.stop();
         throw new FleekFunctionWasmEncryptionFailedError({})
 
     }
-
     progressBar.update(100);
     progressBar.stop();
-
 
     return tempDir;
 };
