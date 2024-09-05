@@ -86,7 +86,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   if (sgx) {
     const buffer = await fs.promises.readFile(filePathToUpload);
 
-    b3Hash = blake3(buffer);
+    b3Hash = await blake3(buffer);
   }
 
   if (!output.debugEnabled && !args.noBundle) {
@@ -145,10 +145,6 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   if (!args.private) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     // TODO: Add a secret
-    const networkServiceId = sgx ? NETWORK_SERVICE_WITH_SGX : NETWORK_SERVICE;
-    output.link(
-      `https://fleek-test.network/services/${networkServiceId}/ipfs/${uploadResult.pin.cid}`,
-    );
 
     if (sgx){
       output.link("https://fleek-test.network/services/3");
@@ -156,6 +152,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       output.link(`Blake3 Hash: ${b3Hash} `)
       output.link(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`)
       output.link(`Example: curl fleek-test.network/services/3 --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`)
+    } else {
+      output.link(
+        `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+      );
+  
     }
   }
 };
