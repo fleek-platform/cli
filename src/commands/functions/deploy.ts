@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import cliProgress from 'cli-progress';
-import {blake3} from 'hash-wasm';
+import { blake3 } from 'hash-wasm';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
@@ -16,8 +16,6 @@ import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 import type { UploadPinResponse } from '@fleek-platform/sdk';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 
-const NETWORK_SERVICE = 1
-const NETWORK_SERVICE_WITH_SGX = 3;
 
 type DeployActionArgs = {
   filePath?: string;
@@ -79,10 +77,10 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       options: { functionName: functionToDeploy.name },
       onUploadProgress: uploadOnProgress(progressBar),
     });
-  
+
   }
 
-  let b3Hash; 
+  let b3Hash;
   if (sgx) {
     const buffer = await fs.promises.readFile(filePathToUpload);
 
@@ -146,7 +144,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     // TODO: Add a secret
 
-    if (sgx){
+    if (sgx) {
       output.link("https://fleek-test.network/services/3");
       output.printNewLine();
       output.link(`Blake3 Hash: ${b3Hash} `)
@@ -156,7 +154,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       output.link(
         `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
       );
-  
+
     }
   }
 };

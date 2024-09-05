@@ -12,7 +12,7 @@ import {
 } from '@fleek-platform/errors';
 
 
-const PUBLIC_KEY = '';
+const PUBLIC_KEY = '03a3fe41244add26af1f820d2acb4ad22b158ff7b69ce41401bf932d7734eb5d49';
 
 const getWasm = async (filePath: string) => {
     const buffer = await fs.promises.readFile(filePath);
@@ -76,7 +76,7 @@ const enryptCode = async (args: { filePath: string }) => {
     progressBar.update(100);
     progressBar.stop();
 
-    return tempDir;
+    return outFile;
 };
 
 export const getWasmCodeFromPath = async (args: {
