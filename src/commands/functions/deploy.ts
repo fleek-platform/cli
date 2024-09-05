@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import cliProgress from 'cli-progress';
-// import { decrypt } from 'eciesjs'
+import {blake3} from 'hash-wasm';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
@@ -79,6 +79,14 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       options: { functionName: functionToDeploy.name },
       onUploadProgress: uploadOnProgress(progressBar),
     });
+  
+  }
+
+  let b3Hash; 
+  if (sgx) {
+    const buffer = await fs.promises.readFile(filePathToUpload);
+
+    b3Hash = blake3(buffer);
   }
 
   if (!output.debugEnabled && !args.noBundle) {
@@ -141,6 +149,14 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.link(
       `https://fleek-test.network/services/${networkServiceId}/ipfs/${uploadResult.pin.cid}`,
     );
+
+    if (sgx){
+      output.link("https://fleek-test.network/services/3");
+      output.printNewLine();
+      output.link(`Blake3 Hash: ${b3Hash} `)
+      output.link(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`)
+      output.link(`Example: curl fleek-test.network/services/3 --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`)
+    }
   }
 };
 
