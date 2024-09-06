@@ -150,9 +150,10 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     if (sgx) {
       // We need to make a request to the network so the network can have a mapping to the blake3 hash.
       // this is a temporarily hack until dalton comes up with a fix on network
-      output.spinner(t('runningAvailabilityCheck'));
+      output.spinner(t('networkFetchMappings'));
       const promises = getNetworkServerIpAddresses().map((ipAddress) =>
-        fetch(`${ipAddress}/services/0/ipfs/${uploadResult.pin.cid}`),
+
+        fetch(`https://${ipAddress}/services/0/ipfs/${uploadResult.pin.cid}`),
       );
       const promiseStatuses = await Promise.allSettled(promises);
 
