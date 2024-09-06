@@ -66,8 +66,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.6",
-    "@fleek-platform/errors": "^2.2.4-stg.14",
-    "@fleek-platform/sdk": "^2.3.0-stg.10",
+    "@fleek-platform/errors": "workspace:*",
+    "@fleek-platform/sdk": "workspace:*",
     "@fleek-platform/tester": "^2.3.0",
     "@fleek-platform/utils-gateways": "^0.1.2",
     "@fleek-platform/utils-github": "^0.0.2",
