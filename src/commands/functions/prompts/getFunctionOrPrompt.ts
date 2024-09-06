@@ -1,5 +1,5 @@
 import { FleekFunctionsNotFoundError } from '@fleek-platform/errors';
-import type { FleekFunction, FleekSdk } from '@fleek-platform/sdk';
+import type { FleekFunction, FleekSdk } from '@fleek-platform/sdk/node';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';

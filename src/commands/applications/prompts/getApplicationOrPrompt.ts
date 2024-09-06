@@ -1,5 +1,5 @@
 import { ApplicationsNotFoundError } from '@fleek-platform/errors';
-import type { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';

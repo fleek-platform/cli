@@ -1,4 +1,4 @@
-import type { Site } from '@fleek-platform/sdk';
+import type { Site } from '@fleek-platform/sdk/node';
 
 import { saveConfiguration } from '../../../utils/configuration/saveConfiguration';
 import type { FleekRootConfig } from '../../../utils/configuration/types';

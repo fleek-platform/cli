@@ -3,7 +3,7 @@ import {
   type Domain,
   FleekSdk,
   PersonalAccessTokenService,
-} from '@fleek-platform/sdk';
+} from '@fleek-platform/sdk/node';
 import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
@@ -13,7 +13,7 @@ vi.mock('../../../prompts/selectPrompt', () => ({
   selectPrompt: vi.fn().mockResolvedValue('secondDomainId'),
 }));
 
-vi.mock('@fleek-platform/sdk', () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const domains = {

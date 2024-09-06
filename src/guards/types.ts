@@ -1,4 +1,4 @@
-import type { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 
 type NoArgumentsType = never;
 

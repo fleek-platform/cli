@@ -1,4 +1,4 @@
-import type { Domain } from '@fleek-platform/sdk';
+import type { Domain } from '@fleek-platform/sdk/node';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';

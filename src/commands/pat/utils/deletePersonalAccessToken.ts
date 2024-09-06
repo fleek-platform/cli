@@ -1,4 +1,4 @@
-import type { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 
 import type { Output } from '../../../output/Output';
 import { t } from '../../../utils/translation';

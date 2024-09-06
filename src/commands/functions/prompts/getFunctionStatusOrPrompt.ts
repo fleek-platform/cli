@@ -1,5 +1,5 @@
 import { FleekFunctionStatusNotValidError } from '@fleek-platform/errors';
-import type { FleekFunctionStatus } from '@fleek-platform/sdk';
+import type { FleekFunctionStatus } from '@fleek-platform/sdk/node';
 import { isFunctionStatusValid } from '@fleek-platform/utils-validation';
 
 type GetFunctionStatusOrPromptArgs = {

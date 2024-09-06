@@ -139,9 +139,9 @@ globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
 
     const errorMessage =
       e &&
-        typeof e === 'object' &&
-        'message' in e &&
-        typeof e.message === 'string'
+      typeof e === 'object' &&
+      'message' in e &&
+      typeof e.message === 'string'
         ? e.message
         : t('unknownTransformError');
 

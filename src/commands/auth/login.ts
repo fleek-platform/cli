@@ -1,4 +1,4 @@
-import { createClient } from '@fleek-platform/sdk';
+import { createClient } from '@fleek-platform/sdk/node';
 
 import { output } from '../../cli';
 import { config } from '../../config';
