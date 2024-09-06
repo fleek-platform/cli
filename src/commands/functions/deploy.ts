@@ -134,6 +134,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     functionId: functionToDeploy.id,
     cid: uploadResult.pin.cid,
     sgx,
+    blake3Hash: b3Hash ?? undefined,
   });
 
   output.success(t('commonNameCreateSuccess', { name: 'deployment' }));
