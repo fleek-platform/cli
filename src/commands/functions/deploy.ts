@@ -149,7 +149,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       // We need to make a request to the network so the network can have a mapping to the blake3 hash.
       // this is a temporarily hack until dalton comes up with a fix on network
       try {
-        await fetch(`http://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
+        await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
       } catch (error) {
         console.error(error)
       }
