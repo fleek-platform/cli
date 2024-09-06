@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import fetch from 'node-fetch';
 import cliProgress from 'cli-progress';
 import { blake3 } from 'hash-wasm';
 
@@ -14,7 +13,7 @@ import { getJsCodeFromPath, getFileLikeObject } from './utils/getJsCodeFromPath'
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 
-import type { UploadPinResponse } from '@fleek-platform/sdk';
+import type { UploadPinResponse } from '@fleek-platform/sdk/node';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 
 

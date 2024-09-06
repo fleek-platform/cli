@@ -1,4 +1,4 @@
-import type { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 import { describe, expect, it, vi } from 'vitest';
 
 import { output as fakeOutput } from '../../cli';

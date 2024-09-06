@@ -1,4 +1,4 @@
-import type { Domain, DomainStatus, FleekSdk } from '@fleek-platform/sdk';
+import type { Domain, DomainStatus, FleekSdk } from '@fleek-platform/sdk/node';
 
 type DomainFilter = {
   status?: DomainStatus;

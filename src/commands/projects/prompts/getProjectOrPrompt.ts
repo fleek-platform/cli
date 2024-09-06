@@ -1,5 +1,5 @@
 import { ProjectsNotFoundError } from '@fleek-platform/errors';
-import type { FleekSdk, Project } from '@fleek-platform/sdk';
+import type { FleekSdk, Project } from '@fleek-platform/sdk/node';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
