@@ -326,6 +326,8 @@
   "callFleekFunctionByNetworkUrlReq": "You can also call this Fleek Network URL directly for increased performance (please keep in mind you will not be able to deactivate this link)",
   "availabilityCheckFailed": "Unable to fetch uploaded function through any of our private gateways, please try again later.",
   "runningAvailabilityCheck": "Checking for availability of file through our gateways.",
+  "networkFetchMappings": "The network is fetching the blake3 hash mapping",
+  "networkFetchFailed": "Failed to fetch Mapping, please retry deploying your function.",
   "unsupportedPackage": "The {packageName} package is not currently supported by Fleek Functions.",
   "showUnsupportedModulesDocLink": "Please refer to our documentation to see which packages we support.",
   "noBundle": "Disable bundling",

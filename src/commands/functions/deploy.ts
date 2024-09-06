@@ -148,11 +148,14 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     if (sgx) {
       // We need to make a request to the network so the network can have a mapping to the blake3 hash.
       // this is a temporarily hack until dalton comes up with a fix on network
+      output.spinner(t('runningAvailabilityCheck'));
       try {
         await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
-      } catch (error) {
-        console.error(error)
+      } catch {
+        output.error(t('networkFetchFailed'))
+        return
       }
+
       output.link("https://fleek-test.network/services/3");
       output.printNewLine();
       output.link(`Blake3 Hash: ${b3Hash} `)
