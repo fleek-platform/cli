@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import fetch from 'node-fetch';
 import cliProgress from 'cli-progress';
 import { blake3 } from 'hash-wasm';
 
@@ -145,6 +146,13 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     // TODO: Add a secret
 
     if (sgx) {
+      // We need to make a request to the network so the network can have a mapping to the blake3 hash.
+      // this is a temporarily hack until dalton comes up with a fix on network
+      try {
+        await fetch(`http://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
+      } catch (error) {
+        console.error(error)
+      }
       output.link("https://fleek-test.network/services/3");
       output.printNewLine();
       output.link(`Blake3 Hash: ${b3Hash} `)
