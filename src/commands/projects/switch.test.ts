@@ -34,7 +34,7 @@ vi.mock('./create', () => ({
   createProjectActionHandler: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock('@fleek-platform/sdk/node, () => ({}));
+vi.mock('@fleek-platform/sdk/node', () => ({}));
 
 describe('Switch between projects', () => {
   it('should switch to project by given id', async () => {

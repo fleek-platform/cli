@@ -50,7 +50,7 @@ vi.mock('../../sites/prompts/getSiteOrPrompt', () => ({
   }),
 }));
 
-vi.mock('@fleek-platform/sdk/node, () => ({
+vi.mock('@fleek-platform/sdk/node', () => ({
   FleekSdk: vi.fn(),
   PersonalAccessTokenService: vi.fn(),
 }));

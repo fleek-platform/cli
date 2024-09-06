@@ -9,7 +9,7 @@ vi.mock('../../../prompts/selectPrompt', () => ({
   selectPrompt: vi.fn().mockResolvedValue('secondRecordId'),
 }));
 
-vi.mock('@fleek-platform/sdk/node, () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const ipns = {

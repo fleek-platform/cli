@@ -13,7 +13,7 @@ vi.mock('../../../prompts/selectPrompt', () => ({
   selectPrompt: vi.fn().mockResolvedValue('secondDomainId'),
 }));
 
-vi.mock('@fleek-platform/sdk/node, () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const domains = {

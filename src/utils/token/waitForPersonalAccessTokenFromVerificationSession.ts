@@ -28,8 +28,7 @@ export const waitForPersonalAccessTokenFromVerificationSession = async ({
                 name,
               },
             },
-          }
-
+          },
         })
         .catch(() => null);
 

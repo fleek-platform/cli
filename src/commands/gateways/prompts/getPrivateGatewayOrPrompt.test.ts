@@ -10,7 +10,7 @@ vi.mock('prompts', () => ({
   default: vi.fn().mockResolvedValue({ value: 'secondPrivateGatewayId' }),
 }));
 
-vi.mock('@fleek-platform/sdk/node, () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const privateGateways = {

@@ -38,7 +38,7 @@ vi.mock('../../cli', () => {
   return { output };
 });
 
-vi.mock('@fleek-platform/sdk/node, () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const privateGateways = {

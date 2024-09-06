@@ -58,7 +58,7 @@ vi.mock('../../utils/pressAnyKey', () => {
   };
 });
 
-vi.mock('@fleek-platform/sdk/node, () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const domains = {
