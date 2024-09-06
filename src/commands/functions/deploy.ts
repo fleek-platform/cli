@@ -16,6 +16,7 @@ import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 
 import type { UploadPinResponse } from '@fleek-platform/sdk';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
+import { getNetworkServerIpAddresses } from '../../utils/getNetworkServerIpAddresses';
 
 
 type DeployActionArgs = {
@@ -150,11 +151,15 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       // We need to make a request to the network so the network can have a mapping to the blake3 hash.
       // this is a temporarily hack until dalton comes up with a fix on network
       output.spinner(t('runningAvailabilityCheck'));
-      try {
-        await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
-      } catch {
-        output.error(t('networkFetchFailed'))
-        return
+      const promises = getNetworkServerIpAddresses().map((ipAddress) =>
+        fetch(`${ipAddress}/services/0/ipfs/${uploadResult.pin.cid}`),
+      );
+      const promiseStatuses = await Promise.allSettled(promises);
+
+      if (promiseStatuses.every((promise) => promise.status === 'rejected')) {
+        output.error(t('networkFetchFailed'));
+
+        return;
       }
 
       output.link("https://fleek-test.network/services/3");
