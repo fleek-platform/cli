@@ -22,6 +22,7 @@ export const waitForPersonalAccessTokenFromVerificationSession = async ({
           createPersonalAccessTokenFromVerificationSession: [
             { where: { id: verificationSessionId }, data: { name } },
           ],
+
         })
         .catch(() => null);
 

@@ -15,6 +15,7 @@ type DeployOptions = {
   private: boolean;
   env?: string[];
   envFile?: string;
+  sgx?: boolean;
 };
 
 export default (program: Command) => {
@@ -69,6 +70,7 @@ export default (program: Command) => {
     .option('--noBundle', t('noBundle'), false)
     .option('--private', t('functionDeployToPrivateStorage'), false)
     .option('-e, --env <environmentVariables...>', t('environmentVariables'))
+    .option('--sgx', t('functionsUseSgx'), false)
     .option(
       '--envFile <environmentVariablesFilePath>',
       t('environmentVariablesFile'),
@@ -81,6 +83,7 @@ export default (program: Command) => {
         private: options.private,
         env: options.env ?? [],
         envFile: options.envFile,
+        sgx: options.sgx,
       }),
     );
 
