@@ -1,4 +1,4 @@
-import type { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
+import type { EnsRecord, FleekSdk } from '@fleek-platform/sdk/node';
 
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 

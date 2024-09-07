@@ -1,5 +1,5 @@
 import { PrivateGatewaysNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk/node';
 // eslint-disable-next-line no-restricted-imports
 import prompts from 'prompts';
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -10,7 +10,7 @@ vi.mock('prompts', () => ({
   default: vi.fn().mockResolvedValue({ value: 'secondPrivateGatewayId' }),
 }));
 
-vi.mock('@fleek-platform/sdk', () => {
+vi.mock('@fleek-platform/sdk/node', () => {
   const FleekSdkMock = vi.fn();
 
   const privateGateways = {

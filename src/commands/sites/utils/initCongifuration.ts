@@ -1,5 +1,5 @@
 // TODO: rename this filename, fix typoe congifuration -> configuration
-import type { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 
 import { saveConfiguration } from '../../../utils/configuration/saveConfiguration';
 import type { FleekRootConfig } from '../../../utils/configuration/types';

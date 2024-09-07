@@ -1,5 +1,5 @@
 import { UnauthenticatedError } from '@fleek-platform/errors';
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk/node';
 import { getDefined } from '../defined';
 
 import { output } from '../cli';

@@ -1,4 +1,4 @@
-import type { FleekSdk, Site } from '@fleek-platform/sdk';
+import type { FleekSdk, Site } from '@fleek-platform/sdk/node';
 
 import { confirmPrompt } from '../../../prompts/confirmPrompt';
 import { getSiteOrPrompt } from '../../sites/prompts/getSiteOrPrompt';

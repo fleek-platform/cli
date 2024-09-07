@@ -1,4 +1,4 @@
-import type { FleekSdk, StoragePin } from '@fleek-platform/sdk';
+import type { FleekSdk, StoragePin } from '@fleek-platform/sdk/node';
 import {
   getCfIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,

@@ -6,7 +6,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "sourceMap": true,
     "outDir": "dist",
     "useUnknownInCatchVariables": true,
@@ -14,5 +14,5 @@
   },
   "include": ["src/**/*", "global.d.ts", "locales/*.d.ts"],
   "exclude": ["dist", "**/node_modules", "**/*.test.ts"],
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json"
 }

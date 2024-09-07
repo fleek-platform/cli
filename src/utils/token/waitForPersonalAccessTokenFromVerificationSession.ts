@@ -1,4 +1,4 @@
-import type { Client } from '@fleek-platform/sdk';
+import type { Client } from '@fleek-platform/sdk/node';
 
 import { checkPeriodicallyUntil } from '../checkPeriodicallyUntil';
 
@@ -19,10 +19,16 @@ export const waitForPersonalAccessTokenFromVerificationSession = async ({
     conditionFn: async () => {
       const response = await client
         .mutation({
-          createPersonalAccessTokenFromVerificationSession: [
-            { where: { id: verificationSessionId }, data: { name } },
-          ],
-
+          createPersonalAccessTokenFromVerificationSession: {
+            __args: {
+              where: {
+                id: verificationSessionId,
+              },
+              data: {
+                name,
+              },
+            },
+          },
         })
         .catch(() => null);
 

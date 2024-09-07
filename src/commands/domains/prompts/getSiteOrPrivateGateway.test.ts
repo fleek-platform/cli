@@ -1,4 +1,4 @@
-import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk/node';
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
@@ -50,7 +50,7 @@ vi.mock('../../sites/prompts/getSiteOrPrompt', () => ({
   }),
 }));
 
-vi.mock('@fleek-platform/sdk', () => ({
+vi.mock('@fleek-platform/sdk/node', () => ({
   FleekSdk: vi.fn(),
   PersonalAccessTokenService: vi.fn(),
 }));

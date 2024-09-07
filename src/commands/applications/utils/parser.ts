@@ -1,7 +1,7 @@
 import type {
   ApplicationWhiteLabelDomain,
   ApplicationWhitelistDomain,
-} from '@fleek-platform/sdk';
+} from '@fleek-platform/sdk/node';
 
 type WhitelistDomain = Omit<
   ApplicationWhitelistDomain,

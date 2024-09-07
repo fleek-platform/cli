@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import fetch from 'node-fetch';
 import cliProgress from 'cli-progress';
 import { blake3 } from 'hash-wasm';
 
@@ -10,13 +9,15 @@ import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
-import { getJsCodeFromPath, getFileLikeObject } from './utils/getJsCodeFromPath';
+import {
+  getJsCodeFromPath,
+  getFileLikeObject,
+} from './utils/getJsCodeFromPath';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 
-import type { UploadPinResponse } from '@fleek-platform/sdk';
+import type { UploadPinResponse } from '@fleek-platform/sdk/node';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
-
 
 type DeployActionArgs = {
   filePath?: string;
@@ -48,7 +49,8 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     return;
   }
 
-  const filePathToUpload = sgx ? await getWasmCodeFromPath({ filePath })
+  const filePathToUpload = sgx
+    ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
       filePath,
       bundle,
@@ -78,7 +80,6 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       options: { functionName: functionToDeploy.name },
       onUploadProgress: uploadOnProgress(progressBar),
     });
-
   }
 
   let b3Hash;
