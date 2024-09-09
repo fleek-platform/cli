@@ -52,10 +52,10 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const filePathToUpload = sgx
     ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
-        filePath,
-        bundle,
-        env,
-      });
+      filePath,
+      bundle,
+      env,
+    });
 
   output.printNewLine();
 
@@ -138,38 +138,33 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     blake3Hash: b3Hash ?? undefined,
   });
 
+  if (sgx) {
+    // We need to make a request to the network so the network can have a mapping to the blake3 hash.
+    // this is a temporarily hack until dalton comes up with a fix on network
+    output.spinner(t('networkFetchMappings'));
+    try {
+      await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
+    } catch {
+      output.error(t('networkFetchFailed'))
+      return
+    }
+  }
+
   output.success(t('commonNameCreateSuccess', { name: 'deployment' }));
   output.printNewLine();
   output.log(t('callFleekFunctionByUrlReq'));
   output.link(functionToDeploy.invokeUrl);
 
-  if (!args.private) {
+  if (sgx) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
-    // TODO: Add a secret
-
-    if (sgx) {
-      // We need to make a request to the network so the network can have a mapping to the blake3 hash.
-      // this is a temporarily hack until dalton comes up with a fix on network
-      output.spinner(t('runningAvailabilityCheck'));
-      try {
-        await fetch(
-          `https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`,
-        );
-      } catch {
-        output.error(t('networkFetchFailed'));
-        return;
-      }
-
-      output.link('https://fleek-test.network/services/3');
-      output.printNewLine();
-      output.link(`Blake3 Hash: ${b3Hash} `);
-      output.link(
-        `Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`,
-      );
-      output.link(
-        `Example: curl fleek-test.network/services/3 --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`,
-      );
-    } else {
+    output.link("https://fleek-test.network/services/3");
+    output.printNewLine();
+    output.link(`Blake3 Hash: ${b3Hash} `)
+    output.link(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`)
+    output.link(`Example: curl fleek-test.network/services/3 --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`)
+  } else {
+    if (!args.private) {
+      output.log(t('callFleekFunctionByNetworkUrlReq'));
       output.link(
         `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
       );
