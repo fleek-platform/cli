@@ -159,9 +159,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     output.link("https://fleek-test.network/services/3");
     output.printNewLine();
-    output.link(`Blake3 Hash: ${b3Hash} `)
-    output.link(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`)
-    output.link(`Example: curl fleek-test.network/services/3 --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`)
+    output.log(`Blake3 Hash: ${b3Hash} `);
+    output.log(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`);
+    output.printNewLine();
+    output.hint(`Here's an example:`);
+    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`);
   } else {
     if (!args.private) {
       output.log(t('callFleekFunctionByNetworkUrlReq'));
