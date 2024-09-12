@@ -72,9 +72,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
   const bundle = !args.noBundle;
-  const sgx = args.sgx ?? false;
+  const isSGX = !!args.sgx;
+  const isTrustedPrivateEnvironment = isSGX && args.private;
+  const isUntrustedPublicEnvironment = !isSGX && !args.private;
 
-  if (args.private && sgx) {
+  if (isTrustedPrivateEnvironment) {
     output.error(t('pvtFunctionInSgxNotSupported', { name: 'function' }));
     return;
   }
@@ -84,7 +86,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     return;
   }
 
-  const filePathToUpload = sgx
+  const filePathToUpload = isSGX
     ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
       filePath,
@@ -121,7 +123,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     return;
   }
 
-  const blake3Hash = sgx
+  const blake3Hash = isSGX
     ? await calculateBlake3Hash({
       filePath: filePathToUpload,
       onFailure: () => {
@@ -177,7 +179,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     await sdk.functions().deploy({
       functionId: functionToDeploy.id,
       cid: uploadResult.pin.cid,
-      sgx,
+      sgx: isSGX,
       blake3Hash,
     });
   } catch {
@@ -187,7 +189,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   // TODO: This should probably happen just after uploadResult
   // looks more like a post upload process due to propagation
-  if (sgx) {
+  if (isSGX) {
     // We need to make a request to the network so the network can have a mapping to the blake3 hash.
     // this is a temporarily hack until dalton comes up with a fix on network
     // TODO: Check status of supposed fix
@@ -206,7 +208,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   output.log(t('callFleekFunctionByUrlReq'));
   output.link(functionToDeploy.invokeUrl);
 
-  if (sgx) {
+  if (isSGX) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     output.link("https://fleek-test.network/services/3");
     output.printNewLine();
@@ -217,7 +219,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`);
   }
 
-  if (!sgx && !args.private) {
+  if (isUntrustedPublicEnvironment) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     output.link(
       `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
