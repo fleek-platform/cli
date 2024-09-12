@@ -4,19 +4,17 @@ import cliProgress from 'cli-progress';
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
-import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
 import {
   getJsCodeFromPath,
-  getFileLikeObject,
 } from './utils/getJsCodeFromPath';
+import { getUploadResult } from './utils/upload';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 import { calculateBlake3Hash } from '../../utils/blake3';
 
-import type { FleekSdk } from '@fleek-platform/sdk/node';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 
 type DeployActionArgs = {
@@ -28,41 +26,6 @@ type DeployActionArgs = {
   envFile?: string;
   sgx?: boolean;
 };
-
-const getUploadResult = async ({
-  filePath,
-  functionName,
-  isPrivate,
-  progressBar,
-  sdk,
-}: {
-  filePath: string;
-  functionName: string;
-  isPrivate: boolean;
-  progressBar: cliProgress.Bar;
-  sdk: FleekSdk;
-}) => {
-  try {
-    if (isPrivate) {
-      return await sdk.storage().uploadPrivateFile({
-        filePath,
-        onUploadProgress: uploadOnProgress(progressBar),
-      });
-    }
-
-    const fileLikeObject = await getFileLikeObject(filePath);
-    return await sdk.storage().uploadFile({
-      file: fileLikeObject,
-      options: { functionName },
-      onUploadProgress: uploadOnProgress(progressBar),
-    });
-  } catch {
-    progressBar.stop();
-  }
-
-  return;
-}
-
 
 const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   sdk,
@@ -109,6 +72,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     isPrivate: args.private,
     progressBar,
     sdk,
+    onFailure: () => {
+      progressBar.stop();
+    }
   });
 
   if (!uploadResult) {
