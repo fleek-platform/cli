@@ -51,9 +51,6 @@ export const addStorageAction: SdkGuardedFunction<
   });
 
   if (!storage) {
-    // TODO: Can this message be improved
-    // include a try again later and report to support
-    // if the issue persists?
     output.error(t('somethingWrongDurUpload'));
 
     return;
