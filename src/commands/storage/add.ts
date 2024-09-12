@@ -8,64 +8,17 @@ import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../cli';
-import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
-import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
+import { uploadStorage } from '../functions/utils/upload';
 
-import type { FleekSdk, UploadPinResponse } from '@fleek-platform/sdk/node';
+import type { SdkGuardedFunction } from '../../guards/types';
+import type { FileLike } from '../functions/utils/upload';
 
 type AddStorageActionArgs = {
   path: string;
 };
-
-type FileLike = {
-  name: string;
-  stream: () => ReadableStream<Uint8Array>;
-  size: number;
-};
-
-const uploadStorage = async ({
-  path,
-  sdk,
-  files,
-  directoryName,
-  progressBar,
-}: {
-    path: string;
-    sdk: FleekSdk,
-    files: FileLike[],
-    directoryName: string,
-    progressBar: cliProgress.SingleBar,
-}): Promise<UploadPinResponse | undefined> => {
-  try {
-    const stat = await fs.stat(path);
-
-    if (stat.isDirectory()) {
-      return await sdk.storage().uploadVirtualDirectory({
-            files,
-            directoryName,
-            onUploadProgress: uploadOnProgress(progressBar),
-          });
-    }
-
-    // TODO: The progressBar is displayed twice
-    // seem like different instances
-    // where one is initialized purposely on set 0
-    // investigate why this is
-    const response = await sdk.storage().uploadFile({
-      file: files[0],
-      onUploadProgress: uploadOnProgress(progressBar),
-    });
-
-    return response;
-  } catch {
-    progressBar.stop();
-  }
-
-  return;
-}
 
 export const addStorageAction: SdkGuardedFunction<
   AddStorageActionArgs
