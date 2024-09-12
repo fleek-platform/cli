@@ -93,7 +93,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     ? await calculateBlake3Hash({
       filePath: filePathToUpload,
       onFailure: () => {
-        output.error('[TODO] Create error for calculate blake 3');
+        output.error(t('failedCalculateBlake3Hash'));
         process.exit(1);
       },
     })
@@ -149,7 +149,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       blake3Hash,
     });
   } catch {
-    output.error('[TODO] Create error failure deploy function');
+    output.error(t('failedDeployFleekFunction'));
     process.exit(1);
   }
 
