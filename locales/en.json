@@ -345,5 +345,7 @@
   "requireDeprecatedUseES6Syntax": "The use of 'require' is deprecated in this context. Please switch to using ES6 'import' syntax for module imports. For example, change 'require' to 'import <ModuleName> from '<ModulePath>';'. This adjustment is necessary to comply with modern JavaScript standards and improve compatibility with Fleek Functions runtime and environment.",
   "invalidWasmCode": "The {path} is a not valid wasm file",
   "expectedNotFoundGeneric": "We had trouble locating the {name}. Please try again, and contact us if the issue persists.",
-  "unexpectedFileFormat": "We weren't expecting the format {format}. Please report the issue to our team and provide details for a quick fix."
+  "unexpectedFileFormat": "We weren't expecting the format {format}. Please report the issue to our team and provide details for a quick fix.",
+  "failedCalculateBlake3Hash": "Failed to calculate the Blake3 hash. Please try again! If the issue persists, report it to our team please.",
+  "failedDeployFleekFunction": "Failed to deploy the Fleek Function. Please try again! If the issue persists, report it to our team please."
 }
