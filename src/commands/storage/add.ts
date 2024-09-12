@@ -20,6 +20,12 @@ type AddStorageActionArgs = {
   path: string;
 };
 
+type FileLike = {
+  name: string;
+  stream: () => ReadableStream<Uint8Array>;
+  size: number;
+};
+
 const uploadStorage = async ({
   path,
   sdk,
@@ -29,7 +35,7 @@ const uploadStorage = async ({
 }: {
     path: string;
     sdk: FleekSdk,
-    files: any[],
+    files: FileLike[],
     directoryName: string,
     progressBar: cliProgress.SingleBar,
 }): Promise<UploadPinResponse | undefined> => {
@@ -78,7 +84,7 @@ export const addStorageAction: SdkGuardedFunction<
     cliProgress.Presets.shades_grey,
   );
   const directoryName = basename(args.path);
-  const files = await filesFromPaths([args.path]);
+  const files: FileLike[] = await filesFromPaths([args.path]);
   
   const storage = await uploadStorage({
     path: args.path,
