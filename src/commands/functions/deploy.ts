@@ -173,18 +173,27 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     }
   }
 
-  await sdk.functions().deploy({
-    functionId: functionToDeploy.id,
-    cid: uploadResult.pin.cid,
-    sgx,
-    blake3Hash,
-  });
+  try {
+    await sdk.functions().deploy({
+      functionId: functionToDeploy.id,
+      cid: uploadResult.pin.cid,
+      sgx,
+      blake3Hash,
+    });
+  } catch {
+    output.error('[TODO] Create error failure deploy function');
+    process.exit(1);
+  }
 
+  // TODO: This should probably happen just after uploadResult
+  // looks more like a post upload process due to propagation
   if (sgx) {
     // We need to make a request to the network so the network can have a mapping to the blake3 hash.
     // this is a temporarily hack until dalton comes up with a fix on network
+    // TODO: Check status of supposed fix
     output.spinner(t('networkFetchMappings'));
     try {
+      // TODO: The `fleek-test` address should be an env var
       await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
     } catch {
       output.error(t('networkFetchFailed'))
@@ -206,13 +215,13 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.printNewLine();
     output.hint(`Here's an example:`);
     output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`);
-  } else {
-    if (!args.private) {
-      output.log(t('callFleekFunctionByNetworkUrlReq'));
-      output.link(
-        `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
-      );
-    }
+  }
+
+  if (!sgx && !args.private) {
+    output.log(t('callFleekFunctionByNetworkUrlReq'));
+    output.link(
+      `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+    );
   }
 };
 
