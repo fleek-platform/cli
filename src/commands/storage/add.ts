@@ -11,10 +11,10 @@ import { output } from '../../cli';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
-import { uploadStorage } from '../functions/utils/upload';
+import { uploadStorage } from './utils/upload';
 
 import type { SdkGuardedFunction } from '../../guards/types';
-import type { FileLike } from '../functions/utils/upload';
+import type { FileLike } from './utils/upload';
 
 type AddStorageActionArgs = {
   path: string;
