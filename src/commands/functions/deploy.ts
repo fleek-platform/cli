@@ -66,7 +66,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     cliProgress.Presets.shades_grey,
   );
 
-  let uploadResult: UploadPinResponse;
+  let uploadResult: UploadPinResponse | undefined;
 
   if (args.private) {
     uploadResult = await sdk.storage().uploadPrivateFile({
@@ -80,6 +80,18 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       options: { functionName: functionToDeploy.name },
       onUploadProgress: uploadOnProgress(progressBar),
     });
+  }
+
+  if (!uploadResult) {
+    output.error(
+      t('commonFunctionActionFailure', {
+        action: 'deploy',
+        tryAgain: t('tryAgain'),
+        message: t('uploadToIpfsFailed'),
+      }),
+    );
+
+    return;
   }
 
   let b3Hash;

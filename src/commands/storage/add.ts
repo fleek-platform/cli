@@ -14,9 +14,52 @@ import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
 
+import type { FleekSdk, UploadPinResponse } from '@fleek-platform/sdk/node';
+
 type AddStorageActionArgs = {
   path: string;
 };
+
+const uploadStorage = async ({
+  path,
+  sdk,
+  files,
+  directoryName,
+  progressBar,
+}: {
+    path: string;
+    sdk: FleekSdk,
+    files: any[],
+    directoryName: string,
+    progressBar: cliProgress.SingleBar,
+}): Promise<UploadPinResponse | undefined> => {
+  try {
+    const stat = await fs.stat(path);
+
+    if (stat.isDirectory()) {
+      return await sdk.storage().uploadVirtualDirectory({
+            files,
+            directoryName,
+            onUploadProgress: uploadOnProgress(progressBar),
+          });
+    }
+
+    // TODO: The progressBar is displayed twice
+    // seem like different instances
+    // where one is initialized purposely on set 0
+    // investigate why this is
+    const response = await sdk.storage().uploadFile({
+      file: files[0],
+      onUploadProgress: uploadOnProgress(progressBar),
+    });
+
+    return response;
+  } catch {
+    progressBar.stop();
+  }
+
+  return;
+}
 
 export const addStorageAction: SdkGuardedFunction<
   AddStorageActionArgs
@@ -34,22 +77,21 @@ export const addStorageAction: SdkGuardedFunction<
     },
     cliProgress.Presets.shades_grey,
   );
-  const stat = await fs.stat(args.path);
-
   const directoryName = basename(args.path);
   const files = await filesFromPaths([args.path]);
-  const storage = stat.isDirectory()
-    ? await sdk.storage().uploadVirtualDirectory({
-        files,
-        directoryName,
-        onUploadProgress: uploadOnProgress(progressBar),
-      })
-    : await sdk.storage().uploadFile({
-        file: files[0],
-        onUploadProgress: uploadOnProgress(progressBar),
-      });
+  
+  const storage = await uploadStorage({
+    path: args.path,
+    sdk,
+    files,
+    directoryName,
+    progressBar,
+  });
 
   if (!storage) {
+    // TODO: Can this message be improved
+    // include a try again later and report to support
+    // if the issue persists?
     output.error(t('somethingWrongDurUpload'));
 
     return;
