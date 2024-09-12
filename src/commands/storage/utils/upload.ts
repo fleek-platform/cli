@@ -47,7 +47,6 @@ export const uploadStorage = async ({
 
     return response;
   } catch {
-    progressBar.stop();
     if (typeof onFailure === 'function') {
       onFailure();
     }

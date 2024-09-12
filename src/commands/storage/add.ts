@@ -45,6 +45,9 @@ export const addStorageAction: SdkGuardedFunction<
     files,
     directoryName,
     progressBar,
+    onFailure: () => {
+      progressBar.stop();
+    }
   });
 
   if (!storage) {

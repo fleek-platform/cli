@@ -37,7 +37,6 @@ export const getUploadResult = async ({
       onUploadProgress: uploadOnProgress(progressBar),
     });
   } catch {
-    progressBar.stop();
     if (typeof onFailure === 'function') {
       onFailure();
     }
