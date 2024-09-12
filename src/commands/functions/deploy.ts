@@ -16,7 +16,7 @@ import {
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 
-import type { UploadPinResponse } from '@fleek-platform/sdk/node';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 
 type DeployActionArgs = {
@@ -28,6 +28,41 @@ type DeployActionArgs = {
   envFile?: string;
   sgx?: boolean;
 };
+
+const getUploadResult = async ({
+  filePath,
+  functionName,
+  isPrivate,
+  progressBar,
+  sdk,
+}: {
+  filePath: string;
+  functionName: string;
+  isPrivate: boolean;
+  progressBar: cliProgress.Bar;
+  sdk: FleekSdk;
+}) => {
+  try {
+    if (isPrivate) {
+      return await sdk.storage().uploadPrivateFile({
+        filePath,
+        onUploadProgress: uploadOnProgress(progressBar),
+      });
+    }
+
+    const fileLikeObject = await getFileLikeObject(filePath);
+    return await sdk.storage().uploadFile({
+      file: fileLikeObject,
+      options: { functionName },
+      onUploadProgress: uploadOnProgress(progressBar),
+    });
+  } catch {
+    progressBar.stop();
+  }
+
+  return;
+}
+
 
 const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   sdk,
@@ -66,21 +101,13 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     cliProgress.Presets.shades_grey,
   );
 
-  let uploadResult: UploadPinResponse | undefined;
-
-  if (args.private) {
-    uploadResult = await sdk.storage().uploadPrivateFile({
-      filePath: filePathToUpload,
-      onUploadProgress: uploadOnProgress(progressBar),
-    });
-  } else {
-    const fileLikeObject = await getFileLikeObject(filePathToUpload);
-    uploadResult = await sdk.storage().uploadFile({
-      file: fileLikeObject,
-      options: { functionName: functionToDeploy.name },
-      onUploadProgress: uploadOnProgress(progressBar),
-    });
-  }
+  const uploadResult = await getUploadResult({
+    filePath: filePathToUpload,
+    functionName: functionToDeploy.name,
+    isPrivate: args.private,
+    progressBar,
+    sdk,
+  });
 
   if (!uploadResult) {
     output.error(
