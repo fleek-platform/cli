@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import cliProgress from 'cli-progress';
-import { blake3 } from 'hash-wasm';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
@@ -15,6 +14,7 @@ import {
 } from './utils/getJsCodeFromPath';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
+import { calculateBlake3Hash } from '../../utils/blake3';
 
 import type { FleekSdk } from '@fleek-platform/sdk/node';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
@@ -121,12 +121,15 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     return;
   }
 
-  let b3Hash;
-  if (sgx) {
-    const buffer = await fs.promises.readFile(filePathToUpload);
-
-    b3Hash = await blake3(buffer);
-  }
+  const blake3Hash = sgx
+    ? await calculateBlake3Hash({
+      filePath: filePathToUpload,
+      onFailure: () => {
+        output.error('[TODO] Create error for calculate blake 3');
+        process.exit(1);
+      },
+    })
+    : undefined;
 
   if (!output.debugEnabled && !args.noBundle) {
     fs.rmSync(filePathToUpload);
@@ -174,7 +177,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     functionId: functionToDeploy.id,
     cid: uploadResult.pin.cid,
     sgx,
-    blake3Hash: b3Hash ?? undefined,
+    blake3Hash,
   });
 
   if (sgx) {
@@ -198,11 +201,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     output.link("https://fleek-test.network/services/3");
     output.printNewLine();
-    output.log(`Blake3 Hash: ${b3Hash} `);
+    output.log(`Blake3 Hash: ${blake3Hash} `);
     output.log(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`);
     output.printNewLine();
     output.hint(`Here's an example:`);
-    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`);
+    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`);
   } else {
     if (!args.private) {
       output.log(t('callFleekFunctionByNetworkUrlReq'));
