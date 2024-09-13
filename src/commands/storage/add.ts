@@ -8,11 +8,13 @@ import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../cli';
-import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
-import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
+import { uploadStorage } from './utils/upload';
+
+import type { SdkGuardedFunction } from '../../guards/types';
+import type { FileLike } from './utils/upload';
 
 type AddStorageActionArgs = {
   path: string;
@@ -34,20 +36,19 @@ export const addStorageAction: SdkGuardedFunction<
     },
     cliProgress.Presets.shades_grey,
   );
-  const stat = await fs.stat(args.path);
-
   const directoryName = basename(args.path);
-  const files = await filesFromPaths([args.path]);
-  const storage = stat.isDirectory()
-    ? await sdk.storage().uploadVirtualDirectory({
-        files,
-        directoryName,
-        onUploadProgress: uploadOnProgress(progressBar),
-      })
-    : await sdk.storage().uploadFile({
-        file: files[0],
-        onUploadProgress: uploadOnProgress(progressBar),
-      });
+  const files: FileLike[] = await filesFromPaths([args.path]);
+  
+  const storage = await uploadStorage({
+    path: args.path,
+    sdk,
+    files,
+    directoryName,
+    progressBar,
+    onFailure: () => {
+      progressBar.stop();
+    }
+  });
 
   if (!storage) {
     output.error(t('somethingWrongDurUpload'));

@@ -1,22 +1,20 @@
 import fs from 'node:fs';
 import cliProgress from 'cli-progress';
-import { blake3 } from 'hash-wasm';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
-import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
 import {
   getJsCodeFromPath,
-  getFileLikeObject,
 } from './utils/getJsCodeFromPath';
+import { getUploadResult } from './utils/upload';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
+import { calculateBlake3Hash } from '../../utils/blake3';
 
-import type { UploadPinResponse } from '@fleek-platform/sdk/node';
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 
 type DeployActionArgs = {
@@ -37,9 +35,11 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
   const bundle = !args.noBundle;
-  const sgx = args.sgx ?? false;
+  const isSGX = !!args.sgx;
+  const isTrustedPrivateEnvironment = isSGX && args.private;
+  const isUntrustedPublicEnvironment = !isSGX && !args.private;
 
-  if (args.private && sgx) {
+  if (isTrustedPrivateEnvironment) {
     output.error(t('pvtFunctionInSgxNotSupported', { name: 'function' }));
     return;
   }
@@ -49,7 +49,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     return;
   }
 
-  const filePathToUpload = sgx
+  const filePathToUpload = isSGX
     ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
       filePath,
@@ -66,28 +66,38 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     cliProgress.Presets.shades_grey,
   );
 
-  let uploadResult: UploadPinResponse;
+  const uploadResult = await getUploadResult({
+    filePath: filePathToUpload,
+    functionName: functionToDeploy.name,
+    isPrivate: args.private,
+    progressBar,
+    sdk,
+    onFailure: () => {
+      progressBar.stop();
+    }
+  });
 
-  if (args.private) {
-    uploadResult = await sdk.storage().uploadPrivateFile({
+  if (!uploadResult) {
+    output.error(
+      t('commonFunctionActionFailure', {
+        action: 'deploy',
+        tryAgain: t('tryAgain'),
+        message: t('uploadToIpfsFailed'),
+      }),
+    );
+
+    return;
+  }
+
+  const blake3Hash = isSGX
+    ? await calculateBlake3Hash({
       filePath: filePathToUpload,
-      onUploadProgress: uploadOnProgress(progressBar),
-    });
-  } else {
-    const fileLikeObject = await getFileLikeObject(filePathToUpload);
-    uploadResult = await sdk.storage().uploadFile({
-      file: fileLikeObject,
-      options: { functionName: functionToDeploy.name },
-      onUploadProgress: uploadOnProgress(progressBar),
-    });
-  }
-
-  let b3Hash;
-  if (sgx) {
-    const buffer = await fs.promises.readFile(filePathToUpload);
-
-    b3Hash = await blake3(buffer);
-  }
+      onFailure: () => {
+        output.error(t('failedCalculateBlake3Hash'));
+        process.exit(1);
+      },
+    })
+    : undefined;
 
   if (!output.debugEnabled && !args.noBundle) {
     fs.rmSync(filePathToUpload);
@@ -131,18 +141,27 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     }
   }
 
-  await sdk.functions().deploy({
-    functionId: functionToDeploy.id,
-    cid: uploadResult.pin.cid,
-    sgx,
-    blake3Hash: b3Hash ?? undefined,
-  });
+  try {
+    await sdk.functions().deploy({
+      functionId: functionToDeploy.id,
+      cid: uploadResult.pin.cid,
+      sgx: isSGX,
+      blake3Hash,
+    });
+  } catch {
+    output.error(t('failedDeployFleekFunction'));
+    process.exit(1);
+  }
 
-  if (sgx) {
+  // TODO: This should probably happen just after uploadResult
+  // looks more like a post upload process due to propagation
+  if (isSGX) {
     // We need to make a request to the network so the network can have a mapping to the blake3 hash.
     // this is a temporarily hack until dalton comes up with a fix on network
+    // TODO: Check status of supposed fix
     output.spinner(t('networkFetchMappings'));
     try {
+      // TODO: The `fleek-test` address should be an env var
       await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
     } catch {
       output.error(t('networkFetchFailed'))
@@ -155,22 +174,22 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   output.log(t('callFleekFunctionByUrlReq'));
   output.link(functionToDeploy.invokeUrl);
 
-  if (sgx) {
+  if (isSGX) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     output.link("https://fleek-test.network/services/3");
     output.printNewLine();
-    output.log(`Blake3 Hash: ${b3Hash} `);
+    output.log(`Blake3 Hash: ${blake3Hash} `);
     output.log(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`);
     output.printNewLine();
     output.hint(`Here's an example:`);
-    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${b3Hash}", "decrypt": true, "input": "foo"}'`);
-  } else {
-    if (!args.private) {
-      output.log(t('callFleekFunctionByNetworkUrlReq'));
-      output.link(
-        `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
-      );
-    }
+    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`);
+  }
+
+  if (isUntrustedPublicEnvironment) {
+    output.log(t('callFleekFunctionByNetworkUrlReq'));
+    output.link(
+      `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+    );
   }
 };
 
