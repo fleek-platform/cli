@@ -307,7 +307,7 @@
   "functionsDeleteDescription": "Delete a function",
   "deploymentsListForSelectedFunction": "Show deployments for the selected function",
   "filePathValidWarning": "Please ensure the file path exists and points to a valid javascript file",
-  "commonFunctionActionFailure": "Failed to {action} function. {message} {tryAgain}!",
+  "commonFunctionActionFailure": "Failed to {action} the Fleek Function. {message} {tryAgain}!",
   "tryAgain": "Please try again or contact support",
   "functionsUpdateDescription": "Update a function",
   "functionUpdateArgsNotValid": "One of --{param1}, --{param2} and --{param3} must be specified",
