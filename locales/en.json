@@ -71,7 +71,7 @@
   "deploymentsListForSelectedSite": "Show deployments for the selected site",
   "buildCmdFailedSeeErr": "The build command {cmd} has failed. Please refer to the errors above, as we are unable to proceed",
   "uploadingFiles": "Files are being uploaded...",
-  "somethingWrongDurUpload": "An error occurred during the upload process. Please try again! If the issue persists, report it to our team please.",
+  "somethingWrongDurUpload": "An error occurred during the upload process. Please try again!",
   "startingSiteDeployment": "Initiating site deployment...",
   "creatingSite": "Creating the site",
   "specifyDistDirToSiteUpl": "Please specify the directory containing the site files to be uploaded",
