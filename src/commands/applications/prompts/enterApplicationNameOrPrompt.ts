@@ -29,8 +29,6 @@ export const enterApplicationNameOrPrompt = async (
         : t('invalidNameUseXofYAndRegex', {
             min: '3',
             max: '30',
-            regFirst: 'a-zA-Z0-9._-~',
-            regLast: 'a-zA-Z0-9',
           }),
     initial: args.application?.name,
   });
