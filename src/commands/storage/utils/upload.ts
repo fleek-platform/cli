@@ -4,6 +4,8 @@ import { uploadOnProgress } from '../../../output/utils/uploadOnProgress';
 import type { FleekSdk, UploadPinResponse } from '@fleek-platform/sdk/node';
 import type { SingleBar as ProgressSingleBar } from 'cli-progress';
 
+import type { ReadableStream } from 'stream/web';
+
 export type FileLike = {
   name: string;
   stream: () => ReadableStream<Uint8Array>;
