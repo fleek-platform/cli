@@ -143,7 +143,7 @@
   "appClientSuccessUpdated": "The application Client ID was successfully updated.",
   "selectApp": "Choose application",
   "typeAppName": "Enter the name of the new application",
-  "invalidNameUseXofYAndRegex": "The name you provided is invalid. It must be between {min} and {max} characters long, starting with \"{regFirst}\" and ending with \"{regLast}\".",
+  "invalidNameUseXofYAndRegex": "The name you provided is invalid. Please ensure it meets the following criteria, it must be between {min} and {max} characters long, begin and end with a letter or number. Allowed characters are letters, numbers, spaces and symbols (. - ~)",
   "typeWhiteLabelDomainsSepByComma": "Enter one or more domain names to whitelist, separated by commas (e.g. example123.com, site321.com)",
   "typeWhitelistDomainsSepByComma": "Enter one or more domain names to whitelist, separated by commas (e.g. example123.com, site321.com)",
   "noPrivateGateways": "You currently do not have any private gateways configured.",
