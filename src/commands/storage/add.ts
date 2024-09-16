@@ -38,7 +38,7 @@ export const addStorageAction: SdkGuardedFunction<
   );
   const directoryName = basename(args.path);
   const files: FileLike[] = await filesFromPaths([args.path]);
-  
+
   const storage = await uploadStorage({
     path: args.path,
     sdk,
@@ -47,7 +47,7 @@ export const addStorageAction: SdkGuardedFunction<
     progressBar,
     onFailure: () => {
       progressBar.stop();
-    }
+    },
   });
 
   if (!storage) {

@@ -7,9 +7,7 @@ import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
-import {
-  getJsCodeFromPath,
-} from './utils/getJsCodeFromPath';
+import { getJsCodeFromPath } from './utils/getJsCodeFromPath';
 import { getUploadResult } from './utils/upload';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
@@ -52,10 +50,10 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const filePathToUpload = isSGX
     ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
-      filePath,
-      bundle,
-      env,
-    });
+        filePath,
+        bundle,
+        env,
+      });
 
   output.printNewLine();
 
@@ -74,7 +72,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     sdk,
     onFailure: () => {
       progressBar.stop();
-    }
+    },
   });
 
   if (!uploadResult) {
@@ -91,12 +89,12 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   const blake3Hash = isSGX
     ? await calculateBlake3Hash({
-      filePath: filePathToUpload,
-      onFailure: () => {
-        output.error(t('failedCalculateBlake3Hash'));
-        process.exit(1);
-      },
-    })
+        filePath: filePathToUpload,
+        onFailure: () => {
+          output.error(t('failedCalculateBlake3Hash'));
+          process.exit(1);
+        },
+      })
     : undefined;
 
   if (!output.debugEnabled && !args.noBundle) {
@@ -162,10 +160,12 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     output.spinner(t('networkFetchMappings'));
     try {
       // TODO: The `fleek-test` address should be an env var
-      await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`)
+      await fetch(
+        `https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`,
+      );
     } catch {
-      output.error(t('networkFetchFailed'))
-      return
+      output.error(t('networkFetchFailed'));
+      return;
     }
   }
 
@@ -176,13 +176,17 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   if (isSGX) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
-    output.link("https://fleek-test.network/services/3");
+    output.link('https://fleek-test.network/services/3');
     output.printNewLine();
     output.log(`Blake3 Hash: ${blake3Hash} `);
-    output.log(`Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`);
+    output.log(
+      `Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`,
+    );
     output.printNewLine();
     output.hint(`Here's an example:`);
-    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`);
+    output.link(
+      `curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`,
+    );
   }
 
   if (isUntrustedPublicEnvironment) {

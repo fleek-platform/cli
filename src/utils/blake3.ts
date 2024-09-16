@@ -14,6 +14,6 @@ export const calculateBlake3Hash = async ({
   } catch {
     if (typeof onFailure === 'function') {
       onFailure();
-    };
+    }
   }
-}
+};

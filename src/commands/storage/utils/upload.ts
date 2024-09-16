@@ -18,22 +18,22 @@ export const uploadStorage = async ({
   progressBar,
   onFailure,
 }: {
-    path: string;
-    sdk: FleekSdk;
-    files: FileLike[];
-    directoryName: string;
-    progressBar: ProgressSingleBar;
-    onFailure?: () => void;
+  path: string;
+  sdk: FleekSdk;
+  files: FileLike[];
+  directoryName: string;
+  progressBar: ProgressSingleBar;
+  onFailure?: () => void;
 }): Promise<UploadPinResponse | undefined> => {
   try {
     const stat = await fs.stat(path);
 
     if (stat.isDirectory()) {
       return await sdk.storage().uploadVirtualDirectory({
-            files,
-            directoryName,
-            onUploadProgress: uploadOnProgress(progressBar),
-          });
+        files,
+        directoryName,
+        onUploadProgress: uploadOnProgress(progressBar),
+      });
     }
 
     // TODO: The progressBar is displayed twice
@@ -53,4 +53,4 @@ export const uploadStorage = async ({
   }
 
   return;
-}
+};

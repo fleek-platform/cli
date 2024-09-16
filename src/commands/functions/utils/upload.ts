@@ -1,7 +1,5 @@
 import { uploadOnProgress } from '../../../output/utils/uploadOnProgress';
-import {
- getFileLikeObject,
-} from './getJsCodeFromPath';
+import { getFileLikeObject } from './getJsCodeFromPath';
 
 import type { FleekSdk } from '@fleek-platform/sdk/node';
 import type { Bar as ProgressBar } from 'cli-progress';
@@ -30,7 +28,7 @@ export const getUploadResult = async ({
       });
     }
 
-    const fileLikeObject = await getFileLikeObject(filePath) as FileLike;
+    const fileLikeObject = (await getFileLikeObject(filePath)) as FileLike;
     return await sdk.storage().uploadFile({
       file: fileLikeObject,
       options: { functionName },
@@ -43,4 +41,4 @@ export const getUploadResult = async ({
   }
 
   return;
-}
+};
