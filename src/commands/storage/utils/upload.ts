@@ -31,7 +31,7 @@ export const uploadStorage = async ({
     const stat = await fs.stat(path);
 
     if (stat.isDirectory()) {
-      return await sdk.storage().uploadVirtualDirectory({
+      return sdk.storage().uploadVirtualDirectory({
         files,
         directoryName,
         onUploadProgress: uploadOnProgress(progressBar),
