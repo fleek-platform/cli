@@ -4,14 +4,14 @@ import cliProgress from 'cli-progress';
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
+import { calculateBlake3Hash } from '../../utils/blake3';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
 import { getJsCodeFromPath } from './utils/getJsCodeFromPath';
-import { getUploadResult } from './utils/upload';
 import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
+import { getUploadResult } from './utils/upload';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
-import { calculateBlake3Hash } from '../../utils/blake3';
 
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 

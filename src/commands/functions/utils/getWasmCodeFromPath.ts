@@ -1,15 +1,15 @@
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 
-import { output } from '../../../cli';
-import { t } from '../../../utils/translation';
-import cliProgress from 'cli-progress';
-import { encrypt } from 'eciesjs';
 import {
+  FleekFunctionInvalidWasmCodeError,
   FleekFunctionPathNotValidError,
   FleekFunctionWasmEncryptionFailedError,
-  FleekFunctionInvalidWasmCodeError,
 } from '@fleek-platform/errors';
+import cliProgress from 'cli-progress';
+import { encrypt } from 'eciesjs';
+import { output } from '../../../cli';
+import { t } from '../../../utils/translation';
 
 const PUBLIC_KEY =
   '03a3fe41244add26af1f820d2acb4ad22b158ff7b69ce41401bf932d7734eb5d49';

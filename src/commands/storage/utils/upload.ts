@@ -4,7 +4,7 @@ import { uploadOnProgress } from '../../../output/utils/uploadOnProgress';
 import type { FleekSdk, UploadPinResponse } from '@fleek-platform/sdk/node';
 import type { SingleBar as ProgressSingleBar } from 'cli-progress';
 
-import type { ReadableStream } from 'stream/web';
+import type { ReadableStream } from 'node:stream/web';
 
 export type FileLike = {
   name: string;
@@ -46,7 +46,6 @@ export const uploadStorage = async ({
       file: files[0],
       onUploadProgress: uploadOnProgress(progressBar),
     });
-
   } catch {
     if (typeof onFailure === 'function') {
       onFailure();
