@@ -42,12 +42,11 @@ export const uploadStorage = async ({
     // seem like different instances
     // where one is initialized purposely on set 0
     // investigate why this is
-    const response = await sdk.storage().uploadFile({
+    return sdk.storage().uploadFile({
       file: files[0],
       onUploadProgress: uploadOnProgress(progressBar),
     });
 
-    return response;
   } catch {
     if (typeof onFailure === 'function') {
       onFailure();
