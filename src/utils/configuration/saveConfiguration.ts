@@ -24,12 +24,12 @@ type ConfigFilePath = string;
 
 const filePathForTypescriptConfig = path.join(
   __dirname,
-  '../../templates/sites/config',
+  './templates/sites/config',
   getConfigTemplateByTypeName('Typescript'),
 );
 const filePathForJavascriptConfig = path.join(
   __dirname,
-  '../../templates/sites/config',
+  './templates/sites/config',
   getConfigTemplateByTypeName('Javascript'),
 );
 
