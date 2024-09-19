@@ -9,7 +9,7 @@ import { logoutActionHandler } from './logout';
 export default (cmd: Command) => {
   cmd
     .command('login')
-    .description(t('loginToFlkPlt', { status: t('loginTo') }))
+    .description(t('cmdAuthLoginDescription'))
     .action(() => {
       const uiAppUrl = getDefined('UI__APP_URL');
       const authApiUrl = getDefined('SDK__GRAPHQL_API_URL');
