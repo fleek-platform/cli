@@ -18,7 +18,7 @@ import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
 type DeployActionArgs = {
   filePath?: string;
   name?: string;
-  noBundle: boolean;
+  bundle: boolean;
   private: boolean;
   env: string[];
   envFile?: string;
@@ -32,7 +32,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
-  const bundle = !args.noBundle;
+  const bundle = !args.bundle;
   const isSGX = !!args.sgx;
   const isTrustedPrivateEnvironment = isSGX && args.private;
   const isUntrustedPublicEnvironment = !isSGX && !args.private;
@@ -97,7 +97,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       })
     : undefined;
 
-  if (!output.debugEnabled && !args.noBundle) {
+  if (!output.debugEnabled && !args.bundle) {
     fs.rmSync(filePathToUpload);
   }
 

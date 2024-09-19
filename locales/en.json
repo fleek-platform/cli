@@ -330,7 +330,7 @@
   "networkFetchFailed": "Failed to fetch Mapping, please retry deploying your function.",
   "unsupportedPackage": "The {packageName} package is not currently supported by Fleek Functions.",
   "showUnsupportedModulesDocLink": "Please refer to our documentation to see which packages we support.",
-  "noBundle": "Disable bundling",
+  "bundleCmd": "Adjust bundling preferences: Enable or Disable file concatenation for improved performance.",
   "bundleDisabledInDirectory": "Bundling is disabled but the path points to a directory. The {filename} file will be uploaded.",
   "functionDeployToPrivateStorage": "[🧪 Alpha] Function code will be private",
   "functionsUseSgx": "[🧪 Alpha] Function will use trusted execution environment for sensitive computations using SGX",
