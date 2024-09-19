@@ -1,3 +1,4 @@
+import { output } from '../../../cli';
 import { listPrompt } from '../../../prompts/listPrompt';
 import { t } from '../../../utils/translation';
 
@@ -9,7 +10,7 @@ type GetWhitelistDomainsOrPromptArgs = {
 export const getWhitelistDomainsOrPrompt = async ({
   whitelistDomains,
   whitelistDomainsToUpdate,
-}: GetWhitelistDomainsOrPromptArgs) => {
+}: GetWhitelistDomainsOrPromptArgs): Promise<string[]> => {
   if (whitelistDomains) {
     return whitelistDomains;
   }
@@ -19,5 +20,17 @@ export const getWhitelistDomainsOrPrompt = async ({
     initial: whitelistDomainsToUpdate,
   });
 
-  return list.filter((hostname) => hostname.length > 0);
+  const domains = list.filter((hostname) => hostname.length > 0);
+
+  if (!domains.length) {
+    output.warn(t('warnProvideValidDomainName'));
+    output.printNewLine();
+    
+    return getWhitelistDomainsOrPrompt({
+      whitelistDomains,
+      whitelistDomainsToUpdate,
+    });
+  }
+
+  return domains;
 };
