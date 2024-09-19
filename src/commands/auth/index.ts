@@ -27,7 +27,7 @@ export default (cmd: Command) => {
 
   cmd
     .command('logout')
-    .description(t('loginToFlkPlt', { status: t('logoutOf') }))
+    .description(t('cmdAuthLogoutDescription'))
     .action(logoutActionHandler)
     .addHelpCommand();
 };

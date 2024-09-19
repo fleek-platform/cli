@@ -349,5 +349,6 @@
   "failedCalculateBlake3Hash": "Failed to calculate the Blake3 hash. Please try again!",
   "failedDeployFleekFunction": "Failed to deploy the Fleek Function. Please try again!",
   "warnProvideValidDomainName": "Please provide a valid domain name.",
-  "cmdAuthLoginDescription": "Authenticate the CLI session using the Fleek Platform Web app. Open the URL in your favourite browser to initiate the browser-based login process. Select your preferred authentication method and return to CLI once completed."
+  "cmdAuthLoginDescription": "Authenticate the CLI session using the Fleek Platform Web app. Open the URL in your favourite browser to initiate the browser-based login process. Select your preferred authentication method and return to CLI once completed.",
+  "cmdAuthLogoutDescription": "Ends your active CLI session, securing your account. Disables access to personal features such as storage and site deployment until re-authentication."
 }
