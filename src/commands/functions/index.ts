@@ -30,7 +30,8 @@ export default (program: Command) => {
     .description(t('functionsCreateDescription'))
     .action((options: { name?: string }) =>
       createActionHandler({ name: options.name }),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('delete')
@@ -38,7 +39,8 @@ export default (program: Command) => {
     .option('-n, --name <functionName>', t('functionName'))
     .action((options: { name?: string }) =>
       deleteActionHandler({ name: options.name }),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('update')
@@ -60,7 +62,8 @@ export default (program: Command) => {
           slug: options.slug,
           status: options.status,
         }),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('deploy')
@@ -85,12 +88,14 @@ export default (program: Command) => {
         envFile: options.envFile,
         sgx: options.sgx,
       }),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('list')
     .description(t('listFunctionsDesc'))
-    .action(() => listActionHandler());
+    .action(() => listActionHandler())
+    .addHelpCommand();
 
   cmd
     .command('deployments')
@@ -98,10 +103,12 @@ export default (program: Command) => {
     .description(t('deploymentsListForSelectedFunction'))
     .action((options: { name?: string }) =>
       listDeploymentsActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('help')
     .description(t('printHelp'))
-    .action(() => cmd.help());
+    .action(() => cmd.help())
+    .addHelpCommand();
 };
