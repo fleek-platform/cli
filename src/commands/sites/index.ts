@@ -16,7 +16,8 @@ export default (program: Command) => {
   cmd
     .command('init')
     .description(t('sitesInitDescription'))
-    .action(() => initActionHandler());
+    .action(() => initActionHandler())
+    .addHelpCommand();
 
   cmd
     .command('ci')
@@ -28,7 +29,8 @@ export default (program: Command) => {
         predefinedConfigPath: options.config,
         provider: options.provider,
       }),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('deploy')
@@ -36,12 +38,14 @@ export default (program: Command) => {
     .option('-c, --config <fleekConfigPath>', t('deploySpecifyPathJson'))
     .action((options: { config?: string }) =>
       deployActionHandler({ predefinedConfigPath: options.config }),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('list')
     .description(t('listSitesDesc'))
-    .action(() => listActionHandler());
+    .action(() => listActionHandler())
+    .addHelpCommand();
 
   cmd
     .command('deployments')
@@ -56,7 +60,8 @@ export default (program: Command) => {
     .description(t('deploymentsListForSelectedSite'))
     .action((options: { id?: string; slug?: string }) =>
       listDeploymentsActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('help')
