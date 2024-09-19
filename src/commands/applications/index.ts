@@ -14,7 +14,8 @@ export default (program: Command) => {
   cmd
     .command('list')
     .description(t('listAllAppForProject'))
-    .action(listApplicationsActionHandler);
+    .action(listApplicationsActionHandler)
+    .addHelpCommand();
 
   cmd
     .command('create')
@@ -23,7 +24,8 @@ export default (program: Command) => {
     .description(t('createNewAppClient'))
     .action((options: { name?: string; whitelistDomains?: string[] }) =>
       createApplicationActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('update')
@@ -41,8 +43,9 @@ export default (program: Command) => {
     .action(
       (options: { id?: string; name?: string; whitelistDomains?: string[] }) =>
         updateApplicationActionHandler(options),
-    );
-
+    )
+    .addHelpCommand();
+    
   cmd
     .command('delete')
     .description(t('deleteAppClient'))
@@ -56,5 +59,6 @@ export default (program: Command) => {
     )
     .action((options: { id?: string }) =>
       deleteApplicationActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 };
