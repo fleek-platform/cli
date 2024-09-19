@@ -48,7 +48,7 @@ export default (program: Command) => {
       createPrivateGatewayActionHandler(options),
     )
     .addHelpCommand();
-    
+
   cmd
     .command('delete')
     .option(
