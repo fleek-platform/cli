@@ -11,7 +11,8 @@ export default (program: Command) => {
   const cmd = program
     .command('ipns')
     .option('-h, --help', 'Print help')
-    .description(t('ipnsDescription'));
+    .description(t('ipnsDescription'))
+    .addHelpCommand();
 
   cmd
     .command('create')
@@ -32,7 +33,8 @@ export default (program: Command) => {
     )
     .action((options: { siteId?: string; siteSlug?: string }) =>
       createActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('publish')
@@ -41,12 +43,14 @@ export default (program: Command) => {
     .option('--hash <string>', t('ipnsPublishOptionHashDesc'))
     .action((options: { name: string; hash: string }) =>
       publishActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('list')
     .description(t('ipnsListDescription'))
-    .action(() => listActionHandler());
+    .action(() => listActionHandler())
+    .addHelpCommand();
 
   cmd
     .command('delete')
@@ -59,13 +63,15 @@ export default (program: Command) => {
         action: t('delete'),
       }),
     )
-    .action((options: { name: string }) => deleteActionHandler(options));
+    .action((options: { name: string }) => deleteActionHandler(options))
+    .addHelpCommand();
 
   cmd
     .command('resolve')
     .description(t('ipnsResolveDescription'))
     .argument('<name>', t('ipnsResolveArgName'))
-    .action((name: string) => resolveActionHandler({ name }));
+    .action((name: string) => resolveActionHandler({ name }))
+    .addHelpCommand();
 
   cmd
     .command('help')
