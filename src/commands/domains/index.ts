@@ -11,7 +11,8 @@ export default (program: Command) => {
   const cmd = program
     .command('domains')
     .option('-h, --help', t('printHelp'))
-    .description(t('domainsDesc'));
+    .description(t('domainsDesc'))
+    .addHelpCommand();
 
   cmd
     .command('list')
@@ -19,7 +20,8 @@ export default (program: Command) => {
     .description(t('listAllDomainsSelectProject'))
     .action((options: { siteId?: string }) =>
       listDomainsActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('detail')
@@ -28,7 +30,8 @@ export default (program: Command) => {
     .description(t('showDomainDetails'))
     .action((options: { id?: string; hostname?: string }) =>
       detailDomainActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('create')
@@ -45,7 +48,8 @@ export default (program: Command) => {
         siteSlug?: string;
         hostname?: string;
       }) => createDomainActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('delete')
@@ -68,7 +72,8 @@ export default (program: Command) => {
     .description(t('deleteDomain'))
     .action((options: { hostname?: string }) =>
       deleteDomainActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('verify')
@@ -77,7 +82,8 @@ export default (program: Command) => {
     .description(t('verifyDomainConfig'))
     .action((options: { hostname?: string }) =>
       verifyDomainActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd.command('help').description(t('printHelp'));
 };
