@@ -45,7 +45,7 @@ export default (program: Command) => {
         updateApplicationActionHandler(options),
     )
     .addHelpCommand();
-    
+
   cmd
     .command('delete')
     .description(t('deleteAppClient'))
