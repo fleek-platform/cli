@@ -15,7 +15,8 @@ export default (program: Command) => {
   cmd
     .command('list')
     .description(t('storageListDescription'))
-    .action(() => listStorageActionHandler());
+    .action(() => listStorageActionHandler())
+    .addHelpCommand();
 
   const getStorage = cmd
     .command('get')
@@ -24,7 +25,8 @@ export default (program: Command) => {
     .option(
       '-n, --name <filenameWithExtension>',
       t('storageNameOption', { action: t('get') }),
-    );
+    )
+    .addHelpCommand();
 
   getStorage.action((options: { cid?: string; name?: string }) => {
     if ((!options.name && !options.cid) || (options.name && options.cid)) {
@@ -51,7 +53,8 @@ export default (program: Command) => {
     .option(
       '-n, --name <filenameWithExtension>',
       t('storageNameOption', { action: t('delete') }),
-    );
+    )
+    .addHelpCommand();
 
   deleteStorage.action((options: { cid?: string; name?: string }) => {
     if ((!options.name && !options.cid) || (options.name && options.cid)) {
@@ -75,5 +78,6 @@ export default (program: Command) => {
     .command('add')
     .description(t('storageAddDescription'))
     .argument('<path>', t('ipfsAddPathDescription'))
-    .action((path: string) => addStorageActionHandler({ path }));
+    .action((path: string) => addStorageActionHandler({ path }))
+    .addHelpCommand();
 };
