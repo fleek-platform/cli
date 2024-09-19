@@ -25,7 +25,7 @@ export const getWhitelistDomainsOrPrompt = async ({
   if (!domains.length) {
     output.warn(t('warnProvideValidDomainName'));
     output.printNewLine();
-    
+
     return getWhitelistDomainsOrPrompt({
       whitelistDomains,
       whitelistDomainsToUpdate,
