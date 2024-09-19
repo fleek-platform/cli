@@ -6,8 +6,8 @@ import { t } from '../../utils/translation';
 import { loginActionHandler } from './login';
 import { logoutActionHandler } from './logout';
 
-export default (program: Command) => {
-  program
+export default (cmd: Command) => {
+  cmd
     .command('login')
     .description(t('loginToFlkPlt', { status: t('loginTo') }))
     .action(() => {
@@ -22,10 +22,12 @@ export default (program: Command) => {
         uiAppUrl,
         authApiUrl,
       });
-    });
+    })
+    .addHelpCommand();
 
-  program
+  cmd
     .command('logout')
     .description(t('loginToFlkPlt', { status: t('logoutOf') }))
-    .action(logoutActionHandler);
+    .action(logoutActionHandler)
+    .addHelpCommand();
 };
