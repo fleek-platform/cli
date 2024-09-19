@@ -13,7 +13,7 @@ export default (program: Command) => {
     .option('-h, --help', t('printHelp'))
     .description(t('ensCmdDescription'))
     .addHelpCommand();
-    
+
   cmd
     .command('create')
     .option('--siteId <string>', t('siteIdOf'))
