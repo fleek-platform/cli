@@ -15,7 +15,8 @@ export default (program: Command) => {
   cmd
     .command('list')
     .description(t('listAllPrvGwForSelectProject'))
-    .action(() => listPrivateGatewaysActionHandler());
+    .action(() => listPrivateGatewaysActionHandler())
+    .addHelpCommand();
 
   cmd
     .command('detail')
@@ -36,7 +37,8 @@ export default (program: Command) => {
     .description(t('gatewayShowDetails'))
     .action((options: { id?: string; slug?: string }) =>
       detailPrivateGatewayActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd
     .command('create')
@@ -44,8 +46,9 @@ export default (program: Command) => {
     .description(t('gatewayCreateCmdDesc'))
     .action((options: { name?: string }) =>
       createPrivateGatewayActionHandler(options),
-    );
-
+    )
+    .addHelpCommand();
+    
   cmd
     .command('delete')
     .option(
@@ -67,7 +70,8 @@ export default (program: Command) => {
     .description(t('gatewayDelete'))
     .action((options: { id?: string; slug?: string }) =>
       deletePrivateGatewayActionHandler(options),
-    );
+    )
+    .addHelpCommand();
 
   cmd.command('help').description(t('printHelp'));
 };
