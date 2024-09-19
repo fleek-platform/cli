@@ -7,13 +7,15 @@ export default (program: Command) => {
   const cmd = program
     .command('ipfs')
     .option('-h, --help', t('printHelp'))
-    .description(t('ipfsDescription'));
+    .description(t('ipfsDescription'))
+    .addHelpCommand();
 
   cmd
     .command('add')
     .description(t('ipfsAddDescription'))
     .argument('<path>', t('ipfsAddPathDescription'))
-    .action((path: string) => addActionHandler({ path }));
+    .action((path: string) => addActionHandler({ path }))
+    .addHelpCommand();
 
   cmd
     .command('help')
