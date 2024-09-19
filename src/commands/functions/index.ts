@@ -11,7 +11,7 @@ import { updateActionHandler } from './update';
 type DeployOptions = {
   path?: string;
   name?: string;
-  bundle: boolean;
+  bundle: string;
   private: boolean;
   env?: string[];
   envFile?: string;
@@ -67,7 +67,7 @@ export default (program: Command) => {
     .description(t('deployFunction'))
     .option('-p, --path <functionCodePath>', t('functionCodePath'))
     .option('-n, --name <functionName>', t('functionName'))
-    .option('--bundle', t('bundleCmd'), true)
+    .option('-b, --bundle <bundle>', t('bundleCmd'), true)
     .option('--private', t('functionDeployToPrivateStorage'), false)
     .option('-e, --env <environmentVariables...>', t('environmentVariables'))
     .option('--sgx', t('functionsUseSgx'), false)
