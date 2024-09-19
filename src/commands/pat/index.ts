@@ -16,7 +16,8 @@ export default (program: Command) => {
   cmd
     .command('list') //
     .description(t('patListDesc'))
-    .action(listPersonalAccessTokensActionHandler);
+    .action(listPersonalAccessTokensActionHandler)
+    .addHelpCommand();
 
   cmd
     .command('create')
@@ -35,7 +36,8 @@ export default (program: Command) => {
         authApiUrl,
         ...args,
       });
-    });
+    })
+    .addHelpCommand();
 
   cmd
     .command('delete')
@@ -50,7 +52,8 @@ export default (program: Command) => {
     )
     .action((personalAccessTokenId: string) =>
       deletePersonalAccessTokenActionHandler({ personalAccessTokenId }),
-    );
+    )
+    .addHelpCommand();
 
   cmd.command('help').description(t('printHelp'));
 };
