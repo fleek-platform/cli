@@ -18,9 +18,7 @@ export default (program: Command) => {
     .command('list')
     .option('--siteId <string>', t('siteIDDomainAssignTo'))
     .description(t('listAllDomainsSelectProject'))
-    .action((options: { siteId?: string }) =>
-      listDomainsActionHandler(options),
-    )
+    .action((options: { siteId?: string }) => listDomainsActionHandler(options))
     .addHelpCommand();
 
   cmd
