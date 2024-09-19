@@ -347,5 +347,6 @@
   "expectedNotFoundGeneric": "We had trouble locating the {name}. Please try again, and contact us if the issue persists.",
   "unexpectedFileFormat": "We weren't expecting the format {format}. Kindly submit a detailed report of the issue to our support team.",
   "failedCalculateBlake3Hash": "Failed to calculate the Blake3 hash. Please try again!",
-  "failedDeployFleekFunction": "Failed to deploy the Fleek Function. Please try again!"
+  "failedDeployFleekFunction": "Failed to deploy the Fleek Function. Please try again!",
+  "warnProvideValidDomainName": "Please provide a valid domain name."
 }
