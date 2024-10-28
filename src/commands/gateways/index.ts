@@ -9,14 +9,12 @@ import { listPrivateGatewaysActionHandler } from './list';
 export default (program: Command): Command => {
   const cmd = program
     .command('gateways')
-    .option('-h', '--help', t('printHelp'))
     .description(t('gatewaysCmdDescription'));
 
   cmd
     .command('list')
     .description(t('listAllPrvGwForSelectProject'))
-    .action(() => listPrivateGatewaysActionHandler())
-    .addHelpCommand();
+    .action(() => listPrivateGatewaysActionHandler());
 
   cmd
     .command('detail')
@@ -37,8 +35,7 @@ export default (program: Command): Command => {
     .description(t('gatewayShowDetails'))
     .action((options: { id?: string; slug?: string }) =>
       detailPrivateGatewayActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('create')
@@ -46,8 +43,7 @@ export default (program: Command): Command => {
     .description(t('gatewayCreateCmdDesc'))
     .action((options: { name?: string }) =>
       createPrivateGatewayActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('delete')
@@ -70,8 +66,7 @@ export default (program: Command): Command => {
     .description(t('gatewayDelete'))
     .action((options: { id?: string; slug?: string }) =>
       deletePrivateGatewayActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   return cmd;
 };
