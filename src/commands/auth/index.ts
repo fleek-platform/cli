@@ -6,7 +6,7 @@ import { t } from '../../utils/translation';
 import { loginActionHandler } from './login';
 import { logoutActionHandler } from './logout';
 
-export default (cmd: Command) => {
+export default (cmd: Command): Command => {
   cmd
     .command('login')
     .description(t('cmdAuthLoginDescription'))
@@ -30,4 +30,6 @@ export default (cmd: Command) => {
     .description(t('cmdAuthLogoutDescription'))
     .action(logoutActionHandler)
     .addHelpCommand();
+
+  return cmd;
 };
