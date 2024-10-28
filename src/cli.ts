@@ -51,6 +51,9 @@ export const init = ({ version, parser }: InitArgs) => {
     .action(() => program.outputHelp())
     .version(version);
 
+  // TODO: The ascii logo should only be displayed
+  // on default command, or general help
+  // a minimal version can be used instead
   program.addHelpText('beforeAll', logo).showHelpAfterError();
 
   type CmdVersionArgs = typeof program;
@@ -75,7 +78,7 @@ export const init = ({ version, parser }: InitArgs) => {
     cmdSites,
     cmdStorage,
     cmdFunctions,
-    // cmdVersion,
+    cmdVersion,
   ];
 
   for (const cmd of commands) {
