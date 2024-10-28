@@ -7,7 +7,7 @@ import { listActionHandler } from './list';
 import { publishActionHandler } from './publish';
 import { resolveActionHandler } from './resolve';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('ipns')
     .option('-h, --help', 'Print help')
@@ -73,8 +73,5 @@ export default (program: Command) => {
     .action((name: string) => resolveActionHandler({ name }))
     .addHelpCommand();
 
-  cmd
-    .command('help')
-    .description(t('printHelp'))
-    .action(() => cmd.help());
+  return cmd;
 };
