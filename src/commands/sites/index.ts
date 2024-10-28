@@ -10,14 +10,12 @@ import { listDeploymentsActionHandler } from './listDeployments';
 export default (program: Command): Command => {
   const cmd = program
     .command('sites')
-    .option('-h, --help', t('printHelp'))
     .description(t('sitesDescription'));
 
   cmd
     .command('init')
     .description(t('sitesInitDescription'))
-    .action(() => initActionHandler())
-    .addHelpCommand();
+    .action(() => initActionHandler());
 
   cmd
     .command('ci')
@@ -29,8 +27,7 @@ export default (program: Command): Command => {
         predefinedConfigPath: options.config,
         provider: options.provider,
       }),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('deploy')
@@ -38,14 +35,12 @@ export default (program: Command): Command => {
     .option('-c, --config <fleekConfigPath>', t('deploySpecifyPathJson'))
     .action((options: { config?: string }) =>
       deployActionHandler({ predefinedConfigPath: options.config }),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('list')
     .description(t('listSitesDesc'))
-    .action(() => listActionHandler())
-    .addHelpCommand();
+    .action(() => listActionHandler());
 
   cmd
     .command('deployments')
@@ -60,8 +55,7 @@ export default (program: Command): Command => {
     .description(t('deploymentsListForSelectedSite'))
     .action((options: { id?: string; slug?: string }) =>
       listDeploymentsActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   return cmd;
 };
