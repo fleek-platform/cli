@@ -8,29 +8,24 @@ import { switchProjectActionHandler } from './switch';
 export default (program: Command): Command => {
   const cmd = program
     .command('projects')
-    .option('-h, --help', t('printHelp'))
-    .description(t('projectsDescription'))
-    .addHelpCommand();
+    .description(t('projectsDescription'));
 
   cmd
     .command('list')
     .description(t('projectsListDesc'))
-    .action(() => listProjectsActionHandler())
-    .addHelpCommand();
+    .action(() => listProjectsActionHandler());
 
   cmd
     .command('switch')
     .option('--id <string>', t('projectsSwitchOptId'))
     .description(t('projectsSwitchBetween'))
-    .action((options: { id?: string }) => switchProjectActionHandler(options))
-    .addHelpCommand();
+    .action((options: { id?: string }) => switchProjectActionHandler(options));
 
   cmd
     .command('create')
     .option('--name <string>', t('projectsWhatNameOfProject'))
     .description(t('projectsCreateNewDesc'))
-    .action((options: { name: string }) => createProjectActionHandler(options))
-    .addHelpCommand();
+    .action((options: { name: string }) => createProjectActionHandler(options));
 
   return cmd;
 };
