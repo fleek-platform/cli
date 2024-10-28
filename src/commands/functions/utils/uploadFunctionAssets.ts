@@ -1,7 +1,7 @@
 import type { FleekSdk } from '@fleek-platform/sdk/node';
+import { isValidFolder } from '@fleek-platform/utils-validation';
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
-import { isValidFolder } from '@fleek-platform/utils-validation';
 
 export const uploadFunctionAssets = async ({
   sdk,
