@@ -10,9 +10,7 @@ import { verifyEnsRecordActionHandler } from './verify';
 export default (program: Command): Command => {
   const cmd = program
     .command('ens')
-    .option('-h, --help', t('printHelp'))
-    .description(t('ensCmdDescription'))
-    .addHelpCommand();
+    .description(t('ensCmdDescription'));
 
   cmd
     .command('create')
@@ -28,8 +26,7 @@ export default (program: Command): Command => {
         name?: string;
         ipns?: string;
       }) => createEnsActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('detail')
@@ -44,8 +41,7 @@ export default (program: Command): Command => {
     .description(t('ensShowDetails'))
     .action((options: { id?: string; name?: string }) =>
       detailEnsRecordsActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('list')
@@ -53,8 +49,7 @@ export default (program: Command): Command => {
     .description(t('ensListAllForProject'))
     .action((options: { siteId?: string }) =>
       listEnsRecordsActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('delete')
@@ -77,8 +72,7 @@ export default (program: Command): Command => {
     .description(t('ensDelete'))
     .action((options: { id?: string; name?: string }) =>
       deleteEnsActionHandler(options),
-    )
-    .addHelpCommand();
+    );
 
   cmd
     .command('verify')
@@ -101,10 +95,7 @@ export default (program: Command): Command => {
     .description(t('ensVerifyIsConfig'))
     .action((options: { id?: string; name?: string }) =>
       verifyEnsRecordActionHandler(options),
-    )
-    .addHelpCommand();
-
-  cmd.command('help').description(t('printHelp'));
+    );
 
   return cmd;
 };

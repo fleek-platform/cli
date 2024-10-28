@@ -67,7 +67,7 @@ export const init = ({ version, parser }: InitArgs) => {
     cmdAuth,
     cmdApplications,
     cmdDomains,
-    // cmdEns,
+    cmdEns,
     // cmdGateways,
     // cmdIPFS,
     // cmdIPNS,
