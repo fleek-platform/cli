@@ -40,8 +40,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install \
-            --strict-peer-dependencies
+          pnpm install
 
       - name: Code format check
         id: fmt_check
