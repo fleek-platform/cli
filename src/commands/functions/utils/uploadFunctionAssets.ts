@@ -1,6 +1,7 @@
 import type { FleekSdk } from '@fleek-platform/sdk/node';
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
+import { isValidFolder } from '@fleek-platform/utils-validation';
 
 export const uploadFunctionAssets = async ({
   sdk,
@@ -8,9 +9,18 @@ export const uploadFunctionAssets = async ({
   functionName,
 }: {
   sdk: FleekSdk;
-  assetsPath: string;
   functionName: string;
-}): Promise<string> => {
+  assetsPath?: string;
+}): Promise<string | undefined> => {
+  if (!assetsPath) {
+    return;
+  }
+
+  if (!(await isValidFolder(assetsPath))) {
+    output.error(t('assetsPathIsNotAFolder'));
+    return;
+  }
+
   try {
     output.spinner(t('uploadingAssets'));
     const result = await sdk.storage().uploadDirectory({

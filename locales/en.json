@@ -352,10 +352,10 @@
   "cmdAuthLoginDescription": "Authenticate the CLI session using the Fleek Platform Web app. Open the URL in your favourite browser to initiate the browser-based login process. Select your preferred authentication method and return to CLI once completed.",
   "cmdAuthLogoutDescription": "Ends your active CLI session, securing your account. Disables access to personal features such as storage and site deployment until re-authentication.",
   "invalidHostname": "Invalid hostname `{hostname}`. Please try again!",
-  "functionsUseAssets": "Path to assets to be uploaded to Fleek Storage along with your function code. Accessible via the global variable `fleek.env.ASSETS_URL`.",
-  "assetsPathIsNotAFolder": "The provided assets path is not a valid folder",
+  "functionsUseAssets": "Choose the assets directory to upload alongside your function. These assets will be accessible in your code through 'fleek.env.ASSETS_CID', e.g. /User/MyProject/assets.",
+  "assetsPathIsNotAFolder": "The specified path doesn't exist or is not a valid directory. Please provide a valid directory path containing your assets.",
   "uploadingAssets": "Uploading assets...",
   "assetsUploadSuccess": "Assets uploaded successfully",
-  "uploadAssetsFailed": "Failed to upload assets for function",
+  "uploadAssetsFailed": "Failed to upload function assets to Fleek. Check your network connection and try again.",
   "assetsNotSupportedInSgx": "Function assets are not supported in SGX"
 }
