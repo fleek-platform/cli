@@ -46,8 +46,6 @@ export const init = ({ version, parser }: InitArgs) => {
   const program: Command = new Command()
     .name('fleek')
     .option('--debug', t('enableDebugMode'))
-    .option('-v, --version', t('printVersionDetails'))
-    .option('-h, --help', t('printHelp'))
     .action(() => program.outputHelp())
     .version(version);
 
@@ -66,19 +64,19 @@ export const init = ({ version, parser }: InitArgs) => {
 
   // Initialise commands
   const commands = [
-    cmdAuth,
+    // cmdAuth,
     cmdApplications,
-    cmdDomains,
-    cmdEns,
-    cmdGateways,
-    cmdIPFS,
-    cmdIPNS,
-    cmdPAT,
-    cmdProjects,
-    cmdSites,
-    cmdStorage,
-    cmdFunctions,
-    cmdVersion,
+    // cmdDomains,
+    // cmdEns,
+    // cmdGateways,
+    // cmdIPFS,
+    // cmdIPNS,
+    // cmdPAT,
+    // cmdProjects,
+    // cmdSites,
+    // cmdStorage,
+    // cmdFunctions,
+    // cmdVersion,
   ];
 
   for (const cmd of commands) {
@@ -88,10 +86,10 @@ export const init = ({ version, parser }: InitArgs) => {
     if (subCmd) {
       // TODO: Identify common subcommands
       // refactor to handle them here
-      subCmd
-        .command('help')
-        .description(t('printHelp'))
-        .action(() => subCmd.help());
+      for (const opt of subCmd.commands) {
+        opt
+          .addHelpCommand();
+      }
     }
   }
 
