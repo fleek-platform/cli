@@ -1,9 +1,11 @@
+import { isHostnameValid } from '@fleek-platform/utils-validation';
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { enterApplicationNameOrPrompt } from './prompts/enterApplicationNameOrPrompt';
 import { getWhitelistDomainsOrPrompt } from './prompts/getWhitelistDomainsOrPrompt';
+import { promptUntil } from '../../utils/prompts/promptUntil';
 
 type CreateApplicationActionArgs = {
   name?: string;
@@ -44,11 +46,39 @@ export const createApplicationAction: SdkGuardedFunction<
     ? args.name
     : await enterApplicationNameOrPrompt({ name: args.name });
 
-  const whitelistDomains = isNonInteractive
-    ? whitelistArgParser(args.whitelistDomains)
-    : await getWhitelistDomainsOrPrompt({
-        whitelistDomains: args.whitelistDomains,
-      });
+  let whitelistDomains: string[] | undefined;
+
+  if (isNonInteractive) {
+    whitelistDomains = whitelistArgParser(args.whitelistDomains);
+  } else {
+    const handler = async () => getWhitelistDomainsOrPrompt({
+      whitelistDomains: args.whitelistDomains,
+    });
+
+    const validator = async (data: string[]) => {
+      let hasInvalidHostname = false;
+
+      for (const hostname of data) {
+        if (!isHostnameValid({ hostname })) {
+          hasInvalidHostname = true;
+          output.warn(t('invalidHostname', { hostname }));
+        }
+      }
+
+      // If error messages displayed
+      // show a new line to make it easier to read
+      if (hasInvalidHostname) {
+        output.printNewLine();
+      }
+
+      return !hasInvalidHostname;
+    }
+
+    whitelistDomains = await promptUntil({
+      handler,
+      validator,
+    });    
+  }
 
   if (!name || !whitelistDomains) {
     output.error(t('unexpectedError'));
