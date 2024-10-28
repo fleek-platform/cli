@@ -3,7 +3,7 @@ import type { Command } from 'commander';
 import { t } from '../../utils/translation';
 import { addActionHandler } from './add';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('ipfs')
     .option('-h, --help', t('printHelp'))
@@ -17,8 +17,5 @@ export default (program: Command) => {
     .action((path: string) => addActionHandler({ path }))
     .addHelpCommand();
 
-  cmd
-    .command('help')
-    .description(t('printHelp'))
-    .action(() => program.help());
+  return cmd;
 };
