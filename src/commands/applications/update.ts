@@ -30,12 +30,13 @@ const updateApplicationAction: SdkGuardedFunction<
     application,
   });
 
-  const handler = async () => getWhitelistDomainsOrPrompt({
-    whitelistDomains: args.whitelistDomains,
-    whitelistDomainsToUpdate: application.whitelistDomains.map(
-      (whitelistDomain) => whitelistDomain.hostname,
-    ),
-  });
+  const handler = async () =>
+    getWhitelistDomainsOrPrompt({
+      whitelistDomains: args.whitelistDomains,
+      whitelistDomainsToUpdate: application.whitelistDomains.map(
+        (whitelistDomain) => whitelistDomain.hostname,
+      ),
+    });
 
   const validator = async (data: string[]) => {
     let hasInvalidHostname = false;
@@ -54,7 +55,7 @@ const updateApplicationAction: SdkGuardedFunction<
     }
 
     return !hasInvalidHostname;
-  }
+  };
 
   const whitelistDomains = await promptUntil({
     handler,

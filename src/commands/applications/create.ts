@@ -51,9 +51,10 @@ export const createApplicationAction: SdkGuardedFunction<
   if (isNonInteractive) {
     whitelistDomains = whitelistArgParser(args.whitelistDomains);
   } else {
-    const handler = async () => getWhitelistDomainsOrPrompt({
-      whitelistDomains: args.whitelistDomains,
-    });
+    const handler = async () =>
+      getWhitelistDomainsOrPrompt({
+        whitelistDomains: args.whitelistDomains,
+      });
 
     const validator = async (data: string[]) => {
       let hasInvalidHostname = false;
@@ -72,12 +73,12 @@ export const createApplicationAction: SdkGuardedFunction<
       }
 
       return !hasInvalidHostname;
-    }
+    };
 
     whitelistDomains = await promptUntil({
       handler,
       validator,
-    });    
+    });
   }
 
   if (!name || !whitelistDomains) {
