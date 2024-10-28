@@ -11,7 +11,7 @@ export const waitUntilFileAvailable = async ({
   const gatewayPatterns = [
     'https://{cid}.ipfs.dweb.link',
     'https://{cid}.ipfs.w3s.link',
-    'https://{cid}.ipfs.cf-ipfs.com',
+    'https://{cid}.ipfs.flk-ipfs.xyz',
     'https://ipfs.io/ipfs/{cid}',
     'https://fleek.ipfs.io/ipfs/{cid}',
   ];

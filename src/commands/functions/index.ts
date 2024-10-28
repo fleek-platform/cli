@@ -18,7 +18,7 @@ type DeployOptions = {
   sgx?: boolean;
 };
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('functions')
     .option('-h, --help', t('printHelp'))
@@ -106,9 +106,5 @@ export default (program: Command) => {
     )
     .addHelpCommand();
 
-  cmd
-    .command('help')
-    .description(t('printHelp'))
-    .action(() => cmd.help())
-    .addHelpCommand();
+  return cmd;
 };

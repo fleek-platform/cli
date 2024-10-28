@@ -51,6 +51,9 @@ export const init = ({ version, parser }: InitArgs) => {
     .action(() => program.outputHelp())
     .version(version);
 
+  // TODO: The ascii logo should only be displayed
+  // on default command, or general help
+  // a minimal version can be used instead
   program.addHelpText('beforeAll', logo).showHelpAfterError();
 
   type CmdVersionArgs = typeof program;
@@ -79,7 +82,17 @@ export const init = ({ version, parser }: InitArgs) => {
   ];
 
   for (const cmd of commands) {
-    cmd(program);
+    const subCmd = cmd(program);
+
+    // Attach common subcommands
+    if (subCmd) {
+      // TODO: Identify common subcommands
+      // refactor to handle them here
+      subCmd
+        .command('help')
+        .description(t('printHelp'))
+        .action(() => subCmd.help());
+    }
   }
 
   // Init parser (unawaited)
