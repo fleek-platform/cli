@@ -74,7 +74,7 @@ export const init = ({ version, parser }: InitArgs) => {
     cmdPAT,
     cmdProjects,
     cmdSites,
-    // cmdStorage,
+    cmdStorage,
     // cmdFunctions,
     // cmdVersion,
   ];
