@@ -7,7 +7,7 @@
   "main": "dist/cli.js",
   "types": "./dist/cli.d.ts",
   "scripts": {
-    "build": "pnpm clean:dist && pnpm transpile && pnpm bundle && pnpm cp:polyfills && cp -r ./src/templates ./dist",
+    "build": "pnpm clean:dist && pnpm transpile && pnpm bundle && cp -r ./src/templates ./dist",
     "build:ci": "pnpm run build",
     "bundle": "ts-node -r dotenv/config bundle.ts",
     "changeset:add": "pnpm exec changeset",
@@ -17,7 +17,6 @@
     "clean:dist": "rm -rf dist",
     "clean:generated": "rm -rf generated",
     "clean:node": "rm -rf node_modules",
-    "cp:polyfills": "cp -r ./polyfills ./dist",
     "format": "npx @biomejs/biome format --write --changed ./src",
     "format:check": "pnpm exec biome format ./src",
     "format:unsafe": "pnpm exec biome check --write --unsafe ./src",
@@ -35,6 +34,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.449.0",
+    "@fleek-platform/functions-esbuild-config": "0.0.13",
     "@web-std/file": "^3.0.2",
     "ansi-escapes": "^3.0.1",
     "as-table": "^1.0.55",
@@ -47,7 +47,7 @@
     "conf": "^10.2.0",
     "dotenv": "^16.4.5",
     "eciesjs": "0.4.7",
-    "esbuild": "^0.21.4",
+    "esbuild": "0.24.0",
     "files-from-path": "^1.0.0",
     "glob": "^8.1.0",
     "hash-wasm": "^4.11.0",

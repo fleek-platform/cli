@@ -4,20 +4,13 @@ import path from 'node:path';
 
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
-import {
-  FleekFunctionBundlingFailedError,
-  FleekFunctionPathNotValidError,
-  UnknownError,
-} from '@fleek-platform/errors';
+import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
-import { type BuildOptions, type Plugin, build } from 'esbuild';
+import { type Plugin, build } from 'esbuild';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
-import { asyncLocalStoragePolyfill } from '../plugins/asyncLocalStoragePolyfill';
-import { nodeProtocolImportSpecifier } from '../plugins/nodeProtocolImportSpecifier';
-import { moduleChecker } from '../plugins/unsupportedModuleStub';
 import type { EnvironmentVariables } from './parseEnvironmentVariables';
 
 type TranspileResponse = {
@@ -56,17 +49,22 @@ type TranspileCodeArgs = {
   filePath: string;
   bundle: boolean;
   env: EnvironmentVariables;
+  assetsCid?: string;
 };
 
 const transpileCode = async (args: TranspileCodeArgs) => {
-  const { filePath, bundle, env } = args;
+  const { createFleekBuildConfig, nodeProtocolImportSpecifier, moduleChecker, unsupportedRuntimeModules } = await import(
+    '@fleek-platform/functions-esbuild-config'
+  );
+
+  const { filePath, bundle, env, assetsCid } = args;
   const progressBar = new cliProgress.SingleBar(
     {
       format: t('uploadProgress', {
         action: t(bundle ? 'bundlingCode' : 'transformingCode'),
       }),
     },
-    cliProgress.Presets.shades_grey,
+    cliProgress.Presets.shades_grey
   );
 
   let tempDir: string;
@@ -85,10 +83,10 @@ const transpileCode = async (args: TranspileCodeArgs) => {
   const unsupportedModulesUsed = new Set<string>();
 
   const plugins: Plugin[] = [
-    moduleChecker({ unsupportedModulesUsed }),
+    moduleChecker({ unsupportedModulesUsed: new Set<string>(unsupportedRuntimeModules) }),
     {
       name: 'ProgressBar',
-      setup: (build) => {
+      setup: (build: any) => {
         build.onStart(() => {
           progressBar.start(100, 10);
         });
@@ -98,39 +96,29 @@ const transpileCode = async (args: TranspileCodeArgs) => {
 
   if (bundle) {
     plugins.push(
-      asyncLocalStoragePolyfill(),
       nodeProtocolImportSpecifier({
         // Handle the error gracefully
         onError: () => output.error(t('failedToApplyNodeImportProtocol')),
-      }),
+      })
     );
   }
 
-  const filePathWorkDir = path.dirname(filePath);
-  const nodeModulesPath = path.join(filePathWorkDir, 'node_modules');
+  let adaptedEnv = env;
+  if (assetsCid) {
+    adaptedEnv = {
+      ...env,
+      ASSETS_CID: assetsCid,
+    };
+  }
 
-  const buildOptions: BuildOptions = {
-    entryPoints: [filePath],
+  const buildConfig = createFleekBuildConfig({
+    filePath,
     bundle,
-    logLevel: 'silent',
-    platform: 'browser',
-    format: 'esm',
-    target: 'esnext',
-    treeShaking: true,
-    mainFields: ['browser', 'module', 'main'],
-    outfile: outFile,
-    minify: true,
-    plugins,
-    nodePaths: [nodeModulesPath],
-  };
-
-  buildOptions.banner = {
-    js: `import { Buffer } from "node:buffer";
-globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
-  };
+    env: adaptedEnv,
+  });
 
   try {
-    await build(buildOptions);
+    await build({ ...buildConfig, outfile: outFile, plugins, minify: bundle ? true : false });
 
     progressBar.update(100);
     progressBar.stop();
@@ -138,12 +126,7 @@ globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
     progressBar.stop();
 
     const errorMessage =
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      typeof e.message === 'string'
-        ? e.message
-        : t('unknownTransformError');
+      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownTransformError');
 
     const transpileResponse: TranspileResponse = {
       path: filePath,
@@ -156,7 +139,7 @@ globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
   }
 
   const transpileResponse: TranspileResponse = {
-    path: bundle ? outFile : filePath,
+    path: outFile,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
   };
@@ -184,12 +167,8 @@ const checkUserSourceCodeSupport = async (filePath: string) => {
   return reRequireSyntax.test(contents);
 };
 
-export const getJsCodeFromPath = async (args: {
-  filePath: string;
-  bundle: boolean;
-  env: EnvironmentVariables;
-}) => {
-  const { filePath, bundle, env } = args;
+export const getJsCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables; assetsCid?: string }) => {
+  const { filePath, bundle, env, assetsCid } = args;
 
   if (!fs.existsSync(filePath)) {
     throw new FleekFunctionPathNotValidError({ path: filePath });
@@ -205,6 +184,7 @@ export const getJsCodeFromPath = async (args: {
     filePath,
     bundle,
     env,
+    assetsCid,
   });
 
   showUnsupportedModules({
