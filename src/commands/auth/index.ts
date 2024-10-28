@@ -22,14 +22,12 @@ export default (cmd: Command): Command => {
         uiAppUrl,
         authApiUrl,
       });
-    })
-    .addHelpCommand();
+    });
 
   cmd
     .command('logout')
     .description(t('cmdAuthLogoutDescription'))
-    .action(logoutActionHandler)
-    .addHelpCommand();
+    .action(logoutActionHandler);
 
   return cmd;
 };
