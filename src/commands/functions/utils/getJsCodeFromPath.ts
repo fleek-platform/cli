@@ -9,7 +9,7 @@ import {
   UnknownError,
 } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
-import { type Plugin, PluginBuild, build } from 'esbuild';
+import { type Plugin, type PluginBuild, build } from 'esbuild';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../../cli';
@@ -130,7 +130,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
       ...buildConfig,
       outfile: outFile,
       plugins,
-      minify: bundle ? true : false,
+      minify: !!bundle,
     });
 
     progressBar.update(100);

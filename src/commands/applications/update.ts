@@ -2,11 +2,11 @@ import { isHostnameValid } from '@fleek-platform/utils-validation';
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
+import { promptUntil } from '../../utils/prompts/promptUntil';
 import { t } from '../../utils/translation';
 import { enterApplicationNameOrPrompt } from './prompts/enterApplicationNameOrPrompt';
 import { getApplicationOrPrompt } from './prompts/getApplicationOrPrompt';
 import { getWhitelistDomainsOrPrompt } from './prompts/getWhitelistDomainsOrPrompt';
-import { promptUntil } from '../../utils/prompts/promptUntil';
 
 type UpdateApplicationArgs = {
   id?: string;

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import cliProgress from 'cli-progress';
 import { isValidFolder } from '@fleek-platform/utils-validation';
+import cliProgress from 'cli-progress';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
@@ -28,7 +28,10 @@ type DeployActionArgs = {
   assetsPath?: string;
 };
 
-const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args }) => {
+const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
+  sdk,
+  args,
+}) => {
   const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
@@ -59,15 +62,14 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     if (!(await isValidFolder(assetsPath))) {
       output.error(t('assetsPathIsNotAFolder'));
       return;
-    } else {
-      output.spinner(t('uploadingAssets'));
-      assetsCid = await uploadFunctionAssets({
-        sdk,
-        assetsPath,
-        functionName: functionToDeploy.name,
-      });
-      output.success(t('assetsUploadSuccess'));
     }
+    output.spinner(t('uploadingAssets'));
+    assetsCid = await uploadFunctionAssets({
+      sdk,
+      assetsPath,
+      functionName: functionToDeploy.name,
+    });
+    output.success(t('assetsUploadSuccess'));
   }
 
   const filePathToUpload = isSGX
@@ -85,7 +87,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     {
       format: t('uploadProgress', { action: t('uploadCodeToIpfs') }),
     },
-    cliProgress.Presets.shades_grey
+    cliProgress.Presets.shades_grey,
   );
 
   const uploadResult = await getUploadResult({
@@ -105,7 +107,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
         action: 'deploy',
         tryAgain: t('tryAgain'),
         message: t('uploadToIpfsFailed'),
-      })
+      }),
     );
 
     return;
@@ -131,7 +133,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
         action: 'deploy',
         tryAgain: t('tryAgain'),
         message: t('uploadToIpfsFailed'),
-      })
+      }),
     );
 
     return;
@@ -185,7 +187,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     output.spinner(t('networkFetchMappings'));
     try {
       // TODO: The `fleek-test` address should be an env var
-      await fetch(`https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`);
+      await fetch(
+        `https://fleek-test.network/services/0/ipfs/${uploadResult.pin.cid}`,
+      );
     } catch {
       output.error(t('networkFetchFailed'));
       return;
@@ -203,16 +207,20 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     output.printNewLine();
     output.log(`Blake3 Hash: ${blake3Hash} `);
     output.log(
-      `Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`
+      `Invoke by sending request to https://fleek-test.network/services/3 with payload of {hash: <Blake3Hash>, decrypt: true, inputs: "foo"}`,
     );
     output.printNewLine();
     output.hint(`Here's an example:`);
-    output.link(`curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`);
+    output.link(
+      `curl ${functionToDeploy.invokeUrl} --data '{"hash": "${blake3Hash}", "decrypt": true, "input": "foo"}'`,
+    );
   }
 
   if (isUntrustedPublicEnvironment) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
-    output.link(`https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`);
+    output.link(
+      `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+    );
   }
 };
 

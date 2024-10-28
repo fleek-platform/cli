@@ -1,4 +1,4 @@
-import { FleekSdk } from '@fleek-platform/sdk/node';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
 
