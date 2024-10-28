@@ -47,6 +47,12 @@ const updateApplicationAction: SdkGuardedFunction<
       }
     }
 
+    // If error messages displayed
+    // show a new line to make it easier to read
+    if (hasInvalidHostname) {
+      output.printNewLine();
+    }
+
     return !hasInvalidHostname;
   }
 
