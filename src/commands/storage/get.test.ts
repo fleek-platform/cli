@@ -138,7 +138,7 @@ describe('Get storage files/folder for the given cid or name', () => {
         cid: 'bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru',
         'filecoin id': '58027558',
         'arweave id': '',
-        link: 'https://bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru.ipfs.flk-ipfs.xyz'
+        link: 'https://bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru.ipfs.flk-ipfs.xyz',
       },
     ]);
   });
