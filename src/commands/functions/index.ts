@@ -20,20 +20,27 @@ type DeployOptions = {
 };
 
 export default (program: Command): Command => {
-  const cmd = program.command('functions').option('-h, --help', t('printHelp')).description(t('functionsDescription'));
+  const cmd = program
+    .command('functions')
+    .option('-h, --help', t('printHelp'))
+    .description(t('functionsDescription'));
 
   cmd
     .command('create')
     .option('-n, --name <functionName>', t('functionName'))
     .description(t('functionsCreateDescription'))
-    .action((options: { name?: string }) => createActionHandler({ name: options.name }))
+    .action((options: { name?: string }) =>
+      createActionHandler({ name: options.name }),
+    )
     .addHelpCommand();
 
   cmd
     .command('delete')
     .description(t('functionsDeleteDescription'))
     .option('-n, --name <functionName>', t('functionName'))
-    .action((options: { name?: string }) => deleteActionHandler({ name: options.name }))
+    .action((options: { name?: string }) =>
+      deleteActionHandler({ name: options.name }),
+    )
     .addHelpCommand();
 
   cmd
@@ -43,13 +50,19 @@ export default (program: Command): Command => {
     .option('--name <newName>', t('functionName'))
     .option('--slug <newSlug>', t('functionSlug'))
     .option('--status <newStatus>', t('functionStatus'))
-    .action((options: { functionName?: string; name?: string; slug?: string; status?: string }) =>
-      updateActionHandler({
-        functionName: options.functionName,
-        name: options.name,
-        slug: options.slug,
-        status: options.status,
-      })
+    .action(
+      (options: {
+        functionName?: string;
+        name?: string;
+        slug?: string;
+        status?: string;
+      }) =>
+        updateActionHandler({
+          functionName: options.functionName,
+          name: options.name,
+          slug: options.slug,
+          status: options.status,
+        }),
     )
     .addHelpCommand();
 
@@ -63,7 +76,10 @@ export default (program: Command): Command => {
     .option('-e, --env <environmentVariables...>', t('environmentVariables'))
     .option('--sgx', t('functionsUseSgx'), false)
     .option('-a --assets <assetsPath>', t('functionsUseAssets'), false)
-    .option('--envFile <environmentVariablesFilePath>', t('environmentVariablesFile'))
+    .option(
+      '--envFile <environmentVariablesFilePath>',
+      t('environmentVariablesFile'),
+    )
     .action((options: DeployOptions) =>
       deployActionHandler({
         filePath: options.path,
@@ -74,7 +90,7 @@ export default (program: Command): Command => {
         envFile: options.envFile,
         sgx: options.sgx,
         assetsPath: options.assets,
-      })
+      }),
     )
     .addHelpCommand();
 
@@ -88,7 +104,9 @@ export default (program: Command): Command => {
     .command('deployments')
     .option('-n, --name <functionName>', t('functionName'))
     .description(t('deploymentsListForSelectedFunction'))
-    .action((options: { name?: string }) => listDeploymentsActionHandler(options))
+    .action((options: { name?: string }) =>
+      listDeploymentsActionHandler(options),
+    )
     .addHelpCommand();
 
   return cmd;

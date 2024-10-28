@@ -1,12 +1,15 @@
 import * as fs from 'node:fs';
 import * as os from 'node:os';
-import path from 'node:path';
 
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
-import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
+import {
+  FleekFunctionBundlingFailedError,
+  FleekFunctionPathNotValidError,
+  UnknownError,
+} from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
-import { type Plugin, build } from 'esbuild';
+import { type Plugin, PluginBuild, build } from 'esbuild';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../../cli';
@@ -53,9 +56,12 @@ type TranspileCodeArgs = {
 };
 
 const transpileCode = async (args: TranspileCodeArgs) => {
-  const { createFleekBuildConfig, nodeProtocolImportSpecifier, moduleChecker, unsupportedRuntimeModules } = await import(
-    '@fleek-platform/functions-esbuild-config'
-  );
+  const {
+    createFleekBuildConfig,
+    nodeProtocolImportSpecifier,
+    moduleChecker,
+    unsupportedRuntimeModules,
+  } = await import('@fleek-platform/functions-esbuild-config');
 
   const { filePath, bundle, env, assetsCid } = args;
   const progressBar = new cliProgress.SingleBar(
@@ -64,7 +70,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
         action: t(bundle ? 'bundlingCode' : 'transformingCode'),
       }),
     },
-    cliProgress.Presets.shades_grey
+    cliProgress.Presets.shades_grey,
   );
 
   let tempDir: string;
@@ -83,10 +89,12 @@ const transpileCode = async (args: TranspileCodeArgs) => {
   const unsupportedModulesUsed = new Set<string>();
 
   const plugins: Plugin[] = [
-    moduleChecker({ unsupportedModulesUsed: new Set<string>(unsupportedRuntimeModules) }),
+    moduleChecker({
+      unsupportedModulesUsed: new Set<string>(unsupportedRuntimeModules),
+    }),
     {
       name: 'ProgressBar',
-      setup: (build: any) => {
+      setup: (build: PluginBuild) => {
         build.onStart(() => {
           progressBar.start(100, 10);
         });
@@ -99,7 +107,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
       nodeProtocolImportSpecifier({
         // Handle the error gracefully
         onError: () => output.error(t('failedToApplyNodeImportProtocol')),
-      })
+      }),
     );
   }
 
@@ -118,7 +126,12 @@ const transpileCode = async (args: TranspileCodeArgs) => {
   });
 
   try {
-    await build({ ...buildConfig, outfile: outFile, plugins, minify: bundle ? true : false });
+    await build({
+      ...buildConfig,
+      outfile: outFile,
+      plugins,
+      minify: bundle ? true : false,
+    });
 
     progressBar.update(100);
     progressBar.stop();
@@ -126,7 +139,12 @@ const transpileCode = async (args: TranspileCodeArgs) => {
     progressBar.stop();
 
     const errorMessage =
-      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownTransformError');
+      e &&
+      typeof e === 'object' &&
+      'message' in e &&
+      typeof e.message === 'string'
+        ? e.message
+        : t('unknownTransformError');
 
     const transpileResponse: TranspileResponse = {
       path: filePath,
@@ -167,7 +185,12 @@ const checkUserSourceCodeSupport = async (filePath: string) => {
   return reRequireSyntax.test(contents);
 };
 
-export const getJsCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables; assetsCid?: string }) => {
+export const getJsCodeFromPath = async (args: {
+  filePath: string;
+  bundle: boolean;
+  env: EnvironmentVariables;
+  assetsCid?: string;
+}) => {
   const { filePath, bundle, env, assetsCid } = args;
 
   if (!fs.existsSync(filePath)) {
