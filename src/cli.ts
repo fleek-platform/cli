@@ -82,14 +82,16 @@ export const init = ({ version, parser }: InitArgs) => {
   ];
 
   for (const cmd of commands) {
-    const instance = cmd(program);
+    const subCmd = cmd(program);
 
     // Attach common subcommands
-    if (instance) {
-      instance
+    if (subCmd) {
+      // TODO: Identify common subcommands
+      // refactor to handle them here
+      subCmd
         .command('help')
         .description(t('printHelp'))
-        .action(() => instance.help());
+        .action(() => subCmd.help());
     }
   }
 
