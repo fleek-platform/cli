@@ -7,7 +7,7 @@ import { detailEnsRecordsActionHandler } from './detail';
 import { listEnsRecordsActionHandler } from './list';
 import { verifyEnsRecordActionHandler } from './verify';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('ens')
     .option('-h, --help', t('printHelp'))
@@ -105,4 +105,6 @@ export default (program: Command) => {
     .addHelpCommand();
 
   cmd.command('help').description(t('printHelp'));
+
+  return cmd;
 };
