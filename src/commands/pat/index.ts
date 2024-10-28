@@ -7,7 +7,7 @@ import { createPersonalAccessTokenActionHandler } from './create';
 import { deletePersonalAccessTokenActionHandler } from './delete';
 import { listPersonalAccessTokensActionHandler } from './list';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('pat')
     .option('-h, --help', t('printHelp'))
@@ -55,5 +55,5 @@ export default (program: Command) => {
     )
     .addHelpCommand();
 
-  cmd.command('help').description(t('printHelp'));
+  return cmd;
 };
