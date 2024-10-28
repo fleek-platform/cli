@@ -7,7 +7,7 @@ import { initActionHandler } from './init';
 import { listActionHandler } from './list';
 import { listDeploymentsActionHandler } from './listDeployments';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('sites')
     .option('-h, --help', t('printHelp'))
@@ -63,8 +63,5 @@ export default (program: Command) => {
     )
     .addHelpCommand();
 
-  cmd
-    .command('help')
-    .description(t('printHelp'))
-    .action(() => cmd.help());
+  return cmd;
 };

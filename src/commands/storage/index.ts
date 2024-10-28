@@ -7,7 +7,7 @@ import { deleteStorageActionHandler } from './delete';
 import { getStorageActionHandler } from './get';
 import { listStorageActionHandler } from './list';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('storage')
     .description(t('storageCmdDescription'));
@@ -80,4 +80,6 @@ export default (program: Command) => {
     .argument('<path>', t('ipfsAddPathDescription'))
     .action((path: string) => addStorageActionHandler({ path }))
     .addHelpCommand();
+
+  return cmd;
 };
