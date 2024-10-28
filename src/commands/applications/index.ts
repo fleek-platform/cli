@@ -6,7 +6,7 @@ import { deleteApplicationActionHandler } from './delete';
 import { listApplicationsActionHandler } from './list';
 import { updateApplicationActionHandler } from './update';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('applications')
     .description(t('appCmdDescription'));
@@ -61,4 +61,6 @@ export default (program: Command) => {
       deleteApplicationActionHandler(options),
     )
     .addHelpCommand();
+
+  return cmd;
 };

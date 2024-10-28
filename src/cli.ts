@@ -64,7 +64,7 @@ export const init = ({ version, parser }: InitArgs) => {
   // Initialise commands
   const commands = [
     cmdAuth,
-    // cmdApplications,
+    cmdApplications,
     cmdDomains,
     // cmdEns,
     // cmdGateways,
