@@ -5,7 +5,7 @@ import { createProjectActionHandler } from './create';
 import { listProjectsActionHandler } from './list';
 import { switchProjectActionHandler } from './switch';
 
-export default (program: Command) => {
+export default (program: Command): Command => {
   const cmd = program
     .command('projects')
     .option('-h, --help', t('printHelp'))
@@ -31,4 +31,6 @@ export default (program: Command) => {
     .description(t('projectsCreateNewDesc'))
     .action((options: { name: string }) => createProjectActionHandler(options))
     .addHelpCommand();
+
+  return cmd;
 };
