@@ -87,8 +87,7 @@ export const init = ({ version, parser }: InitArgs) => {
       // TODO: Identify common subcommands
       // refactor to handle them here
       for (const opt of subCmd.commands) {
-        opt
-          .addHelpCommand();
+        opt.addHelpCommand();
       }
     }
   }

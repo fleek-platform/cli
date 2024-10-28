@@ -6,9 +6,7 @@ import { listProjectsActionHandler } from './list';
 import { switchProjectActionHandler } from './switch';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('projects')
-    .description(t('projectsDescription'));
+  const cmd = program.command('projects').description(t('projectsDescription'));
 
   cmd
     .command('list')

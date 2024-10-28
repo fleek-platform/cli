@@ -8,9 +8,7 @@ import { listActionHandler } from './list';
 import { listDeploymentsActionHandler } from './listDeployments';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('sites')
-    .description(t('sitesDescription'));
+  const cmd = program.command('sites').description(t('sitesDescription'));
 
   cmd
     .command('init')

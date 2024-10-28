@@ -8,15 +8,15 @@ import { listDomainsActionHandler } from './list';
 import { verifyDomainActionHandler } from './verify';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('domains')
-    .description(t('domainsDesc'));
+  const cmd = program.command('domains').description(t('domainsDesc'));
 
   cmd
     .command('list')
     .option('--siteId <string>', t('siteIDDomainAssignTo'))
     .description(t('listAllDomainsSelectProject'))
-    .action((options: { siteId?: string }) => listDomainsActionHandler(options));
+    .action((options: { siteId?: string }) =>
+      listDomainsActionHandler(options),
+    );
 
   cmd
     .command('detail')

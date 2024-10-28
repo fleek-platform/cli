@@ -4,9 +4,7 @@ import { t } from '../../utils/translation';
 import { addActionHandler } from './add';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('ipfs')
-    .description(t('ipfsDescription'));
+  const cmd = program.command('ipfs').description(t('ipfsDescription'));
 
   cmd
     .command('add')

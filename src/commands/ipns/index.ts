@@ -8,9 +8,7 @@ import { publishActionHandler } from './publish';
 import { resolveActionHandler } from './resolve';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('ipns')
-    .description(t('ipnsDescription'));
+  const cmd = program.command('ipns').description(t('ipnsDescription'));
 
   cmd
     .command('create')

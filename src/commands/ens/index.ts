@@ -8,9 +8,7 @@ import { listEnsRecordsActionHandler } from './list';
 import { verifyEnsRecordActionHandler } from './verify';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('ens')
-    .description(t('ensCmdDescription'));
+  const cmd = program.command('ens').description(t('ensCmdDescription'));
 
   cmd
     .command('create')

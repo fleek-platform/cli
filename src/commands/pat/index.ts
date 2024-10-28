@@ -8,9 +8,7 @@ import { deletePersonalAccessTokenActionHandler } from './delete';
 import { listPersonalAccessTokensActionHandler } from './list';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('pat')
-    .description(t('patDescription'));
+  const cmd = program.command('pat').description(t('patDescription'));
 
   cmd
     .command('list')
