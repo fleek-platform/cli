@@ -63,23 +63,31 @@ export const init = ({ version, parser }: InitArgs) => {
 
   // Initialise commands
   const commands = [
-    cmdAuth,
-    cmdApplications,
+    // cmdAuth,
+    // cmdApplications,
     cmdDomains,
-    cmdEns,
-    cmdGateways,
-    cmdIPFS,
-    cmdIPNS,
-    cmdPAT,
-    cmdProjects,
-    cmdSites,
-    cmdStorage,
-    cmdFunctions,
-    cmdVersion,
+    // cmdEns,
+    // cmdGateways,
+    // cmdIPFS,
+    // cmdIPNS,
+    // cmdPAT,
+    // cmdProjects,
+    // cmdSites,
+    // cmdStorage,
+    // cmdFunctions,
+    // cmdVersion,
   ];
 
   for (const cmd of commands) {
-    cmd(program);
+    const instance = cmd(program);
+
+    // Attach common subcommands
+    if (instance) {
+      instance
+        .command('help')
+        .description(t('printHelp'))
+        .action(() => instance.help());
+    }
   }
 
   // Init parser (unawaited)
