@@ -7,7 +7,7 @@
   "main": "dist/cli.js",
   "types": "./dist/cli.d.ts",
   "scripts": {
-    "build": "pnpm clean:dist && pnpm transpile && pnpm bundle && cp -r ./src/templates ./dist",
+    "build": "echo 'TODO: remove the temporary cd..' && cd ../functions-esbuild-config && ls -la && cd ../cli && pnpm clean:dist && pnpm transpile && pnpm bundle && cp -r ./src/templates ./dist",
     "build:ci": "pnpm run build",
     "bundle": "ts-node -r dotenv/config bundle.ts",
     "changeset:add": "pnpm exec changeset",
