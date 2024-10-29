@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.449.0",
-    "@fleek-platform/functions-esbuild-config": "0.0.13",
+    "@fleek-platform/functions-esbuild-config": "0.0.19",
     "@web-std/file": "^3.0.2",
     "ansi-escapes": "^3.0.1",
     "as-table": "^1.0.55",

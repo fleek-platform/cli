@@ -5,7 +5,7 @@ specifiers:
   '@biomejs/biome': ^1.8.3
   '@changesets/cli': ^2.27.6
   '@fleek-platform/errors': ^2.5.1
-  '@fleek-platform/functions-esbuild-config': 0.0.13
+  '@fleek-platform/functions-esbuild-config': 0.0.19
   '@fleek-platform/sdk': ^3.4.0
   '@fleek-platform/tester': ^2.11.0
   '@fleek-platform/utils-gateways': ^0.1.2
@@ -61,7 +61,7 @@ specifiers:
 
 dependencies:
   '@aws-sdk/client-lambda': 3.680.0
-  '@fleek-platform/functions-esbuild-config': 0.0.13_esbuild@0.21.5
+  '@fleek-platform/functions-esbuild-config': 0.0.19_esbuild@0.21.5
   '@web-std/file': 3.0.3
   ansi-escapes: 3.2.0
   as-table: 1.0.55
@@ -1158,11 +1158,11 @@ packages:
       nanoid: 3.3.7
     dev: true
 
-  /@fleek-platform/functions-esbuild-config/0.0.13_esbuild@0.21.5:
-    resolution: {integrity: sha512-gtyl6hGppcK8q4GLwbhw2l84syJTIsCIIqJK4lJckQFpDhXbau9h2BvlmNnYHizyl+da1iWyH5rCy/77Bqo+lg==}
+  /@fleek-platform/functions-esbuild-config/0.0.19_esbuild@0.21.5:
+    resolution: {integrity: sha512-831oGOU48wSm0PNgu+fB/KbkN6uFcetKgwHfYN7VpVP4RBPD+Dc8iD6jiy/9UGfImGdBNHOSqRB94yRhobvC9A==}
     engines: {node: '>=18'}
     peerDependencies:
-      esbuild: '>=0.18.0'
+      esbuild: '>=0.21.0'
     dependencies:
       esbuild: 0.21.5
     dev: false
