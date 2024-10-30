@@ -11,7 +11,10 @@ type CreateFunctionArgs = {
   siteId?: string;
 };
 
-const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({ args, sdk }) => {
+const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({
+  args,
+  sdk,
+}) => {
   const { name, siteId } = args;
   const functionName = await getFunctionNameOrPrompt({ name });
 
@@ -19,7 +22,9 @@ const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({ args, sdk 
     throw new SiteNotFoundError({ site: { id: siteId } });
   }
 
-  const newFunction = await sdk.functions().create({ name: functionName, siteId });
+  const newFunction = await sdk
+    .functions()
+    .create({ name: functionName, siteId });
 
   output.printNewLine();
   output.success(t('commonNameCreateSuccess', { name: 'function' }));

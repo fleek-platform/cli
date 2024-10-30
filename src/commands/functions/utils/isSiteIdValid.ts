@@ -1,6 +1,9 @@
-import { FleekSdk } from '@fleek-platform/sdk/node';
+import type { FleekSdk } from '@fleek-platform/sdk/node';
 
-export const isSiteIdValid = ({ siteId, sdk }: { siteId: string; sdk: FleekSdk }) => {
+export const isSiteIdValid = ({
+  siteId,
+  sdk,
+}: { siteId: string; sdk: FleekSdk }) => {
   if (!siteId) return true;
 
   return sdk
