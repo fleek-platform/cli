@@ -1,8 +1,10 @@
+import { SiteNotFoundError } from '@fleek-platform/errors';
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getFunctionNameOrPrompt } from './prompts/getFunctionNameOrPrompt';
+import { isSiteIdValid } from './utils/isSiteIdValid';
 
 type CreateFunctionArgs = {
   name?: string;
@@ -10,9 +12,14 @@ type CreateFunctionArgs = {
 };
 
 const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({ args, sdk }) => {
-  const functionName = await getFunctionNameOrPrompt({ name: args.name });
+  const { name, siteId } = args;
+  const functionName = await getFunctionNameOrPrompt({ name });
 
-  const newFunction = await sdk.functions().create({ name: functionName, siteId: args.siteId });
+  if (siteId && !(await isSiteIdValid({ siteId, sdk }))) {
+    throw new SiteNotFoundError({ site: { id: siteId } });
+  }
+
+  const newFunction = await sdk.functions().create({ name: functionName, siteId });
 
   output.printNewLine();
   output.success(t('commonNameCreateSuccess', { name: 'function' }));
