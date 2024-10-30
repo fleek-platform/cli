@@ -357,5 +357,6 @@
   "uploadingAssets": "Uploading assets...",
   "assetsUploadSuccess": "Assets uploaded successfully",
   "uploadAssetsFailed": "Failed to upload function assets to Fleek. Check your network connection and try again.",
-  "assetsNotSupportedInSgx": "Function assets are not supported in SGX"
+  "assetsNotSupportedInSgx": "Function assets are not supported in SGX",
+  "functionsSite": "The ID of the site you want to deploy your function to"
 }

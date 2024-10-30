@@ -6,15 +6,13 @@ import { getFunctionNameOrPrompt } from './prompts/getFunctionNameOrPrompt';
 
 type CreateFunctionArgs = {
   name?: string;
+  siteId?: string;
 };
 
-const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({
-  args,
-  sdk,
-}) => {
+const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({ args, sdk }) => {
   const functionName = await getFunctionNameOrPrompt({ name: args.name });
 
-  const newFunction = await sdk.functions().create({ name: functionName });
+  const newFunction = await sdk.functions().create({ name: functionName, siteId: args.siteId });
 
   output.printNewLine();
   output.success(t('commonNameCreateSuccess', { name: 'function' }));
