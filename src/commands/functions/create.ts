@@ -18,13 +18,17 @@ const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({
   const { name, siteId } = args;
   const functionName = await getFunctionNameOrPrompt({ name });
 
-  if (siteId && !(await isSiteIdValid({ siteId, sdk }))) {
-    throw new SiteNotFoundError({ site: { id: siteId } });
+  if (!siteId || !await isSiteIdValid({ siteId: siteId as string, sdk })) {
+    output.error(t(`siteNotFound`));
+    return;
   }
 
   const newFunction = await sdk
     .functions()
-    .create({ name: functionName, siteId });
+    .create({
+      name: functionName,
+      siteId,
+    });
 
   output.printNewLine();
   output.success(t('commonNameCreateSuccess', { name: 'function' }));
