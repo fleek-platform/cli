@@ -4,8 +4,6 @@ export const isSiteIdValid = ({
   siteId,
   sdk,
 }: { siteId: string; sdk: FleekSdk }) => {
-  if (!siteId) return true;
-
   return sdk
     .sites()
     .get({ id: siteId })
