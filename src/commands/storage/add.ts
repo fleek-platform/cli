@@ -1,7 +1,10 @@
 import { existsSync, promises as fs } from 'node:fs';
 import { basename } from 'node:path';
 
-import { getFleekXyzIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
+import {
+  getFleekXyzIpfsGatewayUrl,
+  getPrivateIpfsGatewayUrl,
+} from '@fleek-platform/utils-ipfs';
 import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
 
@@ -17,7 +20,9 @@ type AddStorageActionArgs = {
   path: string;
 };
 
-export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async ({ sdk, args }) => {
+export const addStorageAction: SdkGuardedFunction<
+  AddStorageActionArgs
+> = async ({ sdk, args }) => {
   if (!existsSync(args.path)) {
     output.error(t('filePathNotFound', { path: args.path }));
 
@@ -26,9 +31,10 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
 
   const progressBar = new cliProgress.SingleBar(
     {
-      format: 'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
+      format:
+        'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
     },
-    cliProgress.Presets.shades_grey
+    cliProgress.Presets.shades_grey,
   );
   const directoryName = basename(args.path);
   const files: FileLike[] = await filesFromPaths([args.path]);
@@ -79,7 +85,7 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
       getPrivateIpfsGatewayUrl({
         hostname: privateGatewayDomain.hostname,
         hash,
-      })
+      }),
     );
   }
 

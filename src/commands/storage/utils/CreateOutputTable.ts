@@ -1,5 +1,8 @@
 import type { FleekSdk, StoragePin } from '@fleek-platform/sdk/node';
-import { getFleekXyzIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
+import {
+  getFleekXyzIpfsGatewayUrl,
+  getPrivateIpfsGatewayUrl,
+} from '@fleek-platform/utils-ipfs';
 
 import { getAllActivePrivateGatewayDomains } from '../../gateways/utils/getAllPrivateGatewayDomains';
 
@@ -16,7 +19,10 @@ type TableCoulmns = {
   link: string;
 };
 
-export const createOutputTable = async ({ sdk, storage }: CreateOutputTableArgs): Promise<TableCoulmns[]> => {
+export const createOutputTable = async ({
+  sdk,
+  storage,
+}: CreateOutputTableArgs): Promise<TableCoulmns[]> => {
   const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
     sdk,
   });
@@ -29,7 +35,7 @@ export const createOutputTable = async ({ sdk, storage }: CreateOutputTableArgs)
           getPrivateIpfsGatewayUrl({
             hostname: privateGatewayDomain.hostname,
             hash: s.cid,
-          })
+          }),
         )
       : [getFleekXyzIpfsGatewayUrl(s.cid)];
 

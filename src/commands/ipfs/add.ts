@@ -1,6 +1,9 @@
 import fs from 'node:fs';
 
-import { getFleekXyzIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
+import {
+  getFleekXyzIpfsGatewayUrl,
+  getPrivateIpfsGatewayUrl,
+} from '@fleek-platform/utils-ipfs';
 
 import { output } from '../../cli';
 import type { SdkGuardedFunction } from '../../guards/types';
@@ -56,7 +59,7 @@ const addAction: SdkGuardedFunction<AddActionArgs> = async ({ sdk, args }) => {
       getPrivateIpfsGatewayUrl({
         hostname: privateGatewayDomain.hostname,
         hash,
-      })
+      }),
     );
   }
 };
