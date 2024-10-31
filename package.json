@@ -71,7 +71,7 @@
     "@fleek-platform/tester": "^2.11.1",
     "@fleek-platform/utils-gateways": "^0.1.12",
     "@fleek-platform/utils-github": "^0.0.2",
-    "@fleek-platform/utils-ipfs": "^0.4.2",
+    "@fleek-platform/utils-ipfs": "^0.4.3",
     "@fleek-platform/utils-ipns": "^0.1.12",
     "@fleek-platform/utils-validation": "^2.4.0",
     "@tsconfig/node16": "^16.1.3",
