@@ -95,14 +95,14 @@ describe('List storage files/folder for the selected project', () => {
         cid: 'bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru',
         'filecoin id': '58027558',
         'arweave id': '',
-        link: 'https://bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru.ipfs.flk-ipfs.xyz',
+        link: 'https://bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru.flk-ipfs.xyz',
       },
       {
         filename: 'basic.car',
         cid: 'bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4',
         'filecoin id': '61342544',
         'arweave id': '',
-        link: 'https://bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4.ipfs.flk-ipfs.xyz',
+        link: 'https://bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4.flk-ipfs.xyz',
       },
     ]);
   });

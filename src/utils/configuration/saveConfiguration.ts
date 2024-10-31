@@ -22,14 +22,15 @@ export type SaveConfigurationArgs = {
 
 type ConfigFilePath = string;
 
-const filePathForTypescriptConfig = path.join(
-  __dirname,
-  './templates/sites/config',
+const filePathForTypescriptConfig = path.resolve(
+  path.dirname(__filename),
+  '../../templates/sites/config',
   getConfigTemplateByTypeName('Typescript'),
 );
-const filePathForJavascriptConfig = path.join(
-  __dirname,
-  './templates/sites/config',
+
+const filePathForJavascriptConfig = path.resolve(
+  path.dirname(__filename),
+  '../../templates/sites/config',
   getConfigTemplateByTypeName('Javascript'),
 );
 
