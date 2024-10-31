@@ -27,9 +27,10 @@ export default (program: Command): Command => {
   cmd
     .command('create')
     .option('-n, --name <functionName>', t('functionName'))
+    .option('--site <siteId>', t('functionsSite'))
     .description(t('functionsCreateDescription'))
-    .action((options: { name?: string }) =>
-      createActionHandler({ name: options.name }),
+    .action((options: { name?: string; site?: string }) =>
+      createActionHandler({ name: options.name, siteId: options.site }),
     );
 
   cmd

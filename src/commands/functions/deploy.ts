@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import { isValidFolder } from '@fleek-platform/utils-validation';
 import cliProgress from 'cli-progress';
 
 import { output } from '../../cli';
@@ -62,12 +61,17 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     functionName: functionToDeploy.name,
   });
 
+  const updatedEnv = {
+    FLEEK_URL: functionToDeploy.invokeUrl,
+    ...env,
+  };
+
   const filePathToUpload = isSGX
     ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
         filePath,
         bundle,
-        env,
+        env: updatedEnv,
         assetsCid,
       });
 
