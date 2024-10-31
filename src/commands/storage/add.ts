@@ -1,28 +1,23 @@
-import { promises as fs, existsSync } from 'node:fs';
+import { existsSync, promises as fs } from 'node:fs';
 import { basename } from 'node:path';
-import {
-  getCfIpfsGatewayUrl,
-  getPrivateIpfsGatewayUrl,
-} from '@fleek-platform/utils-ipfs';
+
+import { getFleekXyzIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
 import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
-import { uploadStorage } from './utils/upload';
-
-import type { SdkGuardedFunction } from '../../guards/types';
 import type { FileLike } from './utils/upload';
+import { uploadStorage } from './utils/upload';
 
 type AddStorageActionArgs = {
   path: string;
 };
 
-export const addStorageAction: SdkGuardedFunction<
-  AddStorageActionArgs
-> = async ({ sdk, args }) => {
+export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async ({ sdk, args }) => {
   if (!existsSync(args.path)) {
     output.error(t('filePathNotFound', { path: args.path }));
 
@@ -31,10 +26,9 @@ export const addStorageAction: SdkGuardedFunction<
 
   const progressBar = new cliProgress.SingleBar(
     {
-      format:
-        'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
+      format: 'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
     },
-    cliProgress.Presets.shades_grey,
+    cliProgress.Presets.shades_grey
   );
   const directoryName = basename(args.path);
   const files: FileLike[] = await filesFromPaths([args.path]);
@@ -73,7 +67,7 @@ export const addStorageAction: SdkGuardedFunction<
 
   if (privateGatewayDomains.length === 0) {
     output.log(t('visitViaGateway'));
-    output.link(getCfIpfsGatewayUrl(hash));
+    output.link(getFleekXyzIpfsGatewayUrl(hash));
 
     return;
   }
@@ -85,7 +79,7 @@ export const addStorageAction: SdkGuardedFunction<
       getPrivateIpfsGatewayUrl({
         hostname: privateGatewayDomain.hostname,
         hash,
-      }),
+      })
     );
   }
 
