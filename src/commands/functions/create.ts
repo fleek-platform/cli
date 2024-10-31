@@ -19,7 +19,7 @@ const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({
   const functionName = await getFunctionNameOrPrompt({ name });
 
   if (!siteId || !(await isSiteIdValid({ siteId, sdk }))) {
-    output.error(t(`siteNotFound`));
+    output.error(t('siteNotFound'));
     return;
   }
 

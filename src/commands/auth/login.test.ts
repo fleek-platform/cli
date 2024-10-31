@@ -66,7 +66,7 @@ describe('Login', async () => {
           where: {
             id: 'mockVerificationSession',
           },
-        }
+        },
       },
     });
   });
