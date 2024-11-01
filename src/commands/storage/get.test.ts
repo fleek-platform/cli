@@ -138,7 +138,7 @@ describe('Get storage files/folder for the given cid or name', () => {
         cid: 'bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru',
         'filecoin id': '58027558',
         'arweave id': '',
-        link: 'https://bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru.flk-ipfs.xyz',
+        link: 'https://bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru.ipfs.flk-ipfs.xyz',
       },
     ]);
   });
@@ -164,14 +164,14 @@ describe('Get storage files/folder for the given cid or name', () => {
         cid: 'bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4',
         'filecoin id': '61342544',
         'arweave id': '',
-        link: 'https://bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4.flk-ipfs.xyz',
+        link: 'https://bafkreieasoapp3osmpdt2lwdqy6oqx75nhdsxgkoswyjuwy2675eyhvcg4.ipfs.flk-ipfs.xyz',
       },
       {
         filename: 'basic.car',
         cid: 'bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle',
         'filecoin id': '61342549',
         'arweave id': '',
-        link: 'https://bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle.flk-ipfs.xyz',
+        link: 'https://bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle.ipfs.flk-ipfs.xyz',
       },
     ]);
   });
