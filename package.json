@@ -67,7 +67,7 @@
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.6",
     "@fleek-platform/errors": "^2.7.0",
-    "@fleek-platform/sdk": "3.5.2",
+    "@fleek-platform/sdk": "^3.5.2",
     "@fleek-platform/tester": "^2.12.1",
     "@fleek-platform/utils-gateways": "^0.1.12",
     "@fleek-platform/utils-github": "^0.0.2",
