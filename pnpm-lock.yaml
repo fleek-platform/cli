@@ -6,12 +6,12 @@ specifiers:
   '@changesets/cli': ^2.27.6
   '@fleek-platform/errors': ^2.7.0
   '@fleek-platform/functions-esbuild-config': ^0.0.19
-  '@fleek-platform/sdk': ^3.5.1
-  '@fleek-platform/tester': ^2.11.1
+  '@fleek-platform/sdk': ^3.5.2
+  '@fleek-platform/tester': ^2.12.1
   '@fleek-platform/utils-gateways': ^0.1.12
   '@fleek-platform/utils-github': ^0.0.2
-  '@fleek-platform/utils-ipfs': ^0.4.3
-  '@fleek-platform/utils-ipns': ^0.1.12
+  '@fleek-platform/utils-ipfs': ^0.4.4
+  '@fleek-platform/utils-ipns': ^0.1.13
   '@fleek-platform/utils-validation': ^2.4.0
   '@tsconfig/node16': ^16.1.3
   '@types/ansi-escapes': 3.0.1
@@ -94,12 +94,12 @@ devDependencies:
   '@biomejs/biome': 1.9.4
   '@changesets/cli': 2.27.9
   '@fleek-platform/errors': 2.7.0
-  '@fleek-platform/sdk': 3.5.1
-  '@fleek-platform/tester': 2.11.1
+  '@fleek-platform/sdk': 3.5.2
+  '@fleek-platform/tester': 2.12.1
   '@fleek-platform/utils-gateways': 0.1.12
   '@fleek-platform/utils-github': 0.0.2
-  '@fleek-platform/utils-ipfs': 0.4.3
-  '@fleek-platform/utils-ipns': 0.1.12
+  '@fleek-platform/utils-ipfs': 0.4.4
+  '@fleek-platform/utils-ipns': 0.1.13
   '@fleek-platform/utils-validation': 2.4.0_typescript@4.9.3
   '@tsconfig/node16': 16.1.3
   '@types/ansi-escapes': 3.0.1
@@ -1156,8 +1156,8 @@ packages:
       esbuild: 0.21.5
     dev: false
 
-  /@fleek-platform/sdk/3.5.1:
-    resolution: {integrity: sha512-Jtg9m73AjaUrmGCQNZGQQzYOby4wWm3GOJJ8eS6fmW/N+i+Gbf7uIzxjPPZaCrD0W6yUCgIzFea1V5BBRTMPzw==}
+  /@fleek-platform/sdk/3.5.2:
+    resolution: {integrity: sha512-D5/oGF6z+MOLwZpQuaeYRx4mR/dBwDcJx/wQFuQycdsafJmTliobA8GJGNJWPgoJqnt/AdJ1itPjPznS4b/uPw==}
     engines: {node: '>=18.18.2'}
     dependencies:
       '@noble/hashes': 1.5.0
@@ -1174,8 +1174,8 @@ packages:
       - debug
     dev: true
 
-  /@fleek-platform/tester/2.11.1:
-    resolution: {integrity: sha512-VepDPDuQ/oVaIZ6tni84uM2CT6QeIz20HeGcQluyV1uVHYMeT9v99jmOHnImDWxG2JqyUHbGx4Axvv7DLf9Gww==}
+  /@fleek-platform/tester/2.12.1:
+    resolution: {integrity: sha512-baJeWvYxO/h6lijYyGDv7N+ORxwitQwR08VjiQ6N00qcf/fR4yd//jphsQTj4FEt/blKFkjXgj6c4gGPSZGtOA==}
     dependencies:
       graphql-yoga: 5.1.1
       lodash: 4.17.21
@@ -1186,6 +1186,7 @@ packages:
       node-stdlib-browser: 1.2.1
       object-traversal: 1.0.1
       playwright: 1.48.2
+      prisma: 5.21.1
       proper-lockfile: 4.1.2
       uuid: 9.0.1
     transitivePeerDependencies:
@@ -1208,15 +1209,15 @@ packages:
       yaml: 2.6.0
     dev: true
 
-  /@fleek-platform/utils-ipfs/0.4.3:
-    resolution: {integrity: sha512-Gg5Aahp3UEjfdJM9FQaMHRiiRdM3jtMC/S/N0M19OtSOGEArK9Tqzf8ViCyyIsLA6Nxg+kM1XwsGJ9aMp4RYmA==}
+  /@fleek-platform/utils-ipfs/0.4.4:
+    resolution: {integrity: sha512-J7XNokjTETCdnqeea+zbCvHaZoZ/IEYdd6K3TZnKlDeou0b3HA9XrxBvB78DytZliVZA30NkGllYC3WQrulpOA==}
     dependencies:
       aws4: 1.13.2
       cids: 1.1.9
     dev: true
 
-  /@fleek-platform/utils-ipns/0.1.12:
-    resolution: {integrity: sha512-8txJtncK7Xs+vnxW+VFwuBRmlLhpQLXAmjUnKU2R4VhJwk53SDGLz5PVrAiMDiqxTWR355CQUdWYQdhvGdUghA==}
+  /@fleek-platform/utils-ipns/0.1.13:
+    resolution: {integrity: sha512-uAtoYLXla46jdKqOYpDJIWNIymHxsvkBwp7cwsZN3uFx215M0BGkZEUGfEe1qdfeu6eMtPam0RccrxnhnXuo9g==}
     dependencies:
       '@fleek-platform/errors': 2.7.0
     dev: true
@@ -1533,6 +1534,38 @@ packages:
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
     dev: false
+
+  /@prisma/debug/5.21.1:
+    resolution: {integrity: sha512-uY8SAhcnORhvgtOrNdvWS98Aq/nkQ9QDUxrWAgW8XrCZaI3j2X7zb7Xe6GQSh6xSesKffFbFlkw0c2luHQviZA==}
+    dev: true
+
+  /@prisma/engines-version/5.21.1-1.bf0e5e8a04cada8225617067eaa03d041e2bba36:
+    resolution: {integrity: sha512-qvnEflL0//lh44S/T9NcvTMxfyowNeUxTunPcDfKPjyJNrCNf2F1zQLcUv5UHAruECpX+zz21CzsC7V2xAeM7Q==}
+    dev: true
+
+  /@prisma/engines/5.21.1:
+    resolution: {integrity: sha512-hGVTldUkIkTwoV8//hmnAAiAchi4oMEKD3aW5H2RrnI50tTdwza7VQbTTAyN3OIHWlK5DVg6xV7X8N/9dtOydA==}
+    requiresBuild: true
+    dependencies:
+      '@prisma/debug': 5.21.1
+      '@prisma/engines-version': 5.21.1-1.bf0e5e8a04cada8225617067eaa03d041e2bba36
+      '@prisma/fetch-engine': 5.21.1
+      '@prisma/get-platform': 5.21.1
+    dev: true
+
+  /@prisma/fetch-engine/5.21.1:
+    resolution: {integrity: sha512-70S31vgpCGcp9J+mh/wHtLCkVezLUqe/fGWk3J3JWZIN7prdYSlr1C0niaWUyNK2VflLXYi8kMjAmSxUVq6WGQ==}
+    dependencies:
+      '@prisma/debug': 5.21.1
+      '@prisma/engines-version': 5.21.1-1.bf0e5e8a04cada8225617067eaa03d041e2bba36
+      '@prisma/get-platform': 5.21.1
+    dev: true
+
+  /@prisma/get-platform/5.21.1:
+    resolution: {integrity: sha512-sRxjL3Igst3ct+e8ya/x//cDXmpLbZQ5vfps2N4tWl4VGKQAmym77C/IG/psSMsQKszc8uFC/q1dgmKFLUgXZQ==}
+    dependencies:
+      '@prisma/debug': 5.21.1
+    dev: true
 
   /@repeaterjs/repeater/3.0.6:
     resolution: {integrity: sha512-Javneu5lsuhwNCryN+pXH93VPQ8g0dBX7wItHFgYiwQmzE1sVdg5tWHiOgHywzL2W21XQopa7IwIEnNbmeUJYA==}
@@ -5325,6 +5358,17 @@ packages:
   /printable-characters/1.0.42:
     resolution: {integrity: sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==}
     dev: false
+
+  /prisma/5.21.1:
+    resolution: {integrity: sha512-PB+Iqzld/uQBPaaw2UVIk84kb0ITsLajzsxzsadxxl54eaU5Gyl2/L02ysivHxK89t7YrfQJm+Ggk37uvM70oQ==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.21.1
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
