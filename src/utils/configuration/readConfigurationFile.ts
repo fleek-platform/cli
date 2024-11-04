@@ -60,7 +60,10 @@ export const readConfigurationFile = async ({
       const loadedConfigModule = await (async () => {
         if (fileExtension.toLowerCase() === '.ts') {
           const x = await import('importx');
-          const { default: loadedConfigModule } = await x.import(configPath, __filename);
+          const { default: loadedConfigModule } = await x.import(
+            configPath,
+            __filename,
+          );
           return loadedConfigModule;
         }
         return import(configPath);
