@@ -24,8 +24,8 @@ type ConfigFilePath = string;
 
 const DEV_SRC_UTILS_PATH = '/src/utils';
 const basePath = path.dirname(__filename).includes(DEV_SRC_UTILS_PATH)
-? '../..'
-: '';
+  ? '../..'
+  : '';
 
 const filePathForTypescriptConfig = path.resolve(
   path.dirname(__filename),
