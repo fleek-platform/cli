@@ -12,10 +12,18 @@ const semver = require('semver');
 const { asyncParser, init } = require('../dist/bundle');
 const { loadJSONFromPackageRoot } = require('../dist/utils/json');
 const { checkForPackageUpdates } = require('../dist/utils/update-notifier');
+const { isGlobalNodeModuleInstall } = require('../dist/utils/fs');
 
 const pkgJson = loadJSONFromPackageRoot('package.json');
 const pkgVersion = pkgJson.version;
 const requiredVersion = pkgJson.engines.node;
+
+// Hide deprecation warnings for production builds
+// Otherwise, shows in development environment
+// https://nodejs.org/api/process.html#processnodeprecation
+if (isGlobalNodeModuleInstall()) {
+  process.noDeprecation = true;
+}
 
 if (!semver.satisfies(process.version, requiredVersion)) {
   // TODO: Pick text from locales
