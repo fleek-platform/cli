@@ -52,7 +52,22 @@ export const readConfigurationFile = async ({
     }
 
     try {
-      const loadedConfigModule = await import(configPath);
+      // TODO: The `import` throws `UNKNOWN_FILE_EXTENSION`
+      // Tried `ts-node/register` without success
+      // Ideally `ts-node` should be removed
+      // use `bun` or the new `deno` v2
+      // Obs: For past months `bun` has been impeccable
+      const loadedConfigModule = await (async () => {
+        if (fileExtension.toLowerCase() === '.ts') {
+          const x = await import('importx');
+          const { default: loadedConfigModule } = await x.import(
+            configPath,
+            __filename,
+          );
+          return loadedConfigModule;
+        }
+        return import(configPath);
+      })();
 
       if (typeof loadedConfigModule.default === 'function') {
         return {

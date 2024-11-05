@@ -1,5 +1,30 @@
 # Changelog
 
+## 3.5.2
+
+### Patch Changes
+
+- 0c1014d: Hide deprecation warnings on global install
+
+## 3.5.1
+
+### Patch Changes
+
+- 2233121: Fix storage delete by SDK v3.5.3 update
+
+## 3.5.0
+
+### Minor Changes
+
+- f903a59: Fix typescript configuration file loader
+
+## 3.4.0
+
+### Minor Changes
+
+- 06037b3: Associate function to a site on creation
+- 9185d8d: Update @fleek-platform dependencies
+
 ## 3.3.0
 
 ### Minor Changes

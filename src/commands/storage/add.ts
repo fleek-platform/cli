@@ -1,20 +1,20 @@
 import { promises as fs, existsSync } from 'node:fs';
 import { basename } from 'node:path';
+
 import {
-  getCfIpfsGatewayUrl,
+  getFleekXyzIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,
 } from '@fleek-platform/utils-ipfs';
 import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
 
 import { output } from '../../cli';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
-import { uploadStorage } from './utils/upload';
-
-import type { SdkGuardedFunction } from '../../guards/types';
 import type { FileLike } from './utils/upload';
+import { uploadStorage } from './utils/upload';
 
 type AddStorageActionArgs = {
   path: string;
@@ -73,7 +73,7 @@ export const addStorageAction: SdkGuardedFunction<
 
   if (privateGatewayDomains.length === 0) {
     output.log(t('visitViaGateway'));
-    output.link(getCfIpfsGatewayUrl(hash));
+    output.link(getFleekXyzIpfsGatewayUrl(hash));
 
     return;
   }

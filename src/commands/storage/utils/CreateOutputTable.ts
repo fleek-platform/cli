@@ -1,6 +1,6 @@
 import type { FleekSdk, StoragePin } from '@fleek-platform/sdk/node';
 import {
-  getCfIpfsGatewayUrl,
+  getFleekXyzIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,
 } from '@fleek-platform/utils-ipfs';
 
@@ -37,7 +37,7 @@ export const createOutputTable = async ({
             hash: s.cid,
           }),
         )
-      : [getCfIpfsGatewayUrl(s.cid)];
+      : [getFleekXyzIpfsGatewayUrl(s.cid)];
 
     return gatewayUrls.map((link) => ({
       filename,

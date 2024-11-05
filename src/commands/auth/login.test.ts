@@ -60,14 +60,14 @@ describe('Login', async () => {
 
     expect(result).toBe('mockPat');
     expect(mockClient.mutation).toHaveBeenCalledWith({
-      createPersonalAccessTokenFromVerificationSession: [
-        {
+      createPersonalAccessTokenFromVerificationSession: {
+        __args: {
           data: { name: undefined },
           where: {
             id: 'mockVerificationSession',
           },
         },
-      ],
+      },
     });
   });
 

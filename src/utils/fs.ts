@@ -1,4 +1,4 @@
-import { promises as fsPromises } from 'node:fs';
+import { promises as fsPromises, realpathSync } from 'node:fs';
 
 interface FsError extends Error {
   code?: string;
@@ -17,4 +17,11 @@ export const fileExists = async (path: string) => {
 
     throw e;
   }
+};
+
+export const isGlobalNodeModuleInstall = () => {
+  const GLOBAL_EXEC_PATH_INCLUDES =
+    'node_modules/@fleek-platform/cli/bin/index.js';
+  const executedScript = realpathSync(process.argv[1]);
+  return executedScript.includes(GLOBAL_EXEC_PATH_INCLUDES);
 };

@@ -55,8 +55,7 @@ jobs:
       - name: Install dependencies
         if: ${{ steps.changeset-status.outputs.skip != 'true' }}
         run: |
-          pnpm install \
-            --strict-peer-dependencies
+          pnpm install
 
       - name: Changeset status
         id: changeset-status
