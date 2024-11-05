@@ -62,7 +62,10 @@ describe('Login', async () => {
     expect(mockClient.mutation).toHaveBeenCalledWith({
       createPersonalAccessTokenFromVerificationSession: {
         __args: {
-          data: { name: undefined },
+          data: {
+            name: undefined,
+             clientAppType: "CLI",
+          },
           where: {
             id: 'mockVerificationSession',
           },
