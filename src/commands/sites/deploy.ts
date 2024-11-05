@@ -43,8 +43,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   if (!root) {
     output.error(t('somethingWrongDurUpload'));
     output.printNewLine();
-
-    return;
+    process.exit(1);
   }
 
   output.spinner(t('startingSiteDeployment'));

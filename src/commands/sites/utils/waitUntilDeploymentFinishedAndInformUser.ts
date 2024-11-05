@@ -50,8 +50,7 @@ export const waitUntilDeploymentFinishedAndInformUser = async ({
   if (deploymentStatus === 'RELEASE_FAILED') {
     output.error(t('deployNotFinishTryAgain'));
     output.printNewLine();
-
-    return;
+    process.exit(1);
   }
 
   output.success(`${t('deployed')}!`);
