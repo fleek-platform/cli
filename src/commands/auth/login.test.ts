@@ -64,7 +64,7 @@ describe('Login', async () => {
         __args: {
           data: {
             name: undefined,
-             clientAppType: "CLI",
+            clientAppType: 'CLI',
           },
           where: {
             id: 'mockVerificationSession',
