@@ -20,7 +20,8 @@ export const fileExists = async (path: string) => {
 };
 
 export const isGlobalNodeModuleInstall = () => {
-  const GLOBAL_EXEC_PATH_INCLUDES = 'node_modules/@fleek-platform/cli/bin/index.js';
+  const GLOBAL_EXEC_PATH_INCLUDES =
+    'node_modules/@fleek-platform/cli/bin/index.js';
   const executedScript = realpathSync(process.argv[1]);
   return executedScript.includes(GLOBAL_EXEC_PATH_INCLUDES);
-}
+};
