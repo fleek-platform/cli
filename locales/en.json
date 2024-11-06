@@ -359,5 +359,7 @@
   "uploadAssetsFailed": "Failed to upload function assets to Fleek. Check your network connection and try again.",
   "assetsNotSupportedInSgx": "Function assets are not supported in SGX environment",
   "functionsSite": "The Site ID where the Function will be deployed",
-  "siteNotFound": "Site not found!"
+  "siteNotFound": "Site not found!",
+  "failedAuthentication": "This command failed to authenticate. Have you run 'fleek login' to sign in? If the issue persists contact our support team at https://fleek.xyz/support",
+  "missingPersonalAccessToken": "Missing a valid personal access token. Visit https://fleek.xyz/docs for detailed instructions and try again, please!"
 }
