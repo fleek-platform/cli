@@ -26,7 +26,6 @@ export const waitForPersonalAccessTokenFromVerificationSession = async ({
               },
               data: {
                 name,
-                clientAppType: 'CLI',
               },
             },
           },
