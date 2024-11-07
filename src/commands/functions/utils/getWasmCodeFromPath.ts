@@ -12,7 +12,7 @@ import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
 
 const PUBLIC_KEY =
-  '03a3fe41244add26af1f820d2acb4ad22b158ff7b69ce41401bf932d7734eb5d49';
+  '02de6500ea852d2f4bdc9b6812ac76477e45eae556998d357cfa84e5a0a71bddb4';
 
 const getWasm = async (filePath: string) => {
   const buffer = await fs.promises.readFile(filePath);
