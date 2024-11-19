@@ -1,5 +1,7 @@
 import { join as joinPath } from 'node:path';
+
 import { generateDeploymentWorkflowYaml } from '@fleek-platform/utils-github';
+import { parse as parseSemver } from 'semver';
 
 import type { Output } from '../../../output/Output';
 import { fileExists } from '../../../utils/fs';
@@ -10,14 +12,8 @@ import { requestDeploymentWorkflowInstallCommand } from './requestDeploymentWork
 import { saveDeploymentWorkflowYaml } from './saveDeploymentWorkflowYaml';
 
 export const ghWorkflowFilename = 'fleek-deploy.yaml';
-export const ghActionsWorflowsDirectory = joinPath(
-  process.cwd(),
-  '.github/workflows',
-);
-export const ghActionsDeploySitesYamlPath = joinPath(
-  ghActionsWorflowsDirectory,
-  ghWorkflowFilename,
-);
+export const ghActionsWorflowsDirectory = joinPath(process.cwd(), '.github/workflows');
+export const ghActionsDeploySitesYamlPath = joinPath(ghActionsWorflowsDirectory, ghWorkflowFilename);
 
 type PrepareGitHubActionsIntegrationArgs = {
   personalAccessToken: string;
@@ -34,6 +30,7 @@ export const prepareGitHubActionsIntegration = async ({
 }: PrepareGitHubActionsIntegrationArgs) => {
   const installCommand = await requestDeploymentWorkflowInstallCommand();
   const yamlContent = generateDeploymentWorkflowYaml({
+    nodeVersion: parseSemver(process.version)?.major ?? 18,
     fleekConfigPath,
     installCommand,
   });
