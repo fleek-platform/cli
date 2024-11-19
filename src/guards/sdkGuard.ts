@@ -3,8 +3,8 @@ import { getDefined } from '../defined';
 
 import { output } from '../cli';
 import { config } from '../config';
-import { loginGuard } from './loginGuard';
 import { t } from '../utils/translation';
+import { loginGuard } from './loginGuard';
 
 import type { Action, SdkGuardedFunction } from './types';
 

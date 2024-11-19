@@ -12,8 +12,14 @@ import { requestDeploymentWorkflowInstallCommand } from './requestDeploymentWork
 import { saveDeploymentWorkflowYaml } from './saveDeploymentWorkflowYaml';
 
 export const ghWorkflowFilename = 'fleek-deploy.yaml';
-export const ghActionsWorflowsDirectory = joinPath(process.cwd(), '.github/workflows');
-export const ghActionsDeploySitesYamlPath = joinPath(ghActionsWorflowsDirectory, ghWorkflowFilename);
+export const ghActionsWorflowsDirectory = joinPath(
+  process.cwd(),
+  '.github/workflows',
+);
+export const ghActionsDeploySitesYamlPath = joinPath(
+  ghActionsWorflowsDirectory,
+  ghWorkflowFilename,
+);
 
 type PrepareGitHubActionsIntegrationArgs = {
   personalAccessToken: string;
