@@ -71,7 +71,7 @@
     "@fleek-platform/sdk": "^3.5.4",
     "@fleek-platform/tester": "^2.12.1",
     "@fleek-platform/utils-gateways": "^0.1.12",
-    "@fleek-platform/utils-github": "^0.0.2",
+    "@fleek-platform/utils-github": "^0.1.0",
     "@fleek-platform/utils-ipfs": "^0.4.4",
     "@fleek-platform/utils-ipns": "^0.1.13",
     "@fleek-platform/utils-validation": "^2.4.0",
