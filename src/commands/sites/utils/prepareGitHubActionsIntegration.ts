@@ -35,20 +35,21 @@ export const prepareGitHubActionsIntegration = async ({
   fleekConfigPath,
   output,
 }: PrepareGitHubActionsIntegrationArgs) => {
-  let nodeSemver = process.version;
+  let nodeVersion;
 
-  if (!nodeSemver) {
-    try {
-      nodeSemver = loadJSONFromPackageRoot('package.json').engines.node.replace(
-        /[^0-9\.]+/,
-        '',
-      );
-    } catch {}
+  try {
+    const nodeSemver = loadJSONFromPackageRoot(
+      'package.json',
+    ).engines.node.replace(/[^0-9\.]+/, '');
+
+    nodeVersion = parseSemver(nodeSemver)?.major ?? 18;
+  } catch {
+    nodeVersion = 18;
   }
 
   const installCommand = await requestDeploymentWorkflowInstallCommand();
   const yamlContent = generateDeploymentWorkflowYaml({
-    nodeVersion: parseSemver(nodeSemver)?.major ?? 18,
+    nodeVersion,
     fleekConfigPath,
     installCommand,
   });
