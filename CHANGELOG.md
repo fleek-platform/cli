@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.8.1
+
+### Patch Changes
+
+- 438b2a1: Add "undici" package to support "yarn"
+
 ## 3.8.0
 
 ### Minor Changes
