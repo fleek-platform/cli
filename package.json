@@ -61,6 +61,7 @@
     "prompts": "^2.4.2",
     "semver": "^7.3.8",
     "ts-node": "10.9.1",
+    "undici": "^7.1.0",
     "unique-names-generator": "^4.7.1",
     "update-notifier-cjs": "^5.1.6"
   },
