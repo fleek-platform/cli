@@ -34,8 +34,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
 
   const uploadResults = await sdk.ipfs().addSitesToIpfs(siteConfig.distDir, {
     wrapWithDirectory: true,
-    // We must pass plain object instead of URLSearchParams because of ipfs-http-client bug
-    searchParams: { site_id: site.id } as unknown as URLSearchParams,
+    siteId: site.id,
   });
 
   const root = uploadResults.pop();

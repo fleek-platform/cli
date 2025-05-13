@@ -2,8 +2,8 @@ import { promises as fs, existsSync } from 'node:fs';
 import { basename } from 'node:path';
 
 import {
-  getFleekXyzIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,
+  getWeb3IpfsGatewayUrl,
 } from '@fleek-platform/utils-ipfs';
 import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
@@ -73,7 +73,7 @@ export const addStorageAction: SdkGuardedFunction<
 
   if (privateGatewayDomains.length === 0) {
     output.log(t('visitViaGateway'));
-    output.link(getFleekXyzIpfsGatewayUrl(hash));
+    output.link(getWeb3IpfsGatewayUrl(hash));
 
     return;
   }
