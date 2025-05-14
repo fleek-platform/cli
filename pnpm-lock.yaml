@@ -112,8 +112,8 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0
       '@fleek-platform/sdk':
-        specifier: ^3.5.4
-        version: 3.5.4
+        specifier: ^3.7.2
+        version: 3.7.2
       '@fleek-platform/tester':
         specifier: ^2.12.1
         version: 2.12.1(graphql@15.9.0)
@@ -755,8 +755,8 @@ packages:
     peerDependencies:
       esbuild: '>=0.21.0'
 
-  '@fleek-platform/sdk@3.5.4':
-    resolution: {integrity: sha512-cDTGIcrtjcXF5y+w1SfijjlZyVOeidKYrKeF7ZbqcK6nlUEtdqOunJ+kxicpBiHoulTHYnF6tvqnuxQXEQnO6g==}
+  '@fleek-platform/sdk@3.7.2':
+    resolution: {integrity: sha512-sWv0o5AfqtGsbbZp5GHsJp/dRqjxEAi2uqm1TXUc/SjpzPacxC+bKsJvoV7kcn2XX34cSYrZlfVi2bWMHLAqFg==}
     engines: {node: '>=18.18.2'}
 
   '@fleek-platform/tester@2.12.1':
@@ -4585,7 +4585,7 @@ snapshots:
     dependencies:
       esbuild: 0.21.5
 
-  '@fleek-platform/sdk@3.5.4':
+  '@fleek-platform/sdk@3.7.2':
     dependencies:
       '@noble/hashes': 1.5.0
       '@web-std/file': 3.0.3
