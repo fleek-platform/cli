@@ -124,8 +124,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@fleek-platform/utils-ipfs':
-        specifier: ^0.4.4
-        version: 0.4.4
+        specifier: ^0.4.5
+        version: 0.4.5
       '@fleek-platform/utils-ipns':
         specifier: ^0.1.13
         version: 0.1.13
@@ -768,8 +768,8 @@ packages:
   '@fleek-platform/utils-github@0.1.0':
     resolution: {integrity: sha512-pumNPpD815ogT+HhbiYWWZtGV4PYbUFbHQNdTDRCcTVr+c0jt5izzKBsJ9X3vaUBjPcU2hs2SsOFcbfGlobaGw==}
 
-  '@fleek-platform/utils-ipfs@0.4.4':
-    resolution: {integrity: sha512-J7XNokjTETCdnqeea+zbCvHaZoZ/IEYdd6K3TZnKlDeou0b3HA9XrxBvB78DytZliVZA30NkGllYC3WQrulpOA==}
+  '@fleek-platform/utils-ipfs@0.4.5':
+    resolution: {integrity: sha512-AxwSaZIFkubs0KBM+AwOkTIbWZ6U3c3Ny/R9CQm5heajAOfgpzcw9a22lM+stb5VVDUfhoOQKJ+klQg1+U5WkQ==}
 
   '@fleek-platform/utils-ipns@0.1.13':
     resolution: {integrity: sha512-uAtoYLXla46jdKqOYpDJIWNIymHxsvkBwp7cwsZN3uFx215M0BGkZEUGfEe1qdfeu6eMtPam0RccrxnhnXuo9g==}
@@ -4629,7 +4629,7 @@ snapshots:
     dependencies:
       yaml: 2.6.0
 
-  '@fleek-platform/utils-ipfs@0.4.4':
+  '@fleek-platform/utils-ipfs@0.4.5':
     dependencies:
       aws4: 1.13.2
       cids: 1.1.9
