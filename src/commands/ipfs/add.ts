@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 
 import {
-  getFleekXyzIpfsGatewayUrl,
   getPrivateIpfsGatewayUrl,
+  getWeb3IpfsGatewayUrl,
 } from '@fleek-platform/utils-ipfs';
 
 import { output } from '../../cli';
@@ -47,7 +47,7 @@ const addAction: SdkGuardedFunction<AddActionArgs> = async ({ sdk, args }) => {
 
   if (privateGatewayDomains.length === 0) {
     output.hint(`${t('getFileFromPubAddr')}:`);
-    output.link(getFleekXyzIpfsGatewayUrl(hash));
+    output.link(getWeb3IpfsGatewayUrl(hash));
 
     return;
   }
