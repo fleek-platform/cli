@@ -3,7 +3,6 @@ import cmdApplications from './commands/applications/index';
 import cmdAuth from './commands/auth/index';
 import cmdDomains from './commands/domains/index';
 import cmdEns from './commands/ens/index';
-import cmdFunctions from './commands/functions/index';
 import cmdGateways from './commands/gateways/index';
 import cmdIPFS from './commands/ipfs/index';
 import cmdIPNS from './commands/ipns/index';
@@ -75,7 +74,6 @@ export const init = ({ version, parser }: InitArgs) => {
     cmdProjects,
     cmdSites,
     cmdStorage,
-    cmdFunctions,
     cmdVersion,
   ];
 
